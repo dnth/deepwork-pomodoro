@@ -58,50 +58,51 @@
   }
 
   .dark {
-    --background: 222 84% 5%;
-    --foreground: 0 0% 98%;
-    --card: 215 28% 17%;
-    --card-foreground: 0 0% 98%;
-    --popover: 215 28% 17%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 215 28% 17%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 142 69% 58%;
+    /* Midnight Productivity Palette - Base colors */
+    --background: 222 84% 6%;  /* slate-900: #0f172a */
+    --foreground: 212 13% 95%; /* slate-100: #f1f5f9 */
+    --card: 215 25% 17%;       /* slate-800: #1e293b */
+    --card-foreground: 212 13% 95%;
+    --popover: 215 25% 17%;    /* slate-800: #1e293b */
+    --popover-foreground: 212 13% 95%;
+    --primary: 173 58% 39%;    /* teal-500: #14b8a6 */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 45 93% 47%;   /* amber-500: #f59e0b */
     --secondary-foreground: 0 0% 9%;
-    --muted: 215 16% 47%;
-    --muted-foreground: 215 13% 54%;
-    --accent: 38 92% 50%;
+    --muted: 215 20% 65%;      /* slate-400: #94a3b8 */
+    --muted-foreground: 215 25% 35%; /* slate-600: #475569 */
+    --accent: 173 80% 67%;     /* teal-400: #2dd4bf */
     --accent-foreground: 0 0% 9%;
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 72% 51%;  /* red-600: #dc2626 */
     --destructive-foreground: 0 0% 98%;
-    --border: 215 16% 47%;
-    --input: 215 16% 47%;
-    --ring: 142 69% 58%;
-    --chart-1: 38 92% 50%;
-    --chart-2: 142 69% 58%;
-    --chart-3: 215 16% 47%;
-    --chart-4: 38 84% 43%;
-    --chart-5: 142 76% 36%;
+    --border: 215 20% 33%;     /* slate-700: #334155 */
+    --input: 215 20% 33%;      /* slate-700: #334155 */
+    --ring: 173 58% 39%;       /* teal-500: #14b8a6 */
+    --chart-1: 173 58% 39%;    /* teal-500 */
+    --chart-2: 45 93% 47%;     /* amber-500 */
+    --chart-3: 141 76% 48%;    /* emerald-500 */
+    --chart-4: 217 92% 59%;    /* blue-500 */
+    --chart-5: 0 72% 51%;      /* red-500 */
 
-    /* Custom theme variables - Dark Mode */
-    --theme-background-from: 222 84% 5%;
-    --theme-background-via: 215 28% 17%;
-    --theme-background-to: 215 16% 47%;
-    --theme-card-bg: 215 28% 17%;
-    --theme-card-border: 215 16% 47%;
-    --theme-text-primary: 0 0% 98%;
-    --theme-text-secondary: 215 13% 54%;
-    --theme-text-muted: 215 16% 47%;
-    --theme-accent: 142 76% 36%;
-    --theme-accent-hover: 142 69% 58%;
-    --theme-progress: 38 92% 50%;
-    --theme-progress-bg: 215 16% 47%;
-    --theme-input-bg: 215 28% 17%;
-    --theme-input-border: 215 16% 47%;
-    --theme-task-accent: 142 76% 36%;
-    --theme-task-bg: 142 76% 36%;
-    --theme-task-border: 142 69% 58%;
-    --theme-task-text: 142 69% 58%;
+    /* Midnight Productivity Custom Variables */
+    --theme-background-from: 222 84% 6%;   /* slate-900 */
+    --theme-background-via: 215 25% 17%;   /* slate-800 */
+    --theme-background-to: 222 84% 6%;     /* slate-900 */
+    --theme-card-bg: 215 25% 17%;          /* slate-800 with opacity */
+    --theme-card-border: 215 20% 33%;      /* slate-700 */
+    --theme-text-primary: 212 13% 95%;     /* slate-100 */
+    --theme-text-secondary: 213 27% 84%;   /* slate-300 */
+    --theme-text-muted: 215 20% 65%;       /* slate-400 */
+    --theme-accent: 173 58% 39%;           /* teal-500 */
+    --theme-accent-hover: 173 85% 54%;     /* teal-600 */
+    --theme-progress: 45 93% 47%;          /* amber-500 */
+    --theme-progress-bg: 215 20% 33%;      /* slate-700 */
+    --theme-input-bg: 215 20% 33%;         /* slate-700 */
+    --theme-input-border: 215 25% 35%;     /* slate-600 */
+    --theme-task-accent: 173 58% 39%;      /* teal-500 */
+    --theme-task-bg: 173 58% 39%;          /* teal-500 with opacity */
+    --theme-task-border: 173 58% 39%;      /* teal-500 */
+    --theme-task-text: 173 80% 67%;        /* teal-400 */
   }
 }
 

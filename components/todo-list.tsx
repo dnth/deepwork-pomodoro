@@ -75,8 +75,8 @@ export function TodoList() {
           value={newTask}
           onChange={(e) => setNewTask(e.target.value)}
           onKeyPress={handleKeyPress}
-          placeholder="Add new task..."
-          className="flex-1 bg-theme-input-bg border-theme-input-border text-theme-text-primary placeholder-theme-text-muted rounded-xl text-sm sm:text-base p-2 sm:p-3"
+          placeholder="What would you like to focus on?"
+          className="flex-1 bg-theme-input-bg border-theme-input-border text-theme-text-primary placeholder:text-slate-400 rounded-xl text-sm sm:text-base p-2 sm:p-3"
         />
         <Select value={selectedTag} onValueChange={(value: TaskTag) => setSelectedTag(value)}>
           <SelectTrigger 

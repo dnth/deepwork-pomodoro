@@ -47,19 +47,19 @@ export default function Home() {
           {/* Center: Time and Date */}
           <div className="text-center">
             <div className="text-theme-text-primary text-lg sm:text-xl font-light tracking-wide">
-              {currentTime.toLocaleTimeString('en-US', { 
+              {mounted ? currentTime.toLocaleTimeString('en-US', { 
                 hour: '2-digit', 
                 minute: '2-digit', 
                 second: '2-digit',
                 hour12: true 
-              })}
+              }) : '--:--:-- --'}
             </div>
             <div className="text-theme-text-secondary text-xs sm:text-sm -mt-1">
-              {currentTime.toLocaleDateString('en-US', { 
+              {mounted ? currentTime.toLocaleDateString('en-US', { 
                 weekday: 'short', 
                 month: 'short', 
                 day: 'numeric' 
-              })}
+              }) : '--- --- --'}
             </div>
           </div>
           
