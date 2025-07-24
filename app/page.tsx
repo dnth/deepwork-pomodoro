@@ -14,10 +14,20 @@ export default function Home() {
   const [showSettings, setShowSettings] = useState(false)
   const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
+  const [currentTime, setCurrentTime] = useState(new Date())
 
   // Only show theme toggle after mounting to prevent hydration mismatch
   useEffect(() => {
     setMounted(true)
+  }, [])
+
+  // Update current time every second
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date())
+    }, 1000)
+
+    return () => clearInterval(timer)
   }, [])
 
   const toggleTheme = () => {
@@ -27,11 +37,32 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-theme-background-from via-theme-background-via to-theme-background-to">
 
-      {/* Header */}
-      <header className="relative z-10 flex items-center justify-between p-4 sm:p-6">
-        <div className="flex-1" />
-        <h1 className="text-xl sm:text-2xl font-bold text-theme-text-primary">Deep Work</h1>
-        <div className="flex-1 flex justify-end items-center gap-2 sm:gap-3">
+      {/* Compact Header with App Name, Time, and Theme Toggle */}
+      <header className="relative z-10 p-4 sm:p-6">
+        <div className="flex items-center justify-between">
+          {/* Left: App Name */}
+          <h1 className="text-xl sm:text-2xl font-bold text-theme-text-primary">Deep Work</h1>
+          
+          {/* Center: Time and Date */}
+          <div className="text-center">
+            <div className="text-theme-text-primary text-lg sm:text-xl font-light tracking-wide">
+              {currentTime.toLocaleTimeString('en-US', { 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit',
+                hour12: true 
+              })}
+            </div>
+            <div className="text-theme-text-secondary text-xs sm:text-sm -mt-1">
+              {currentTime.toLocaleDateString('en-US', { 
+                weekday: 'short', 
+                month: 'short', 
+                day: 'numeric' 
+              })}
+            </div>
+          </div>
+          
+          {/* Right: Theme Toggle */}
           <Button
             onClick={toggleTheme}
             variant="ghost"
