@@ -98,13 +98,21 @@ export function usePomodoro() {
     [settings],
   )
 
-  // Update timer when settings change
+  // Update timer when settings change (but not when paused)
   useEffect(() => {
-    if (!state.isRunning) {
-      const duration = getDuration(state.currentMode, state.currentTask?.tag)
+    const duration = getDuration(state.currentMode, state.currentTask?.tag)
+    if (!state.isRunning && state.timeLeft === duration) {
       dispatch({ type: "RESET", duration })
     }
-  }, [settings, state.currentMode, state.currentTask, state.isRunning, getDuration])
+  }, [settings, state.currentMode, state.currentTask, getDuration])
+
+  // Initialize timer duration when mode changes
+  useEffect(() => {
+    const duration = getDuration(state.currentMode, state.currentTask?.tag)
+    if (state.timeLeft !== duration && !state.isRunning) {
+      dispatch({ type: "RESET", duration })
+    }
+  }, [state.currentMode, state.currentTask, getDuration])
 
   const setMode = useCallback(
     (mode: TimerMode) => {
@@ -150,17 +158,13 @@ export function usePomodoro() {
     return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`
   }, [])
 
-  // Clear interval helper
-  const clearCurrentInterval = useCallback(() => {
+
+  // Timer countdown effect
+  useEffect(() => {
     if (intervalRef.current) {
       clearInterval(intervalRef.current)
       intervalRef.current = null
     }
-  }, [])
-
-  // Timer countdown effect
-  useEffect(() => {
-    clearCurrentInterval()
 
     if (state.isRunning && state.timeLeft > 0) {
       intervalRef.current = setInterval(() => {
@@ -168,8 +172,13 @@ export function usePomodoro() {
       }, 1000)
     }
 
-    return clearCurrentInterval
-  }, [state.isRunning, clearCurrentInterval])
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current)
+        intervalRef.current = null
+      }
+    }
+  }, [state.isRunning])
 
   // Handle timer completion
   useEffect(() => {
