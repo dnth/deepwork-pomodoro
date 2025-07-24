@@ -88,16 +88,16 @@ export function TodoList() {
           <span className="text-sm text-theme-text-secondary">Tag:</span>
           <Select value={selectedTag} onValueChange={(value: TaskTag) => setSelectedTag(value)}>
             <SelectTrigger 
-                className="w-32 bg-theme-input-bg border-theme-input-border text-theme-text-primary rounded-lg">
+                className="w-44 bg-theme-input-bg border-theme-input-border text-theme-text-primary rounded-lg">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent className="bg-theme-card-bg border-theme-card-border text-theme-text-primary">
+            <SelectContent className="bg-theme-card-bg border-theme-card-border text-theme-text-primary min-w-[12rem]">
               {Object.entries(taskTagConfig).map(([key, config]) => (
-                <SelectItem key={key} value={key} className="hover:bg-theme-card-bg/40 focus:bg-theme-card-bg/40 focus:text-theme-text-primary data-[highlighted]:bg-theme-card-bg/40 data-[highlighted]:text-theme-text-primary pl-2">
-                  <div className="flex items-center gap-2 ml-6">
-                    <div className={`w-3 h-3 rounded-full ${config.color} flex-shrink-0`} />
-                    <span className="text-theme-text-primary">{config.label}</span>
-                    <span className="text-xs text-theme-text-muted">({config.duration}min)</span>
+                <SelectItem key={key} value={key} className="hover:bg-theme-card-bg/40 focus:bg-theme-card-bg/40 focus:text-theme-text-primary data-[highlighted]:bg-theme-card-bg/40 data-[highlighted]:text-theme-text-primary">
+                  <div className="flex items-center gap-3 pl-2">
+                    <div className={`w-2 h-2 rounded-full ${config.color} flex-shrink-0`} />
+                    <span className="text-theme-text-primary font-medium">{config.label}</span>
+                    <span className="text-xs text-theme-text-muted ml-auto">({config.duration}min)</span>
                   </div>
                 </SelectItem>
               ))}
