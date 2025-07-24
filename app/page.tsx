@@ -12,25 +12,21 @@ import { useTheme } from "@/hooks/use-theme"
 
 export default function Home() {
   const [showSettings, setShowSettings] = useState(false)
-  const { theme, toggleTheme, currentTheme } = useTheme()
-  
-  console.log("Page component rendered with theme:", currentTheme, theme.name)
+  const { toggleTheme, currentTheme } = useTheme()
 
   return (
-    <div className="min-h-screen bg-slate-900">
-      {/* Background gradient */}
-      <div className={`fixed inset-0 ${theme.backgroundGradient} opacity-95`} />
+    <div className="min-h-screen bg-gradient-to-br from-theme-background-from via-theme-background-via to-theme-background-to">
 
       {/* Header */}
       <header className="relative z-10 flex items-center justify-between p-6">
         <div className="flex-1" />
-        <h1 className={`text-2xl font-bold ${theme.textPrimary}`}>Deep Work</h1>
+        <h1 className="text-2xl font-bold text-theme-text-primary">Deep Work</h1>
         <div className="flex-1 flex justify-end items-center gap-3">
           <Button
             onClick={toggleTheme}
             variant="ghost"
             size="sm"
-            className={`${theme.textSecondary} hover:${theme.textPrimary} hover:bg-white/10 rounded-lg`}
+            className="text-theme-text-secondary hover:text-theme-text-primary hover:bg-white/10 rounded-lg"
           >
             <Palette className="w-4 h-4 mr-2" />
             Theme

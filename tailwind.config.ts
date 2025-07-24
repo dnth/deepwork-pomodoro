@@ -62,6 +62,26 @@ const config: Config = {
   				'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
   				border: 'hsl(var(--sidebar-border))',
   				ring: 'hsl(var(--sidebar-ring))'
+  			},
+  			theme: {
+  				'background-from': 'hsl(var(--theme-background-from))',
+  				'background-via': 'hsl(var(--theme-background-via))',
+  				'background-to': 'hsl(var(--theme-background-to))',
+  				'card-bg': 'hsl(var(--theme-card-bg))',
+  				'card-border': 'hsl(var(--theme-card-border))',
+  				'text-primary': 'hsl(var(--theme-text-primary))',
+  				'text-secondary': 'hsl(var(--theme-text-secondary))',
+  				'text-muted': 'hsl(var(--theme-text-muted))',
+  				'accent': 'hsl(var(--theme-accent))',
+  				'accent-hover': 'hsl(var(--theme-accent-hover))',
+  				'progress': 'hsl(var(--theme-progress))',
+  				'progress-bg': 'hsl(var(--theme-progress-bg))',
+  				'input-bg': 'hsl(var(--theme-input-bg))',
+  				'input-border': 'hsl(var(--theme-input-border))',
+  				'task-accent': 'hsl(var(--theme-task-accent))',
+  				'task-bg': 'hsl(var(--theme-task-bg))',
+  				'task-border': 'hsl(var(--theme-task-border))',
+  				'task-text': 'hsl(var(--theme-task-text))'
   			}
   		},
   		borderRadius: {

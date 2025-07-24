@@ -43,7 +43,70 @@
     --sidebar-accent-foreground: 0 0% 98%;
     --sidebar-border: 215 28% 17%;
     --sidebar-ring: 142 69% 58%;
+
+    /* Custom theme variables */
+    --theme-background-from: 222 84% 5%;
+    --theme-background-via: 215 28% 17%;
+    --theme-background-to: 215 16% 47%;
+    --theme-card-bg: 215 28% 17%;
+    --theme-card-border: 215 16% 47%;
+    --theme-text-primary: 0 0% 98%;
+    --theme-text-secondary: 215 13% 54%;
+    --theme-text-muted: 215 16% 47%;
+    --theme-accent: 142 76% 36%;
+    --theme-accent-hover: 142 69% 58%;
+    --theme-progress: 38 92% 50%;
+    --theme-progress-bg: 215 16% 47%;
+    --theme-input-bg: 215 28% 17%;
+    --theme-input-border: 215 16% 47%;
+    --theme-task-accent: 142 76% 36%;
+    --theme-task-bg: 142 76% 36%;
+    --theme-task-border: 142 69% 58%;
+    --theme-task-text: 142 69% 58%;
   }
+
+  .theme-forest {
+    --theme-background-from: 222 84% 5%;
+    --theme-background-via: 215 28% 17%;
+    --theme-background-to: 215 16% 47%;
+    --theme-card-bg: 215 28% 17%;
+    --theme-card-border: 215 16% 47%;
+    --theme-text-primary: 0 0% 98%;
+    --theme-text-secondary: 215 13% 54%;
+    --theme-text-muted: 215 16% 47%;
+    --theme-accent: 142 76% 36%;
+    --theme-accent-hover: 142 69% 58%;
+    --theme-progress: 38 92% 50%;
+    --theme-progress-bg: 215 16% 47%;
+    --theme-input-bg: 215 28% 17%;
+    --theme-input-border: 215 16% 47%;
+    --theme-task-accent: 142 76% 36%;
+    --theme-task-bg: 142 76% 36%;
+    --theme-task-border: 142 69% 58%;
+    --theme-task-text: 142 69% 58%;
+  }
+
+  .theme-midnight {
+    --theme-background-from: 222 84% 5%;
+    --theme-background-via: 217 91% 18%;
+    --theme-background-to: 224 71% 4%;
+    --theme-card-bg: 224 71% 4%;
+    --theme-card-border: 217 91% 18%;
+    --theme-text-primary: 214 100% 97%;
+    --theme-text-secondary: 213 27% 84%;
+    --theme-text-muted: 212 17% 75%;
+    --theme-accent: 188 86% 53%;
+    --theme-accent-hover: 187 85% 53%;
+    --theme-progress: 188 86% 65%;
+    --theme-progress-bg: 224 71% 4%;
+    --theme-input-bg: 224 71% 4%;
+    --theme-input-border: 217 91% 18%;
+    --theme-task-accent: 188 86% 53%;
+    --theme-task-bg: 188 86% 53%;
+    --theme-task-border: 187 85% 53%;
+    --theme-task-text: 187 85% 53%;
+  }
+
   .dark {
     --background: 222 84% 5%;
     --foreground: 0 0% 98%;

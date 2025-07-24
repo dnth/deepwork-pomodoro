@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button"
 import { Trees, Flame, Cloud, Waves, Play, Pause, Volume2, VolumeX } from "lucide-react"
 import { useState, useRef } from "react"
 import { Input } from "@/components/ui/input"
-import { useTheme } from "@/hooks/use-theme"
 
 interface AmbientCategory {
   id: string
@@ -54,7 +53,6 @@ export function YoutubePlaylist() {
   const playerRef = useRef<any>(null)
   const [customVideoUrl, setCustomVideoUrl] = useState("")
   const [customVideoId, setCustomVideoId] = useState<string | null>(null)
-  const { theme, currentTheme } = useTheme()
 
   const extractVideoId = (url: string): string | null => {
     const regex = /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/
@@ -85,16 +83,16 @@ export function YoutubePlaylist() {
   }
 
   return (
-    <div className={`${theme.cardBg} backdrop-blur-sm border ${theme.cardBorder} rounded-2xl p-8 shadow-2xl`}>
+    <div className="bg-theme-card-bg/30 backdrop-blur-sm border border-theme-card-border/30 rounded-2xl p-8 shadow-2xl">
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
-        <h2 className={`text-2xl font-bold ${theme.textPrimary}`}>Ambient Sounds</h2>
+        <h2 className="text-2xl font-bold text-theme-text-primary">Ambient Sounds</h2>
         <div className="flex gap-2">
           <Button
             onClick={togglePlayPause}
             variant="ghost"
             size="sm"
-            className={`${theme.textMuted} hover:${theme.textPrimary} ${theme.cardHover}`}
+            className="text-theme-text-muted hover:text-theme-text-primary hover:bg-theme-card-bg/40"
           >
             {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
           </Button>
@@ -102,7 +100,7 @@ export function YoutubePlaylist() {
             onClick={toggleMute}
             variant="ghost"
             size="sm"
-            className={`${theme.textMuted} hover:${theme.textPrimary} ${theme.cardHover}`}
+            className="text-theme-text-muted hover:text-theme-text-primary hover:bg-theme-card-bg/40"
           >
             {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
           </Button>
@@ -116,12 +114,11 @@ export function YoutubePlaylist() {
             value={customVideoUrl}
             onChange={(e) => setCustomVideoUrl(e.target.value)}
             placeholder="Paste YouTube video URL for custom ambient sound..."
-            style={{backgroundColor: currentTheme === 'forest' ? 'rgba(51, 65, 85, 0.5)' : 'rgba(30, 58, 138, 0.5)'}}
-            className={`flex-1 ${theme.inputBorder} ${theme.textPrimary} placeholder-${theme.textMuted} rounded-xl`}
+            className="flex-1 border-theme-input-border text-theme-text-primary placeholder-theme-text-muted rounded-xl"
           />
           <Button
             onClick={handleCustomVideo}
-            className={`${theme.accent} ${theme.accentHover} ${theme.textPrimary} rounded-xl px-6`}
+            className="bg-theme-accent hover:bg-theme-accent-hover text-theme-text-primary rounded-xl px-6"
           >
             Load Video
           </Button>
@@ -137,8 +134,8 @@ export function YoutubePlaylist() {
             variant="ghost"
             className={`h-24 flex flex-col items-center justify-center gap-2 rounded-xl transition-all duration-200 hover:scale-105 ${
               activeCategory === category.id
-                ? `${theme.accent}/20 border border-green-500/50 text-green-400`
-                : `${theme.inputBg} ${theme.cardHover} ${theme.textSecondary} hover:${theme.textPrimary}`
+                ? `bg-theme-task-bg/20 border border-theme-task-border/50 text-theme-task-text`
+                : `bg-theme-input-bg/50 hover:bg-theme-card-bg/40 text-theme-text-secondary hover:text-theme-text-primary`
             }`}
           >
             {category.icon}
@@ -150,7 +147,7 @@ export function YoutubePlaylist() {
       {/* YouTube Player */}
       {activeCategory && (
         <div className="mb-6">
-          <div className={`aspect-video ${theme.inputBg} rounded-xl overflow-hidden`}>
+          <div className="aspect-video bg-theme-input-bg/50 rounded-xl overflow-hidden">
             <iframe
               ref={playerRef}
               width="100%"
@@ -175,8 +172,8 @@ export function YoutubePlaylist() {
       )}
 
       {activeCategory && (
-        <div className={`flex items-center gap-4 p-4 ${theme.inputBg} rounded-xl`}>
-          <div className={`w-12 h-12 ${theme.accent}/20 rounded-lg flex items-center justify-center`}>
+        <div className="flex items-center gap-4 p-4 bg-theme-input-bg/50 rounded-xl">
+          <div className="w-12 h-12 bg-theme-accent/20 rounded-lg flex items-center justify-center">
             {activeCategory === "custom" ? (
               <Play className="w-6 h-6" />
             ) : (
@@ -184,12 +181,12 @@ export function YoutubePlaylist() {
             )}
           </div>
           <div className="flex-1">
-            <div className={`text-${theme.textPrimary} font-medium`}>
+            <div className="text-theme-text-primary font-medium">
               {activeCategory === "custom"
                 ? "Custom Video"
                 : ambientCategories.find((c) => c.id === activeCategory)?.name}
             </div>
-            <div className={`${theme.textMuted} text-sm`}>
+            <div className="text-theme-text-muted text-sm">
               {activeCategory === "custom"
                 ? "Your custom ambient sound"
                 : ambientCategories.find((c) => c.id === activeCategory)?.description}
@@ -198,9 +195,9 @@ export function YoutubePlaylist() {
           <div className="flex items-center gap-2">
             {isPlaying && (
               <div className="flex gap-1">
-                <div className={`w-1 h-4 ${theme.progress} rounded-full animate-pulse`} />
-                <div className={`w-1 h-4 ${theme.progress} rounded-full animate-pulse delay-75`} />
-                <div className={`w-1 h-4 ${theme.progress} rounded-full animate-pulse delay-150`} />
+                <div className="w-1 h-4 bg-theme-progress rounded-full animate-pulse" />
+                <div className="w-1 h-4 bg-theme-progress rounded-full animate-pulse delay-75" />
+                <div className="w-1 h-4 bg-theme-progress rounded-full animate-pulse delay-150" />
               </div>
             )}
           </div>

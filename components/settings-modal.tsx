@@ -6,7 +6,6 @@ import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { useSettings } from "@/hooks/use-settings"
-import { useTheme } from "@/hooks/use-theme"
 
 interface SettingsModalProps {
   isOpen: boolean
@@ -15,22 +14,21 @@ interface SettingsModalProps {
 
 export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
   const { settings, updateSettings, resetSettings } = useSettings()
-  const { theme, currentTheme } = useTheme()
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className={`${theme.cardBg} ${theme.cardBorder} ${theme.textPrimary} max-w-md`}>
+      <DialogContent className="bg-theme-card-bg border-theme-card-border text-theme-text-primary max-w-md">
         <DialogHeader>
-          <DialogTitle className={`text-xl font-bold ${theme.textPrimary}`}>Timer Settings</DialogTitle>
+          <DialogTitle className="text-xl font-bold text-theme-text-primary">Timer Settings</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-6 py-4">
           {/* Timer Durations */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-green-400">Timer Durations</h3>
+            <h3 className="text-lg font-semibold text-theme-task-text">Timer Durations</h3>
 
             <div className="space-y-2">
-              <Label className={theme.textSecondary} htmlFor="pomodoro">
+              <Label className="text-theme-text-secondary" htmlFor="pomodoro">
                 Pomodoro (minutes)
               </Label>
               <Input
@@ -40,13 +38,12 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                 max="60"
                 value={settings.pomodoroDuration}
                 onChange={(e) => updateSettings({ pomodoroDuration: Number.parseInt(e.target.value) || 25 })}
-                style={{backgroundColor: currentTheme === 'forest' ? 'rgba(51, 65, 85, 0.5)' : 'rgba(30, 58, 138, 0.5)'}}
-                className={`${theme.inputBorder} ${theme.textPrimary}`}
+                className="border-theme-input-border text-theme-text-primary"
               />
             </div>
 
             <div className="space-y-2">
-              <Label className={theme.textSecondary} htmlFor="shortBreak">
+              <Label className="text-theme-text-secondary" htmlFor="shortBreak">
                 Short Break (minutes)
               </Label>
               <Input
@@ -56,13 +53,12 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                 max="30"
                 value={settings.shortBreakDuration}
                 onChange={(e) => updateSettings({ shortBreakDuration: Number.parseInt(e.target.value) || 5 })}
-                style={{backgroundColor: currentTheme === 'forest' ? 'rgba(51, 65, 85, 0.5)' : 'rgba(30, 58, 138, 0.5)'}}
-                className={`${theme.inputBorder} ${theme.textPrimary}`}
+                className="border-theme-input-border text-theme-text-primary"
               />
             </div>
 
             <div className="space-y-2">
-              <Label className={theme.textSecondary} htmlFor="longBreak">
+              <Label className="text-theme-text-secondary" htmlFor="longBreak">
                 Long Break (minutes)
               </Label>
               <Input
@@ -72,18 +68,17 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                 max="60"
                 value={settings.longBreakDuration}
                 onChange={(e) => updateSettings({ longBreakDuration: Number.parseInt(e.target.value) || 15 })}
-                style={{backgroundColor: currentTheme === 'forest' ? 'rgba(51, 65, 85, 0.5)' : 'rgba(30, 58, 138, 0.5)'}}
-                className={`${theme.inputBorder} ${theme.textPrimary}`}
+                className="border-theme-input-border text-theme-text-primary"
               />
             </div>
           </div>
 
           {/* Preferences */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-green-400">Preferences</h3>
+            <h3 className="text-lg font-semibold text-theme-task-text">Preferences</h3>
 
             <div className="flex items-center justify-between">
-              <Label className={theme.textSecondary} htmlFor="autoStart">
+              <Label className="text-theme-text-secondary" htmlFor="autoStart">
                 Auto-start breaks
               </Label>
               <Switch
@@ -94,7 +89,7 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
             </div>
 
             <div className="flex items-center justify-between">
-              <Label className={theme.textSecondary} htmlFor="notifications">
+              <Label className="text-theme-text-secondary" htmlFor="notifications">
                 Browser notifications
               </Label>
               <Switch
@@ -105,7 +100,7 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
             </div>
 
             <div className="flex items-center justify-between">
-              <Label className={theme.textSecondary} htmlFor="sounds">
+              <Label className="text-theme-text-secondary" htmlFor="sounds">
                 Sound alerts
               </Label>
               <Switch
@@ -121,11 +116,11 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
             <Button
               onClick={resetSettings}
               variant="outline"
-              className={`flex-1 ${theme.inputBorder} ${theme.textSecondary} hover:${theme.textPrimary} ${theme.cardHover} bg-transparent`}
+              className="flex-1 border-theme-input-border text-theme-text-secondary hover:text-theme-text-primary hover:bg-theme-card-bg/40 bg-transparent"
             >
               Reset to Default
             </Button>
-            <Button onClick={onClose} className={`flex-1 ${theme.accent} ${theme.accentHover} ${theme.textPrimary}`}>
+            <Button onClick={onClose} className="flex-1 bg-theme-accent hover:bg-theme-accent-hover text-theme-text-primary">
               Save Changes
             </Button>
           </div>
