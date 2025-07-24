@@ -6,13 +6,19 @@ import { YoutubePlaylist } from "@/components/youtube-playlist"
 import { SettingsModal } from "@/components/settings-modal"
 import { Button } from "@/components/ui/button"
 import { Moon, Sun } from "lucide-react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { DailyQuote } from "@/components/daily-quote"
 import { useTheme } from "next-themes"
 
 export default function Home() {
   const [showSettings, setShowSettings] = useState(false)
   const { theme, setTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+
+  // Only show theme toggle after mounting to prevent hydration mismatch
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const toggleTheme = () => {
     setTheme(theme === 'dark' ? 'light' : 'dark')
@@ -32,11 +38,11 @@ export default function Home() {
             size="sm"
             className="text-theme-text-secondary hover:text-theme-text-primary hover:bg-white/10 rounded-lg"
           >
-            {theme === 'dark' ? (
+            {mounted && (theme === 'dark' ? (
               <Sun className="w-4 h-4 mr-2" />
             ) : (
               <Moon className="w-4 h-4 mr-2" />
-            )}
+            ))}
             Theme
           </Button>
         </div>
