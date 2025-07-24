@@ -36,10 +36,19 @@ export function usePomodoro() {
     [settings],
   )
 
+  // Update timer when settings change
+  useEffect(() => {
+    if (!isRunning) {
+      const duration = getDuration(currentMode, currentTask?.tag)
+      setTimeLeft(duration)
+    }
+  }, [settings, currentMode, currentTask, isRunning, getDuration])
+
   const setMode = useCallback(
     (mode: TimerMode) => {
       setCurrentMode(mode)
-      setTimeLeft(getDuration(mode))
+      const duration = getDuration(mode)
+      setTimeLeft(duration)
       setIsRunning(false)
       if (mode !== "task") {
         setCurrentTask(null)
@@ -51,8 +60,6 @@ export function usePomodoro() {
   const startTaskTimer = useCallback(
     (task: Todo) => {
       const duration = getDuration("task", task.tag)
-
-      // Update all state at once
       setCurrentMode("task")
       setCurrentTask(task)
       setTimeLeft(duration)
@@ -62,26 +69,28 @@ export function usePomodoro() {
   )
 
   const startTimer = useCallback(() => {
+    if (timeLeft === 0) {
+      const duration = getDuration(currentMode, currentTask?.tag)
+      setTimeLeft(duration)
+    }
     setIsRunning(true)
-  }, [])
+  }, [timeLeft, currentMode, currentTask, getDuration])
 
   const pauseTimer = useCallback(() => {
     setIsRunning(false)
   }, [])
 
   const resetTimer = useCallback(() => {
-    if (currentMode === "task" && currentTask) {
-      setTimeLeft(getDuration("task", currentTask.tag))
-    } else {
-      setTimeLeft(getDuration(currentMode))
-    }
+    const duration = getDuration(currentMode, currentTask?.tag)
+    setTimeLeft(duration)
     setIsRunning(false)
   }, [currentMode, currentTask, getDuration])
 
   const stopTaskTimer = useCallback(() => {
+    const duration = getDuration("pomodoro")
     setCurrentMode("pomodoro")
     setCurrentTask(null)
-    setTimeLeft(getDuration("pomodoro"))
+    setTimeLeft(duration)
     setIsRunning(false)
   }, [getDuration])
 
@@ -93,62 +102,44 @@ export function usePomodoro() {
 
   // Timer countdown effect
   useEffect(() => {
-    let interval: NodeJS.Timeout | null = null
+    let interval: NodeJS.Timeout | undefined
 
-    if (isRunning && timeLeft > 0) {
+    if (isRunning) {
       interval = setInterval(() => {
-        setTimeLeft((prev) => prev - 1)
-      }, 1000)
-    } else if (timeLeft === 0 && isRunning) {
-      // Timer completed
-      setIsRunning(false)
-
-      if (currentMode === "pomodoro" || currentMode === "task") {
-        setCompletedToday((prev) => prev + 1)
-      }
-
-      // Show notification
-      if (settings.notifications && "Notification" in window) {
-        const message =
-          currentMode === "task" && currentTask
-            ? `Task "${currentTask.text}" completed!`
-            : currentMode === "pomodoro"
-              ? "Time for a break!"
-              : "Break time is over!"
-
-        if (Notification.permission === "granted") {
-          new Notification("Deep Work", {
-            body: message,
-            icon: "/favicon.ico",
-          })
-        } else if (Notification.permission !== "denied") {
-          Notification.requestPermission().then((permission) => {
-            if (permission === "granted") {
-              new Notification("Deep Work", {
-                body: message,
-                icon: "/favicon.ico",
-              })
+        setTimeLeft((prev) => {
+          if (prev <= 1) {
+            // Timer finished
+            setIsRunning(false)
+            
+            if (currentMode === "pomodoro" || currentMode === "task") {
+              setCompletedToday((prev) => prev + 1)
             }
-          })
-        }
-      }
+            
+            // Notification
+            if (settings.notifications && typeof window !== 'undefined' && Notification.permission === "granted") {
+              const message = currentMode === 'task' && currentTask ? `Task "${currentTask.text}" completed!` : currentMode === 'pomodoro' ? "Time for a break!" : "Break time is over!"
+              new Notification("Deep Work", { body: message, icon: "/favicon.ico" })
+            }
 
-      // Auto-start next session if enabled and not a task timer
-      if (settings.autoStartBreaks && currentMode !== "task") {
-        const newCompletedCount = currentMode === "pomodoro" ? completedToday + 1 : completedToday
-        const nextMode =
-          currentMode === "pomodoro" ? (newCompletedCount % 4 === 0 ? "longBreak" : "shortBreak") : "pomodoro"
+            // Auto start breaks/tasks
+            if (settings.autoStartBreaks && currentMode !== "task") {
+              const newCompletedCount = currentMode === "pomodoro" ? completedToday + 1 : completedToday
+              const nextMode =
+                currentMode === "pomodoro" ? (newCompletedCount % 4 === 0 ? "longBreak" : "shortBreak") : "pomodoro"
+              
+              setMode(nextMode)
+              // We need to start the timer again for the next session
+              setTimeout(() => setIsRunning(true), 1000)
 
-        setTimeout(() => {
-          setMode(nextMode)
-          setIsRunning(true)
-        }, 1000)
-      } else if (currentMode === "task") {
-        // Task completed, return to pomodoro mode
-        setTimeout(() => {
-          stopTaskTimer()
-        }, 1000)
-      }
+            } else if (currentMode === "task") {
+              stopTaskTimer()
+            }
+
+            return 0
+          }
+          return prev - 1
+        })
+      }, 1000)
     }
 
     return () => {
@@ -158,23 +149,15 @@ export function usePomodoro() {
     }
   }, [
     isRunning,
-    timeLeft,
+    settings,
     currentMode,
     currentTask,
-    settings,
     completedToday,
     setCompletedToday,
+    getDuration,
     setMode,
-    stopTaskTimer,
+    stopTaskTimer
   ])
-
-  // Update timer when settings change (but not when in task mode or running)
-  useEffect(() => {
-    if (!isRunning && currentMode !== "task") {
-      setTimeLeft(getDuration(currentMode))
-    }
-  }, [settings.pomodoroDuration, settings.shortBreakDuration, settings.longBreakDuration, currentMode, getDuration])
-
 
   return {
     timeLeft,

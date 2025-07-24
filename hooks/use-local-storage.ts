@@ -1,13 +1,13 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 
 export function useLocalStorage<T>(key: string, initialValue: T) {
+  // Always initialize with initialValue for consistent server/client first render
   const [storedValue, setStoredValue] = useState<T>(initialValue)
-  const [isClient, setIsClient] = useState(false)
 
+  // Only run on client-side after first render
   useEffect(() => {
-    setIsClient(true)
     try {
       const item = window.localStorage.getItem(key)
       if (item) {
@@ -18,18 +18,20 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
     }
   }, [key])
 
-  const setValue = (value: T | ((val: T) => T)) => {
-    try {
-      const valueToStore = value instanceof Function ? value(storedValue) : value
-      console.log(`Setting localStorage ${key}:`, valueToStore)
-      setStoredValue(valueToStore)
-      if (isClient) {
-        window.localStorage.setItem(key, JSON.stringify(valueToStore))
+  const setValue = useCallback(
+    (value: T | ((val: T) => T)) => {
+      try {
+        setStoredValue((current) => {
+          const valueToStore = value instanceof Function ? value(current) : value
+          window.localStorage.setItem(key, JSON.stringify(valueToStore))
+          return valueToStore
+        })
+      } catch (error) {
+        console.error(`Error setting localStorage key "${key}":`, error)
       }
-    } catch (error) {
-      console.error(`Error setting localStorage key "${key}":`, error)
-    }
-  }
+    },
+    [key],
+  )
 
   return [storedValue, setValue] as const
 }
