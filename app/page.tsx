@@ -5,14 +5,18 @@ import { TodoList } from "@/components/todo-list"
 import { YoutubePlaylist } from "@/components/youtube-playlist"
 import { SettingsModal } from "@/components/settings-modal"
 import { Button } from "@/components/ui/button"
-import { Palette } from "lucide-react"
+import { Moon, Sun } from "lucide-react"
 import { useState } from "react"
 import { DailyQuote } from "@/components/daily-quote"
-import { useTheme } from "@/hooks/use-theme"
+import { useTheme } from "next-themes"
 
 export default function Home() {
   const [showSettings, setShowSettings] = useState(false)
-  const { toggleTheme, currentTheme } = useTheme()
+  const { theme, setTheme } = useTheme()
+
+  const toggleTheme = () => {
+    setTheme(theme === 'dark' ? 'light' : 'dark')
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-theme-background-from via-theme-background-via to-theme-background-to">
@@ -28,7 +32,11 @@ export default function Home() {
             size="sm"
             className="text-theme-text-secondary hover:text-theme-text-primary hover:bg-white/10 rounded-lg"
           >
-            <Palette className="w-4 h-4 mr-2" />
+            {theme === 'dark' ? (
+              <Sun className="w-4 h-4 mr-2" />
+            ) : (
+              <Moon className="w-4 h-4 mr-2" />
+            )}
             Theme
           </Button>
         </div>

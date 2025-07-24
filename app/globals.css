@@ -35,78 +35,26 @@
     --chart-4: 38 84% 43%;
     --chart-5: 142 69% 58%;
     --radius: 0.5rem;
-    --sidebar-background: 222 84% 5%;
-    --sidebar-foreground: 0 0% 98%;
-    --sidebar-primary: 142 76% 36%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 215 16% 47%;
-    --sidebar-accent-foreground: 0 0% 98%;
-    --sidebar-border: 215 28% 17%;
-    --sidebar-ring: 142 69% 58%;
 
-    /* Custom theme variables */
-    --theme-background-from: 222 84% 5%;
-    --theme-background-via: 215 28% 17%;
-    --theme-background-to: 215 16% 47%;
-    --theme-card-bg: 215 28% 17%;
+    /* Custom theme variables - Light Mode */
+    --theme-background-from: 0 0% 100%;
+    --theme-background-via: 210 40% 98%;
+    --theme-background-to: 214 32% 91%;
+    --theme-card-bg: 0 0% 100%;
     --theme-card-border: 215 16% 47%;
-    --theme-text-primary: 0 0% 98%;
+    --theme-text-primary: 215 25% 27%;
     --theme-text-secondary: 215 13% 54%;
     --theme-text-muted: 215 16% 47%;
     --theme-accent: 142 76% 36%;
     --theme-accent-hover: 142 69% 58%;
     --theme-progress: 38 92% 50%;
     --theme-progress-bg: 215 16% 47%;
-    --theme-input-bg: 215 28% 17%;
+    --theme-input-bg: 0 0% 100%;
     --theme-input-border: 215 16% 47%;
     --theme-task-accent: 142 76% 36%;
     --theme-task-bg: 142 76% 36%;
     --theme-task-border: 142 69% 58%;
     --theme-task-text: 142 69% 58%;
-  }
-
-  .theme-forest {
-    /* Forest Green Productivity Palette - using Tailwind slate + green */
-    --theme-background-from: 222 84% 5%;   /* slate-900 #0f172a */
-    --theme-background-via: 215 28% 17%;    /* slate-800 #1e293b */
-    --theme-background-to: 215 20% 21%;     /* slate-700 #334155 */
-    --theme-card-bg: 215 28% 17%;           /* slate-800 #1e293b */
-    --theme-card-border: 215 20% 21%;       /* slate-700 #334155 */
-    --theme-text-primary: 214 32% 91%;      /* slate-100 #f1f5f9 */
-    --theme-text-secondary: 215 16% 47%;    /* slate-400 #94a3b8 */
-    --theme-text-muted: 215 14% 34%;        /* slate-500 #64748b */
-    --theme-accent: 142 76% 36%;            /* green-500 #22c55e */
-    --theme-accent-hover: 142 71% 45%;      /* green-600 #16a34a */
-    --theme-progress: 142 69% 58%;          /* green-400 #4ade80 */
-    --theme-progress-bg: 215 20% 21%;       /* slate-700 #334155 */
-    --theme-input-bg: 215 28% 17%;          /* slate-800 #1e293b */
-    --theme-input-border: 215 20% 21%;      /* slate-700 #334155 */
-    --theme-task-accent: 142 76% 36%;       /* green-500 #22c55e */
-    --theme-task-bg: 142 76% 36%;           /* green-500 #22c55e */
-    --theme-task-border: 142 69% 58%;       /* green-400 #4ade80 */
-    --theme-task-text: 142 69% 58%;         /* green-400 #4ade80 */
-  }
-
-  .theme-midnight {
-    /* Midnight Productivity Palette - using Tailwind slate + teal + amber */
-    --theme-background-from: 222 84% 5%;    /* slate-900 #0f172a */
-    --theme-background-via: 215 28% 17%;     /* slate-800 #1e293b */
-    --theme-background-to: 215 20% 21%;      /* slate-700 #334155 */
-    --theme-card-bg: 215 28% 17%;            /* slate-800 #1e293b */
-    --theme-card-border: 215 20% 21%;        /* slate-700 #334155 */
-    --theme-text-primary: 214 32% 91%;       /* slate-100 #f1f5f9 */
-    --theme-text-secondary: 215 16% 47%;     /* slate-400 #94a3b8 */
-    --theme-text-muted: 215 14% 34%;         /* slate-500 #64748b */
-    --theme-accent: 178 60% 48%;             /* teal-500 #14b8a6 */
-    --theme-accent-hover: 178 66% 41%;       /* teal-600 #0d9488 */
-    --theme-progress: 45 93% 47%;            /* amber-500 #f59e0b */
-    --theme-progress-bg: 215 20% 21%;        /* slate-700 #334155 */
-    --theme-input-bg: 215 28% 17%;           /* slate-800 #1e293b */
-    --theme-input-border: 215 20% 21%;       /* slate-700 #334155 */
-    --theme-task-accent: 178 60% 48%;        /* teal-500 #14b8a6 */
-    --theme-task-bg: 178 60% 48%;            /* teal-500 #14b8a6 */
-    --theme-task-border: 172 66% 50%;        /* teal-400 #2dd4bf */
-    --theme-task-text: 172 66% 50%;          /* teal-400 #2dd4bf */
   }
 
   .dark {
@@ -134,14 +82,26 @@
     --chart-3: 215 16% 47%;
     --chart-4: 38 84% 43%;
     --chart-5: 142 76% 36%;
-    --sidebar-background: 222 84% 5%;
-    --sidebar-foreground: 0 0% 98%;
-    --sidebar-primary: 142 69% 58%;
-    --sidebar-primary-foreground: 0 0% 9%;
-    --sidebar-accent: 215 16% 47%;
-    --sidebar-accent-foreground: 0 0% 98%;
-    --sidebar-border: 215 28% 17%;
-    --sidebar-ring: 142 69% 58%;
+
+    /* Custom theme variables - Dark Mode */
+    --theme-background-from: 222 84% 5%;
+    --theme-background-via: 215 28% 17%;
+    --theme-background-to: 215 16% 47%;
+    --theme-card-bg: 215 28% 17%;
+    --theme-card-border: 215 16% 47%;
+    --theme-text-primary: 0 0% 98%;
+    --theme-text-secondary: 215 13% 54%;
+    --theme-text-muted: 215 16% 47%;
+    --theme-accent: 142 76% 36%;
+    --theme-accent-hover: 142 69% 58%;
+    --theme-progress: 38 92% 50%;
+    --theme-progress-bg: 215 16% 47%;
+    --theme-input-bg: 215 28% 17%;
+    --theme-input-border: 215 16% 47%;
+    --theme-task-accent: 142 76% 36%;
+    --theme-task-bg: 142 76% 36%;
+    --theme-task-border: 142 69% 58%;
+    --theme-task-text: 142 69% 58%;
   }
 }
 
