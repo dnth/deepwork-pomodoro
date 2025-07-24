@@ -93,10 +93,10 @@ export function TodoList() {
             </SelectTrigger>
             <SelectContent className="bg-theme-card-bg border-theme-card-border text-theme-text-primary">
               {Object.entries(taskTagConfig).map(([key, config]) => (
-                <SelectItem key={key} value={key} className="hover:bg-theme-card-bg/40">
-                  <div className="flex items-center gap-2">
-                    <div className={`w-2 h-2 rounded-full ${config.color}`} />
-                    <span>{config.label}</span>
+                <SelectItem key={key} value={key} className="hover:bg-theme-card-bg/40 focus:bg-theme-card-bg/40 focus:text-theme-text-primary data-[highlighted]:bg-theme-card-bg/40 data-[highlighted]:text-theme-text-primary pl-2">
+                  <div className="flex items-center gap-2 ml-6">
+                    <div className={`w-3 h-3 rounded-full ${config.color} flex-shrink-0`} />
+                    <span className="text-theme-text-primary">{config.label}</span>
                     <span className="text-xs text-theme-text-muted">({config.duration}min)</span>
                   </div>
                 </SelectItem>
