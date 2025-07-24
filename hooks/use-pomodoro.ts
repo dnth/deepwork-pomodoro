@@ -173,7 +173,7 @@ export function usePomodoro() {
     if (!isRunning && currentMode !== "task") {
       setTimeLeft(getDuration(currentMode))
     }
-  }, [settings.pomodoroDuration, settings.shortBreakDuration, settings.longBreakDuration, currentMode, getDuration, isRunning])
+  }, [settings.pomodoroDuration, settings.shortBreakDuration, settings.longBreakDuration, currentMode, getDuration])
 
 
   return {
