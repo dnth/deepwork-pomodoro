@@ -19,7 +19,7 @@ export function DailyQuote() {
       className={`${theme.cardBg} backdrop-blur-sm ${theme.cardBorder} border rounded-2xl p-8 shadow-2xl group ${theme.cardHover} transition-all duration-200`}
     >
       <div className="flex items-center gap-4">
-        <div className={`flex items-center justify-center w-12 h-12 ${theme.accent}/20 rounded-xl`}>
+        <div className={`flex items-center justify-center w-12 h-12 bg-green-500/20 rounded-xl`}>
           <Edit3 className={`w-6 h-6 text-green-400`} />
         </div>
 
@@ -29,7 +29,7 @@ export function DailyQuote() {
             value={quote}
             onChange={handleChange}
             placeholder="Enter your daily quote or motto..."
-            className={`bg-transparent border-none text-xl ${theme.textPrimary} placeholder-${theme.textMuted} p-0 h-auto font-medium italic focus-visible:ring-0 focus-visible:ring-offset-0`}
+            className={`bg-transparent border-none text-xl ${theme.textPrimary} placeholder:text-slate-400 p-0 h-auto font-medium italic focus-visible:ring-0 focus-visible:ring-offset-0`}
           />
         </div>
       </div>
