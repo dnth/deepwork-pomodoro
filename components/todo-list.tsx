@@ -6,14 +6,11 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Plus, Trash2, Play, Clock, Square } from "lucide-react"
+import { Plus, Trash2 } from "lucide-react"
 import { useTodos, taskTagConfig, type TaskTag, type Todo } from "@/hooks/use-todos"
 import { useState } from "react"
-import { usePomodoro } from "@/hooks/use-pomodoro"
-
 export function TodoList() {
   const { todos, addTodo, toggleTodo, deleteTodo } = useTodos()
-  const { startTaskTimer, stopTaskTimer, currentTask, isRunning, currentMode } = usePomodoro()
   const [newTask, setNewTask] = useState("")
   const [selectedTag, setSelectedTag] = useState<TaskTag>("focus")
 
@@ -43,13 +40,6 @@ export function TodoList() {
     }
   }
 
-  const handleStartTask = (todo: Todo) => {
-    startTaskTimer(todo)
-  }
-
-  const handleStopTask = () => {
-    stopTaskTimer()
-  }
 
   return (
     <div className="w-full bg-theme-card-bg/30 backdrop-blur-sm border border-theme-card-border/30 rounded-2xl p-4 sm:p-6 lg:p-8 shadow-2xl">
@@ -173,15 +163,11 @@ export function TodoList() {
                 </h3>
                 {incompleteTasks.map((todo) => {
                   const tagConfig = taskTagConfig[todo.tag]
-                  const isCurrentTask = currentTask?.id === todo.id
-                  const isActiveTask = isCurrentTask && currentMode === "task"
 
                   return (
                     <div
                       key={todo.id}
-                      className={`flex items-center gap-3 p-3 sm:p-4 bg-theme-input-bg/50 rounded-xl hover:bg-theme-card-bg/40 transition-colors group ${
-                        isActiveTask ? "ring-2 ring-theme-task-border/50 bg-theme-task-bg/10" : ""
-                      }`}
+                      className="flex items-center gap-3 p-3 sm:p-4 bg-theme-input-bg/50 rounded-xl hover:bg-theme-card-bg/40 transition-colors group"
                     >
                       <Checkbox
                         checked={todo.completed}
@@ -198,37 +184,10 @@ export function TodoList() {
                           <span className={`text-xs ${tagConfig.textColor}`}>
                             {tagConfig.label} ({tagConfig.duration}min)
                           </span>
-                          {isActiveTask && isRunning && (
-                            <div className="flex items-center gap-1 text-theme-task-text">
-                              <Clock className="w-3 h-3 animate-pulse" />
-                              <span className="text-xs font-medium">Active</span>
-                            </div>
-                          )}
                         </div>
                       </div>
 
                       <div className="flex items-center gap-2">
-                        {isActiveTask ? (
-                          <Button
-                            onClick={handleStopTask}
-                            variant="ghost"
-                            size="sm"
-                            className="opacity-100 text-red-400 hover:text-red-300 transition-all p-2"
-                            title="Stop task timer"
-                          >
-                            <Square className="w-4 h-4" />
-                          </Button>
-                        ) : (
-                          <Button
-                            onClick={() => handleStartTask(todo)}
-                            variant="ghost"
-                            size="sm"
-                            className="opacity-0 group-hover:opacity-100 text-theme-text-muted hover:text-theme-task-text transition-all p-2"
-                            title={`Start ${taskTagConfig[todo.tag].label} timer (${taskTagConfig[todo.tag].duration}min)`}
-                          >
-                            <Play className="w-4 h-4" />
-                          </Button>
-                        )}
                         <Button
                           onClick={() => deleteTodo(todo.id)}
                           variant="ghost"

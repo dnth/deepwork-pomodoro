@@ -3,15 +3,13 @@
 import { useReducer, useEffect, useCallback, useRef } from "react"
 import { useSettings } from "./use-settings"
 import { useLocalStorage } from "./use-local-storage"
-import type { Todo, TaskTag } from "./use-todos"
 
-type TimerMode = "pomodoro" | "shortBreak" | "longBreak" | "task"
+type TimerMode = "pomodoro" | "shortBreak" | "longBreak"
 
 interface TimerState {
   timeLeft: number
   isRunning: boolean
   currentMode: TimerMode
-  currentTask: Todo | null
 }
 
 type TimerAction =
@@ -21,8 +19,6 @@ type TimerAction =
   | { type: "TICK" }
   | { type: "COMPLETE" }
   | { type: "SET_MODE"; mode: TimerMode; duration: number }
-  | { type: "START_TASK"; task: Todo; duration: number }
-  | { type: "STOP_TASK"; duration: number }
 
 function timerReducer(state: TimerState, action: TimerAction): TimerState {
   switch (action.type) {
@@ -42,23 +38,6 @@ function timerReducer(state: TimerState, action: TimerAction): TimerState {
         currentMode: action.mode,
         timeLeft: action.duration,
         isRunning: false,
-        currentTask: action.mode !== "task" ? null : state.currentTask,
-      }
-    case "START_TASK":
-      return {
-        ...state,
-        currentMode: "task",
-        currentTask: action.task,
-        timeLeft: action.duration,
-        isRunning: true,
-      }
-    case "STOP_TASK":
-      return {
-        ...state,
-        currentMode: "pomodoro",
-        currentTask: null,
-        timeLeft: action.duration,
-        isRunning: false,
       }
     default:
       return state
@@ -74,11 +53,10 @@ export function usePomodoro() {
     timeLeft: settings.pomodoroDuration * 60,
     isRunning: false,
     currentMode: "pomodoro" as TimerMode,
-    currentTask: null,
   })
 
   const getDuration = useCallback(
-    (mode: TimerMode, taskTag?: TaskTag) => {
+    (mode: TimerMode) => {
       switch (mode) {
         case "pomodoro":
           return settings.pomodoroDuration * 60
@@ -86,11 +64,6 @@ export function usePomodoro() {
           return settings.shortBreakDuration * 60
         case "longBreak":
           return settings.longBreakDuration * 60
-        case "task":
-          if (taskTag === "quick") return 10 * 60
-          if (taskTag === "focus") return 25 * 60
-          if (taskTag === "deep") return 50 * 60
-          return 25 * 60
         default:
           return settings.pomodoroDuration * 60
       }
@@ -100,19 +73,19 @@ export function usePomodoro() {
 
   // Update timer when settings change (but not when paused)
   useEffect(() => {
-    const duration = getDuration(state.currentMode, state.currentTask?.tag)
+    const duration = getDuration(state.currentMode)
     if (!state.isRunning && state.timeLeft === duration) {
       dispatch({ type: "RESET", duration })
     }
-  }, [settings, state.currentMode, state.currentTask, getDuration])
+  }, [settings, state.currentMode, getDuration])
 
   // Initialize timer duration when mode changes
   useEffect(() => {
-    const duration = getDuration(state.currentMode, state.currentTask?.tag)
+    const duration = getDuration(state.currentMode)
     if (state.timeLeft !== duration && !state.isRunning) {
       dispatch({ type: "RESET", duration })
     }
-  }, [state.currentMode, state.currentTask, getDuration])
+  }, [state.currentMode, getDuration])
 
   const setMode = useCallback(
     (mode: TimerMode) => {
@@ -122,35 +95,24 @@ export function usePomodoro() {
     [getDuration],
   )
 
-  const startTaskTimer = useCallback(
-    (task: Todo) => {
-      const duration = getDuration("task", task.tag)
-      dispatch({ type: "START_TASK", task, duration })
-    },
-    [getDuration],
-  )
 
   const startTimer = useCallback(() => {
     if (state.timeLeft === 0) {
-      const duration = getDuration(state.currentMode, state.currentTask?.tag)
+      const duration = getDuration(state.currentMode)
       dispatch({ type: "RESET", duration })
     }
     dispatch({ type: "START" })
-  }, [state.timeLeft, state.currentMode, state.currentTask, getDuration])
+  }, [state.timeLeft, state.currentMode, getDuration])
 
   const pauseTimer = useCallback(() => {
     dispatch({ type: "PAUSE" })
   }, [])
 
   const resetTimer = useCallback(() => {
-    const duration = getDuration(state.currentMode, state.currentTask?.tag)
+    const duration = getDuration(state.currentMode)
     dispatch({ type: "RESET", duration })
-  }, [state.currentMode, state.currentTask, getDuration])
+  }, [state.currentMode, getDuration])
 
-  const stopTaskTimer = useCallback(() => {
-    const duration = getDuration("pomodoro")
-    dispatch({ type: "STOP_TASK", duration })
-  }, [getDuration])
 
   const formatTime = useCallback((seconds: number) => {
     const mins = Math.floor(seconds / 60)
@@ -185,22 +147,20 @@ export function usePomodoro() {
     if (state.timeLeft === 0 && state.isRunning) {
       dispatch({ type: "COMPLETE" })
       
-      if (state.currentMode === "pomodoro" || state.currentMode === "task") {
+      if (state.currentMode === "pomodoro") {
         setCompletedToday((prev) => prev + 1)
       }
       
       // Notification
       if (settings.notifications && typeof window !== 'undefined' && Notification.permission === "granted") {
-        const message = state.currentMode === 'task' && state.currentTask 
-          ? `Task "${state.currentTask.text}" completed!` 
-          : state.currentMode === 'pomodoro' 
+        const message = state.currentMode === 'pomodoro' 
           ? "Time for a break!" 
           : "Break time is over!"
         new Notification("Deep Work", { body: message, icon: "/favicon.ico" })
       }
 
-      // Auto start breaks/tasks
-      if (settings.autoStartBreaks && state.currentMode !== "task") {
+      // Auto start breaks
+      if (settings.autoStartBreaks) {
         const newCompletedCount = state.currentMode === "pomodoro" ? completedToday + 1 : completedToday
         const nextMode = state.currentMode === "pomodoro" 
           ? (newCompletedCount % 4 === 0 ? "longBreak" : "shortBreak") 
@@ -211,25 +171,19 @@ export function usePomodoro() {
           dispatch({ type: "SET_MODE", mode: nextMode, duration })
           dispatch({ type: "START" })
         }, 1000)
-      } else if (state.currentMode === "task") {
-        const duration = getDuration("pomodoro")
-        dispatch({ type: "STOP_TASK", duration })
       }
     }
-  }, [state.timeLeft, state.isRunning, state.currentMode, state.currentTask, settings, completedToday, setCompletedToday, getDuration])
+  }, [state.timeLeft, state.isRunning, state.currentMode, settings, completedToday, setCompletedToday, getDuration])
 
   return {
     timeLeft: state.timeLeft,
     isRunning: state.isRunning,
     currentMode: state.currentMode,
-    currentTask: state.currentTask,
     completedToday,
     setMode,
-    startTaskTimer,
     startTimer,
     pauseTimer,
     resetTimer,
-    stopTaskTimer,
     formatTime,
   }
 }
