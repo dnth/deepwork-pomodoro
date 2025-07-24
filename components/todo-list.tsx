@@ -73,7 +73,7 @@ export function TodoList() {
             onChange={(e) => setNewTask(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="Add new task..."
-            className="flex-1 border-theme-input-border text-theme-text-primary placeholder-theme-text-muted rounded-xl"
+            className="flex-1 bg-theme-input-bg border-theme-input-border text-theme-text-primary placeholder-theme-text-muted rounded-xl"
           />
           <Button
             onClick={handleAddTask}
@@ -88,7 +88,7 @@ export function TodoList() {
           <span className="text-sm text-theme-text-secondary">Tag:</span>
           <Select value={selectedTag} onValueChange={(value: TaskTag) => setSelectedTag(value)}>
             <SelectTrigger 
-                className="w-32 border-theme-input-border text-theme-text-primary rounded-lg">
+                className="w-32 bg-theme-input-bg border-theme-input-border text-theme-text-primary rounded-lg">
               <SelectValue />
             </SelectTrigger>
             <SelectContent className="bg-theme-card-bg border-theme-card-border text-theme-text-primary">

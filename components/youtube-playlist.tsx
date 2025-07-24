@@ -114,7 +114,7 @@ export function YoutubePlaylist() {
             value={customVideoUrl}
             onChange={(e) => setCustomVideoUrl(e.target.value)}
             placeholder="Paste YouTube video URL for custom ambient sound..."
-            className="flex-1 border-theme-input-border text-theme-text-primary placeholder-theme-text-muted rounded-xl"
+            className="flex-1 bg-theme-input-bg border-theme-input-border text-theme-text-primary placeholder-theme-text-muted rounded-xl"
           />
           <Button
             onClick={handleCustomVideo}
