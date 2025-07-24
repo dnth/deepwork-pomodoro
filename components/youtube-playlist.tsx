@@ -53,17 +53,35 @@ export function YoutubePlaylist() {
   const playerRef = useRef<any>(null)
   const [customVideoUrl, setCustomVideoUrl] = useState("")
   const [customVideoId, setCustomVideoId] = useState<string | null>(null)
+  const [isPlaylist, setIsPlaylist] = useState(false)
+  const [playlistId, setPlaylistId] = useState<string | null>(null)
 
-  const extractVideoId = (url: string): string | null => {
-    const regex = /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/
-    const match = url.match(regex)
-    return match ? match[1] : null
+  const extractVideoId = (url: string): { videoId: string | null; playlistId: string | null } => {
+    // Extract playlist ID
+    const playlistRegex = /[?&]list=([^&]+)/
+    const playlistMatch = url.match(playlistRegex)
+    const playlistId = playlistMatch ? playlistMatch[1] : null
+
+    // Extract video ID
+    const videoRegex = /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/
+    const videoMatch = url.match(videoRegex)
+    const videoId = videoMatch ? videoMatch[1] : null
+
+    return { videoId, playlistId }
   }
 
   const handleCustomVideo = () => {
-    const videoId = extractVideoId(customVideoUrl)
-    if (videoId) {
+    const { videoId, playlistId } = extractVideoId(customVideoUrl)
+    
+    if (playlistId) {
+      setPlaylistId(playlistId)
+      setIsPlaylist(true)
+      setActiveCategory("custom")
+      setIsPlaying(true)
+    } else if (videoId) {
       setCustomVideoId(videoId)
+      setIsPlaylist(false)
+      setPlaylistId(null)
       setActiveCategory("custom")
       setIsPlaying(true)
     }
@@ -113,7 +131,7 @@ export function YoutubePlaylist() {
           <Input
             value={customVideoUrl}
             onChange={(e) => setCustomVideoUrl(e.target.value)}
-            placeholder="Paste YouTube video URL for custom ambient sound..."
+            placeholder="Paste YouTube video or playlist URL..."
             className="flex-1 bg-theme-input-bg border-theme-input-border text-theme-text-primary placeholder-theme-text-muted rounded-xl text-sm sm:text-base"
           />
           <Button
@@ -154,13 +172,13 @@ export function YoutubePlaylist() {
               height="100%"
               src={`https://www.youtube.com/embed/${
                 activeCategory === "custom"
-                  ? customVideoId
-                  : ambientCategories.find((c) => c.id === activeCategory)?.videoId
-              }?autoplay=${isPlaying ? 1 : 0}&mute=${isMuted ? 1 : 0}&loop=1&playlist=${
-                activeCategory === "custom"
-                  ? customVideoId
-                  : ambientCategories.find((c) => c.id === activeCategory)?.videoId
-              }`}
+                  ? isPlaylist 
+                    ? `videoseries?list=${playlistId}`
+                    : `${customVideoId}?playlist=${customVideoId}`
+                  : `${ambientCategories.find((c) => c.id === activeCategory)?.videoId}?playlist=${
+                      ambientCategories.find((c) => c.id === activeCategory)?.videoId
+                    }`
+              }&autoplay=${isPlaying ? 1 : 0}&mute=${isMuted ? 1 : 0}&loop=1`}
               title="Ambient Sound Player"
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
