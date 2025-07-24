@@ -83,10 +83,10 @@ export function YoutubePlaylist() {
   }
 
   return (
-    <div className="bg-theme-card-bg/30 backdrop-blur-sm border border-theme-card-border/30 rounded-2xl p-8 shadow-2xl">
+    <div className="bg-theme-card-bg/30 backdrop-blur-sm border border-theme-card-border/30 rounded-2xl p-4 sm:p-6 lg:p-8 shadow-2xl">
       {/* Header */}
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-theme-text-primary">Ambient Sounds</h2>
+      <div className="flex justify-between items-center mb-4 sm:mb-6">
+        <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-theme-text-primary">Ambient Sounds</h2>
         <div className="flex gap-2">
           <Button
             onClick={togglePlayPause}
@@ -108,17 +108,17 @@ export function YoutubePlaylist() {
       </div>
 
       {/* Custom Video Input */}
-      <div className="mb-6">
-        <div className="flex gap-3">
+      <div className="mb-4 sm:mb-6">
+        <div className="flex gap-2 sm:gap-3">
           <Input
             value={customVideoUrl}
             onChange={(e) => setCustomVideoUrl(e.target.value)}
             placeholder="Paste YouTube video URL for custom ambient sound..."
-            className="flex-1 bg-theme-input-bg border-theme-input-border text-theme-text-primary placeholder-theme-text-muted rounded-xl"
+            className="flex-1 bg-theme-input-bg border-theme-input-border text-theme-text-primary placeholder-theme-text-muted rounded-xl text-sm sm:text-base"
           />
           <Button
             onClick={handleCustomVideo}
-            className="bg-theme-accent hover:bg-theme-accent-hover text-theme-text-primary rounded-xl px-6"
+            className="bg-theme-accent hover:bg-theme-accent-hover text-theme-text-primary rounded-xl px-4 sm:px-6 text-sm sm:text-base"
           >
             Load Video
           </Button>
@@ -126,27 +126,27 @@ export function YoutubePlaylist() {
       </div>
 
       {/* Category Grid */}
-      <div className="grid grid-cols-2 gap-4 mb-6">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-4 sm:mb-6">
         {ambientCategories.map((category) => (
           <Button
             key={category.id}
             onClick={() => handleCategoryClick(category)}
             variant="ghost"
-            className={`h-24 flex flex-col items-center justify-center gap-2 rounded-xl transition-all duration-200 hover:scale-105 ${
+            className={`h-20 sm:h-24 flex flex-col items-center justify-center gap-1 sm:gap-2 rounded-xl transition-all duration-200 hover:scale-105 ${
               activeCategory === category.id
                 ? `bg-theme-task-bg/20 border border-theme-task-border/50 text-theme-task-text`
                 : `bg-theme-input-bg/50 hover:bg-theme-card-bg/40 text-theme-text-secondary hover:text-theme-text-primary`
             }`}
           >
-            {category.icon}
-            <span className="text-sm font-medium">{category.name}</span>
+            <div className="w-5 h-5 sm:w-6 sm:h-6">{category.icon}</div>
+            <span className="text-xs sm:text-sm font-medium">{category.name}</span>
           </Button>
         ))}
       </div>
 
       {/* YouTube Player */}
       {activeCategory && (
-        <div className="mb-6">
+        <div className="mb-4 sm:mb-6">
           <div className="aspect-video bg-theme-input-bg/50 rounded-xl overflow-hidden">
             <iframe
               ref={playerRef}

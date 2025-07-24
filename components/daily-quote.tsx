@@ -14,24 +14,23 @@ export function DailyQuote() {
 
   return (
     <div
-      className="bg-theme-card-bg/30 backdrop-blur-sm border-theme-card-border/30 border rounded-2xl p-8 shadow-2xl group hover:bg-theme-card-bg/40 transition-all duration-200"
+      className="w-full bg-theme-card-bg/30 backdrop-blur-sm border-theme-card-border/30 border rounded-2xl p-4 sm:p-6 lg:p-8 shadow-2xl group hover:bg-theme-card-bg/40 transition-all duration-200"
     >
-      <div className="flex items-center gap-4">
-        <div className="flex items-center justify-center w-12 h-12 bg-theme-task-bg/20 rounded-xl">
-          <Edit3 className="w-6 h-6 text-theme-task-text" />
+      <div className="flex items-center gap-3 sm:gap-4">
+        <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-theme-task-bg/20 rounded-xl">
+          <Edit3 className="w-5 h-5 sm:w-6 sm:h-6 text-theme-task-text" />
         </div>
 
         <div className="flex-1">
-          <label className="block text-sm font-medium text-theme-text-muted mb-2">Daily Quote / Motto</label>
+          <label className="block text-xs sm:text-sm font-medium text-theme-text-muted mb-2 sm:mb-3">Daily Quote / Motto</label>
           <Input
             value={quote}
             onChange={handleChange}
             placeholder="Enter your daily quote or motto..."
-            className="bg-transparent border-none text-5xl text-theme-text-primary placeholder:text-theme-text-muted p-0 h-auto font-medium italic focus-visible:ring-0 focus-visible:ring-offset-0"
+            className="bg-transparent border-none text-lg sm:text-2xl lg:text-4xl text-theme-text-primary placeholder:text-theme-text-muted p-0 h-auto font-medium italic focus-visible:ring-0 focus-visible:ring-offset-0"
           />
         </div>
       </div>
-
     </div>
   )
 }

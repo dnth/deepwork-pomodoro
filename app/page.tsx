@@ -18,10 +18,10 @@ export default function Home() {
     <div className="min-h-screen bg-gradient-to-br from-theme-background-from via-theme-background-via to-theme-background-to">
 
       {/* Header */}
-      <header className="relative z-10 flex items-center justify-between p-6">
+      <header className="relative z-10 flex items-center justify-between p-4 sm:p-6">
         <div className="flex-1" />
-        <h1 className="text-2xl font-bold text-theme-text-primary">Deep Work</h1>
-        <div className="flex-1 flex justify-end items-center gap-3">
+        <h1 className="text-xl sm:text-2xl font-bold text-theme-text-primary">Deep Work</h1>
+        <div className="flex-1 flex justify-end items-center gap-2 sm:gap-3">
           <Button
             onClick={toggleTheme}
             variant="ghost"
@@ -34,28 +34,33 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Daily Quote Section */}
-      <div className="relative z-10 container mx-auto px-6 mb-6">
-        <DailyQuote />
-      </div>
-
       {/* Main Content */}
-      <main className="relative z-10 container mx-auto px-6 pb-6">
-        {/* Two Column Layout */}
-        <div className="grid lg:grid-cols-2 gap-8 mb-8">
-          {/* Pomodoro Timer - Left Column */}
-          <div className="space-y-6">
-            <PomodoroTimer onSettingsClick={() => setShowSettings(true)} />
+      <main className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-4 sm:pb-6">
+        {/* Daily Quote Section */}
+        <div className="grid gap-4 sm:gap-6">
+          {/* Daily Quote */}
+          <div>
+            <DailyQuote />
           </div>
 
-          {/* Todo List - Right Column */}
-          <div className="space-y-6">
-            <TodoList />
+          {/* Two Column Layout */}
+          <div className="grid lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
+            {/* Pomodoro Timer - Left Column */}
+            <div className="w-full">
+              <PomodoroTimer onSettingsClick={() => setShowSettings(true)} />
+            </div>
+
+            {/* Todo List - Right Column */}
+            <div className="w-full">
+              <TodoList />
+            </div>
+          </div>
+
+          {/* YouTube Playlist Section - Bottom */}
+          <div>
+            <YoutubePlaylist />
           </div>
         </div>
-
-        {/* YouTube Playlist Section - Bottom */}
-        <YoutubePlaylist />
       </main>
 
       {/* Settings Modal */}

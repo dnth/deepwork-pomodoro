@@ -48,15 +48,15 @@ export function TodoList() {
   }
 
   return (
-    <div className="bg-theme-card-bg/30 backdrop-blur-sm border border-theme-card-border/30 rounded-2xl p-8 shadow-2xl">
+    <div className="w-full bg-theme-card-bg/30 backdrop-blur-sm border border-theme-card-border/30 rounded-2xl p-4 sm:p-6 lg:p-8 shadow-2xl">
       {/* Header */}
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-theme-text-primary">To Do</h2>
-        <span className="text-theme-task-text font-semibold">{Math.round(progress)}%</span>
+      <div className="flex justify-between items-center mb-4 sm:mb-6">
+        <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-theme-text-primary">To Do</h2>
+        <span className="text-theme-task-text font-semibold text-sm sm:text-base">{Math.round(progress)}%</span>
       </div>
 
       {/* Progress Bar */}
-      <div className="mb-6">
+      <div className="mb-4 sm:mb-6">
         <div className="w-full bg-theme-progress-bg rounded-full h-2">
           <div
             className="bg-theme-progress h-2 rounded-full transition-all duration-300"
@@ -66,34 +66,34 @@ export function TodoList() {
       </div>
 
       {/* Add Task Input */}
-      <div className="space-y-3 mb-6">
-        <div className="flex gap-3">
+      <div className="space-y-3 mb-4 sm:mb-6">
+        <div className="flex gap-2 sm:gap-3">
           <Input
             value={newTask}
             onChange={(e) => setNewTask(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="Add new task..."
-            className="flex-1 bg-theme-input-bg border-theme-input-border text-theme-text-primary placeholder-theme-text-muted rounded-xl"
+            className="flex-1 bg-theme-input-bg border-theme-input-border text-theme-text-primary placeholder-theme-text-muted rounded-xl text-sm sm:text-base p-2 sm:p-3"
           />
           <Button
             onClick={handleAddTask}
-            className="bg-theme-accent hover:bg-theme-accent-hover text-theme-text-primary rounded-xl px-4"
+            className="bg-theme-accent hover:bg-theme-accent-hover text-theme-text-primary rounded-xl px-3 sm:px-4"
           >
-            <Plus className="w-5 h-5" />
+            <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
           </Button>
         </div>
 
         {/* Tag Selection */}
-        <div className="flex items-center gap-3">
-          <span className="text-sm text-theme-text-secondary">Tag:</span>
+        <div className="flex items-center gap-2 sm:gap-3">
+          <span className="text-xs sm:text-sm text-theme-text-secondary">Tag:</span>
           <Select value={selectedTag} onValueChange={(value: TaskTag) => setSelectedTag(value)}>
             <SelectTrigger 
-                className="w-44 bg-theme-input-bg border-theme-input-border text-theme-text-primary rounded-lg">
+                className="w-36 sm:w-44 bg-theme-input-bg border-theme-input-border text-theme-text-primary rounded-lg text-sm p-2 sm:p-3">
               <SelectValue />
             </SelectTrigger>
             <SelectContent className="bg-theme-card-bg border-theme-card-border text-theme-text-primary min-w-[12rem]">
               {Object.entries(taskTagConfig).map(([key, config]) => (
-                <SelectItem key={key} value={key} className="hover:bg-theme-card-bg/40 focus:bg-theme-card-bg/40 focus:text-theme-text-primary data-[highlighted]:bg-theme-card-bg/40 data-[highlighted]:text-theme-text-primary pl-2">
+                <SelectItem key={key} value={key} className="hover:bg-theme-card-bg/40 focus:bg-theme-card-bg/40 focus:text-theme-text-primary data-[highlighted]:bg-theme-card-bg/40 data-[highlighted]:text-theme-text-primary p-2 sm:p-3">
                   {config.symbol}  {config.label} ({config.duration}min)
                 </SelectItem>
               ))}
@@ -103,7 +103,7 @@ export function TodoList() {
       </div>
 
       {/* Task Counter */}
-      <div className="text-theme-text-secondary mb-6">
+      <div className="text-theme-text-secondary mb-4 sm:mb-6">
         <span className="text-theme-text-primary font-semibold">
           {todos.filter((t) => t.completed).length}/{todos.length}
         </span>
@@ -123,7 +123,7 @@ export function TodoList() {
             return (
               <div
                 key={todo.id}
-                className={`flex items-center gap-3 p-3 bg-theme-input-bg/50 rounded-xl hover:bg-theme-card-bg/40 transition-colors group ${
+                className={`flex items-center gap-3 p-3 sm:p-4 bg-theme-input-bg/50 rounded-xl hover:bg-theme-card-bg/40 transition-colors group ${
                   isActiveTask ? "ring-2 ring-theme-task-border/50 bg-theme-task-bg/10" : ""
                 }`}
               >
@@ -134,7 +134,7 @@ export function TodoList() {
                 />
 
                 <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-1">
+                  <div className="flex items-center gap-2 mb-1 sm:mb-2">
                     <span
                       className={`flex-1 transition-all ${
                         todo.completed ? "text-theme-text-muted line-through" : "text-theme-text-primary"
@@ -165,7 +165,7 @@ export function TodoList() {
                           onClick={handleStopTask}
                           variant="ghost"
                           size="sm"
-                          className="opacity-100 text-red-400 hover:text-red-300 transition-all"
+                          className="opacity-100 text-red-400 hover:text-red-300 transition-all p-2"
                           title="Stop task timer"
                         >
                           <Square className="w-4 h-4" />
@@ -175,7 +175,7 @@ export function TodoList() {
                           onClick={() => handleStartTask(todo)}
                           variant="ghost"
                           size="sm"
-                          className="opacity-0 group-hover:opacity-100 text-theme-text-muted hover:text-theme-task-text transition-all"
+                          className="opacity-0 group-hover:opacity-100 text-theme-text-muted hover:text-theme-task-text transition-all p-2"
                           title={`Start ${taskTagConfig[todo.tag].label} timer (${taskTagConfig[todo.tag].duration}min)`}
                         >
                           <Play className="w-4 h-4" />
@@ -187,7 +187,7 @@ export function TodoList() {
                     onClick={() => deleteTodo(todo.id)}
                     variant="ghost"
                     size="sm"
-                    className="opacity-0 group-hover:opacity-100 text-theme-text-muted hover:text-red-400 transition-all"
+                    className="opacity-0 group-hover:opacity-100 text-theme-text-muted hover:text-red-400 transition-all p-2"
                   >
                     <Trash2 className="w-4 h-4" />
                   </Button>

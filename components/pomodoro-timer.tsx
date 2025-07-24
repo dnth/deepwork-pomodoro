@@ -52,20 +52,20 @@ export function PomodoroTimer({ onSettingsClick }: PomodoroTimerProps) {
   const hasCurrentTask = currentTask !== null
 
   return (
-    <div className="bg-theme-card-bg/30 backdrop-blur-sm border border-theme-card-border/30 rounded-2xl p-8 shadow-2xl">
+    <div className="w-full bg-theme-card-bg/30 backdrop-blur-sm border border-theme-card-border/30 rounded-2xl p-4 sm:p-6 lg:p-8 shadow-2xl">
       {/* Header */}
-      <div className="flex justify-between items-center mb-6">
-        <div className="flex items-center gap-3">
-          <h2 className="text-2xl font-bold text-theme-text-primary">{getTimerTitle()}</h2>
+      <div className="flex justify-between items-center mb-4 sm:mb-6">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-theme-text-primary">{getTimerTitle()}</h2>
           {isTaskMode && (
-            <span className="text-xs bg-theme-task-accent text-white px-2 py-1 rounded-full font-medium">TASK MODE</span>
+            <span className="text-xs bg-theme-task-accent text-white px-2 py-1 sm:px-3 sm:py-1.5 rounded-full font-medium">TASK MODE</span>
           )}
         </div>
         <Button
           onClick={onSettingsClick}
           variant="ghost"
           size="sm"
-          className="text-theme-text-muted hover:text-theme-text-primary hover:bg-theme-card-bg/40 rounded-lg"
+          className="text-theme-text-muted hover:text-theme-text-primary hover:bg-theme-card-bg/40 rounded-lg p-2"
         >
           <Settings className="w-5 h-5" />
         </Button>
@@ -73,14 +73,14 @@ export function PomodoroTimer({ onSettingsClick }: PomodoroTimerProps) {
 
       {/* Current Task Display - Always show when in task mode */}
       {isTaskMode && hasCurrentTask && (
-        <div className="mb-6 p-4 bg-theme-task-bg/10 border border-theme-task-border/30 rounded-xl">
+        <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-theme-task-bg/10 border border-theme-task-border/30 rounded-xl">
           <div className="flex items-center justify-between">
             <div className="flex-1">
-              <div className="flex items-center gap-2 mb-2">
+              <div className="flex items-center gap-2 mb-2 sm:mb-3">
                 <Clock className="w-4 h-4 text-theme-task-text" />
                 <span className="font-medium text-theme-text-primary">Working on:</span>
               </div>
-              <p className="text-theme-text-primary font-medium text-lg mb-2">{currentTask.text}</p>
+              <p className="text-theme-text-primary font-medium text-lg mb-2 sm:mb-3">{currentTask.text}</p>
               <div className="flex items-center gap-2">
                 <div className={`w-3 h-3 rounded-full ${taskTagConfig[currentTask.tag].color}`} />
                 <span className={`text-sm ${taskTagConfig[currentTask.tag].textColor} font-medium`}>
@@ -102,13 +102,13 @@ export function PomodoroTimer({ onSettingsClick }: PomodoroTimerProps) {
       )}
 
       {/* Mode Tabs */}
-      <div className="flex bg-theme-input-bg/50 rounded-xl p-1 mb-8">
+      <div className="flex bg-theme-input-bg/50 rounded-xl p-1 mb-6 sm:mb-8">
         {modes.map((mode) => (
           <Button
             key={mode.key}
             variant="ghost"
             onClick={() => setMode(mode.key)}
-            className={`flex-1 rounded-lg transition-all duration-200 ${
+            className={`flex-1 rounded-lg p-2 sm:p-3 transition-all duration-200 ${
               currentMode === mode.key && !isTaskMode
                 ? "bg-theme-accent text-theme-text-primary shadow-lg"
                 : "text-theme-text-secondary hover:text-theme-text-primary hover:bg-theme-card-bg/40"
@@ -120,14 +120,14 @@ export function PomodoroTimer({ onSettingsClick }: PomodoroTimerProps) {
       </div>
 
       {/* Timer Display */}
-      <div className="text-center mb-8">
-        <div className="text-8xl font-bold text-theme-text-primary mb-4 font-mono tracking-tight">
+      <div className="text-center mb-6 sm:mb-8">
+        <div className="text-4xl sm:text-6xl lg:text-8xl font-bold text-theme-text-primary mb-3 sm:mb-4 font-mono tracking-tight">
           {formatTime(timeLeft)}
         </div>
 
         {/* Progress Ring */}
-        <div className="relative w-32 h-32 mx-auto mb-6">
-          <svg className="w-32 h-32 transform -rotate-90" viewBox="0 0 120 120">
+        <div className="relative w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32 mx-auto mb-4 sm:mb-6">
+          <svg className="w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32 transform -rotate-90" viewBox="0 0 120 120">
             <circle
               cx="60"
               cy="60"
@@ -154,13 +154,13 @@ export function PomodoroTimer({ onSettingsClick }: PomodoroTimerProps) {
       </div>
 
       {/* Controls */}
-      <div className="flex justify-center gap-4 mb-8">
+      <div className="flex justify-center gap-3 sm:gap-4 mb-6 sm:mb-8">
         <Button
           onClick={isRunning ? pauseTimer : startTimer}
           size="lg"
-          className="bg-theme-accent hover:bg-theme-accent-hover text-theme-text-primary px-8 py-3 rounded-xl shadow-lg transition-all duration-200 hover:scale-105"
+          className="bg-theme-accent hover:bg-theme-accent-hover text-theme-text-primary px-6 sm:px-8 py-2 sm:py-3 rounded-xl shadow-lg transition-all duration-200 hover:scale-105 text-sm sm:text-base"
         >
-          {isRunning ? <Pause className="w-6 h-6 mr-2" /> : <Play className="w-6 h-6 mr-2" />}
+          {isRunning ? <Pause className="w-4 h-4 sm:w-6 sm:h-6 mr-1 sm:mr-2" /> : <Play className="w-4 h-4 sm:w-6 sm:h-6 mr-1 sm:mr-2" />}
           {isRunning ? "Pause" : "Start"}
         </Button>
 
@@ -168,9 +168,9 @@ export function PomodoroTimer({ onSettingsClick }: PomodoroTimerProps) {
           onClick={resetTimer}
           variant="outline"
           size="lg"
-          className="border-theme-input-border text-theme-text-secondary hover:text-theme-text-primary hover:bg-theme-card-bg/40 px-6 py-3 rounded-xl bg-transparent"
+          className="border-theme-input-border text-theme-text-secondary hover:text-theme-text-primary hover:bg-theme-card-bg/40 px-4 sm:px-6 py-2 sm:py-3 rounded-xl bg-transparent"
         >
-          <RotateCcw className="w-5 h-5" />
+          <RotateCcw className="w-4 h-4 sm:w-5 sm:h-5" />
         </Button>
       </div>
 
