@@ -142,8 +142,6 @@ export function TodoList() {
                           <span className="flex-1 transition-all text-theme-text-muted line-through">
                             {todo.text}
                           </span>
-                        </div>
-                        <div className="flex items-center gap-2">
                           <span className="text-sm">{tagConfig.symbol}</span>
                           <span className={`text-xs ${tagConfig.textColor} opacity-70`}>
                             {tagConfig.label} ({tagConfig.duration}min)
@@ -196,18 +194,16 @@ export function TodoList() {
                           <span className="flex-1 transition-all text-theme-text-primary">
                             {todo.text}
                           </span>
+                          <span className="text-sm">{tagConfig.symbol}</span>
+                          <span className={`text-xs ${tagConfig.textColor}`}>
+                            {tagConfig.label} ({tagConfig.duration}min)
+                          </span>
                           {isActiveTask && isRunning && (
                             <div className="flex items-center gap-1 text-theme-task-text">
                               <Clock className="w-3 h-3 animate-pulse" />
                               <span className="text-xs font-medium">Active</span>
                             </div>
                           )}
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm">{tagConfig.symbol}</span>
-                          <span className={`text-xs ${tagConfig.textColor}`}>
-                            {tagConfig.label} ({tagConfig.duration}min)
-                          </span>
                         </div>
                       </div>
 
