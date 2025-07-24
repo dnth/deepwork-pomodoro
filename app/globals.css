@@ -10,51 +10,51 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 215 25% 27%;
-    --card: 215 16% 47%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 215 25% 27%;
-    --primary: 222 84% 5%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 142 76% 36%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 215 16% 47%;
-    --muted-foreground: 215 13% 54%;
-    --accent: 38 92% 50%;
-    --accent-foreground: 0 0% 9%;
-    --destructive: 0 84.2% 60.2%;
+    --background: 210 40% 98%;        /* bg-slate-50: #f8fafc */
+    --foreground: 222 84% 5%;         /* text-slate-900: #0f172a */
+    --card: 0 0% 100%;                /* bg-white: #ffffff */
+    --card-foreground: 222 84% 5%;    /* text-slate-900: #0f172a */
+    --popover: 0 0% 100%;             /* bg-white: #ffffff */
+    --popover-foreground: 222 84% 5%; /* text-slate-900: #0f172a */
+    --primary: 178 60% 29%;           /* teal-600: #0d9488 */
+    --primary-foreground: 0 0% 100%;  /* white text */
+    --secondary: 215 28% 97%;         /* bg-slate-100: #f1f5f9 */
+    --secondary-foreground: 222 84% 5%; /* text-slate-900: #0f172a */
+    --muted: 215 28% 97%;             /* bg-slate-100: #f1f5f9 */
+    --muted-foreground: 215 16% 65%;  /* text-slate-500: #64748b */
+    --accent: 45 96% 53%;             /* amber-400: #fbbf24 */
+    --accent-foreground: 222 84% 5%;  /* text-slate-900: #0f172a */
+    --destructive: 0 84% 60%;         /* red-500: #ef4444 */
     --destructive-foreground: 0 0% 98%;
-    --border: 215 16% 47%;
-    --input: 215 16% 47%;
-    --ring: 142 69% 58%;
-    --chart-1: 38 92% 50%;
-    --chart-2: 142 76% 36%;
-    --chart-3: 215 16% 47%;
-    --chart-4: 38 84% 43%;
-    --chart-5: 142 69% 58%;
+    --border: 215 20% 91%;            /* border-slate-200: #e2e8f0 */
+    --input: 214 32% 91%;             /* border-slate-300: #cbd5e1 */
+    --ring: 178 60% 29%;              /* teal-600: #0d9488 */
+    --chart-1: 45 96% 53%;            /* amber-400: #fbbf24 */
+    --chart-2: 178 60% 29%;           /* teal-600: #0d9488 */
+    --chart-3: 160 84% 39%;           /* emerald-500: #10b981 */
+    --chart-4: 221 83% 53%;           /* blue-500: #3b82f6 */
+    --chart-5: 0 84% 60%;             /* red-500: #ef4444 */
     --radius: 0.5rem;
 
-    /* Custom theme variables - Light Mode */
-    --theme-background-from: 0 0% 100%;
-    --theme-background-via: 210 40% 98%;
-    --theme-background-to: 214 32% 91%;
-    --theme-card-bg: 0 0% 100%;
-    --theme-card-border: 215 16% 47%;
-    --theme-text-primary: 215 25% 27%;
-    --theme-text-secondary: 215 13% 54%;
-    --theme-text-muted: 215 16% 47%;
-    --theme-accent: 142 76% 36%;
-    --theme-accent-hover: 142 69% 58%;
-    --theme-progress: 38 92% 50%;
-    --theme-progress-bg: 215 16% 47%;
-    --theme-input-bg: 0 0% 100%;
-    --theme-input-border: 215 16% 47%;
-    --theme-task-accent: 142 76% 36%;
-    --theme-task-bg: 142 76% 36%;
-    --theme-task-border: 142 69% 58%;
-    --theme-task-text: 142 69% 58%;
+    /* Custom theme variables - Daylight Focus Palette */
+    --theme-background-from: 210 40% 98%;  /* bg-slate-50: #f8fafc */
+    --theme-background-via: 0 0% 100%;     /* bg-white: #ffffff */
+    --theme-background-to: 210 40% 98%;    /* bg-slate-50: #f8fafc */
+    --theme-card-bg: 0 0% 100%;            /* bg-white: #ffffff */
+    --theme-card-border: 215 20% 91%;      /* border-slate-200: #e2e8f0 */
+    --theme-text-primary: 222 84% 5%;      /* text-slate-900: #0f172a */
+    --theme-text-secondary: 215 25% 35%;   /* text-slate-700: #334155 */
+    --theme-text-muted: 215 16% 65%;       /* text-slate-500: #64748b */
+    --theme-accent: 178 60% 29%;           /* bg-teal-600: #0d9488 */
+    --theme-accent-hover: 178 69% 25%;     /* bg-teal-700: #0f766e */
+    --theme-progress: 45 96% 53%;          /* bg-amber-400: #fbbf24 */
+    --theme-progress-bg: 215 20% 91%;      /* bg-slate-200: #e2e8f0 */
+    --theme-input-bg: 0 0% 100%;           /* bg-white: #ffffff */
+    --theme-input-border: 214 32% 91%;     /* border-slate-300: #cbd5e1 */
+    --theme-task-accent: 178 60% 29%;      /* teal-600: #0d9488 */
+    --theme-task-bg: 178 60% 29%;          /* teal-600: #0d9488 */
+    --theme-task-border: 178 60% 29%;      /* teal-600: #0d9488 */
+    --theme-task-text: 178 60% 29%;        /* teal-600: #0d9488 */
   }
 
   .dark {

@@ -150,10 +150,10 @@ export function YoutubePlaylist() {
             key={category.id}
             onClick={() => handleCategoryClick(category)}
             variant="ghost"
-            className={`h-20 sm:h-24 flex flex-col items-center justify-center gap-1 sm:gap-2 rounded-xl transition-all duration-200 hover:scale-105 ${
+            className={`h-20 sm:h-24 flex flex-col items-center justify-center gap-1 sm:gap-2 rounded-xl border transition-all duration-200 hover:scale-105 ${
               activeCategory === category.id
-                ? `bg-theme-task-bg/20 border border-theme-task-border/50 text-theme-task-text`
-                : `bg-theme-input-bg/50 hover:bg-theme-card-bg/40 text-theme-text-secondary hover:text-theme-text-primary`
+                ? `bg-theme-task-bg/30 border-theme-task-border text-theme-task-text shadow-lg shadow-theme-task-bg/20`
+                : `bg-theme-card-bg border-theme-card-border hover:bg-theme-card-bg hover:border-theme-accent/30 text-theme-text-secondary hover:text-theme-text-primary shadow-sm hover:shadow-md`
             }`}
           >
             <div className="w-5 h-5 sm:w-6 sm:h-6">{category.icon}</div>
