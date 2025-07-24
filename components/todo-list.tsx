@@ -17,7 +17,7 @@ export function TodoList() {
   const { startTaskTimer, stopTaskTimer, currentTask, isRunning, currentMode } = usePomodoro()
   const [newTask, setNewTask] = useState("")
   const [selectedTag, setSelectedTag] = useState<TaskTag>("focus")
-  const { theme } = useTheme()
+  const { theme, currentTheme } = useTheme()
 
   const getProgress = () => {
     if (todos.length === 0) return 0
@@ -75,7 +75,8 @@ export function TodoList() {
             onChange={(e) => setNewTask(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="Add new task..."
-            className={`flex-1 ${theme.inputBg} ${theme.inputBorder} ${theme.textPrimary} placeholder-${theme.textMuted} rounded-xl`}
+            style={{backgroundColor: currentTheme === 'forest' ? 'rgba(51, 65, 85, 0.5)' : 'rgba(30, 58, 138, 0.5)'}}
+            className={`flex-1 ${theme.inputBorder} ${theme.textPrimary} placeholder-${theme.textMuted} rounded-xl`}
           />
           <Button
             onClick={handleAddTask}
@@ -89,7 +90,9 @@ export function TodoList() {
         <div className="flex items-center gap-3">
           <span className={`text-sm ${theme.textSecondary}`}>Tag:</span>
           <Select value={selectedTag} onValueChange={(value: TaskTag) => setSelectedTag(value)}>
-            <SelectTrigger className={`w-32 ${theme.inputBg} ${theme.inputBorder} ${theme.textPrimary} rounded-lg`}>
+            <SelectTrigger 
+              style={{backgroundColor: currentTheme === 'forest' ? 'rgba(51, 65, 85, 0.5)' : 'rgba(30, 58, 138, 0.5)'}}
+              className={`w-32 ${theme.inputBorder} ${theme.textPrimary} rounded-lg`}>
               <SelectValue />
             </SelectTrigger>
             <SelectContent className={`${theme.cardBg} ${theme.cardBorder} ${theme.textPrimary}`}>
@@ -108,7 +111,7 @@ export function TodoList() {
       </div>
 
       {/* Task Counter */}
-      <div className="text-gray-300 mb-6">
+      <div className={`${theme.textSecondary} mb-6`}>
         <span className={`${theme.textPrimary} font-semibold`}>
           {todos.filter((t) => t.completed).length}/{todos.length}
         </span>
@@ -128,7 +131,7 @@ export function TodoList() {
             return (
               <div
                 key={todo.id}
-                className={`flex items-center gap-3 p-3 ${theme.inputBg} rounded-xl hover:bg-gray-900/50 transition-colors group ${
+                className={`flex items-center gap-3 p-3 ${theme.inputBg} rounded-xl ${theme.cardHover} transition-colors group ${
                   isActiveTask ? "ring-2 ring-green-500/50 bg-green-500/10" : ""
                 }`}
               >

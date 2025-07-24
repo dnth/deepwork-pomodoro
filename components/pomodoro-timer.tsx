@@ -67,7 +67,7 @@ export function PomodoroTimer({ onSettingsClick }: PomodoroTimerProps) {
           onClick={onSettingsClick}
           variant="ghost"
           size="sm"
-          className={`${theme.textMuted} hover:${theme.textPrimary} hover:bg-gray-700/50 rounded-lg`}
+          className={`${theme.textMuted} hover:${theme.textPrimary} ${theme.cardHover} rounded-lg`}
         >
           <Settings className="w-5 h-5" />
         </Button>
@@ -113,7 +113,7 @@ export function PomodoroTimer({ onSettingsClick }: PomodoroTimerProps) {
             className={`flex-1 rounded-lg transition-all duration-200 ${
               currentMode === mode.key && !isTaskMode
                 ? `${theme.accent} ${theme.textPrimary} shadow-lg`
-                : `${theme.textSecondary} hover:${theme.textPrimary} hover:bg-gray-700/50`
+                : `${theme.textSecondary} hover:${theme.textPrimary} ${theme.cardHover}`
             }`}
           >
             {mode.label}
@@ -170,7 +170,7 @@ export function PomodoroTimer({ onSettingsClick }: PomodoroTimerProps) {
           onClick={resetTimer}
           variant="outline"
           size="lg"
-          className={`${theme.inputBorder} ${theme.textSecondary} hover:${theme.textPrimary} hover:bg-gray-700/50 px-6 py-3 rounded-xl bg-transparent`}
+          className={`${theme.inputBorder} ${theme.textSecondary} hover:${theme.textPrimary} ${theme.cardHover} px-6 py-3 rounded-xl bg-transparent`}
         >
           <RotateCcw className="w-5 h-5" />
         </Button>

@@ -54,7 +54,7 @@ export function YoutubePlaylist() {
   const playerRef = useRef<any>(null)
   const [customVideoUrl, setCustomVideoUrl] = useState("")
   const [customVideoId, setCustomVideoId] = useState<string | null>(null)
-  const { theme } = useTheme()
+  const { theme, currentTheme } = useTheme()
 
   const extractVideoId = (url: string): string | null => {
     const regex = /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/
@@ -94,7 +94,7 @@ export function YoutubePlaylist() {
             onClick={togglePlayPause}
             variant="ghost"
             size="sm"
-            className={`${theme.textMuted} hover:${theme.textPrimary} hover:bg-gray-700/50`}
+            className={`${theme.textMuted} hover:${theme.textPrimary} ${theme.cardHover}`}
           >
             {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
           </Button>
@@ -102,7 +102,7 @@ export function YoutubePlaylist() {
             onClick={toggleMute}
             variant="ghost"
             size="sm"
-            className={`${theme.textMuted} hover:${theme.textPrimary} hover:bg-gray-700/50`}
+            className={`${theme.textMuted} hover:${theme.textPrimary} ${theme.cardHover}`}
           >
             {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
           </Button>
@@ -116,7 +116,8 @@ export function YoutubePlaylist() {
             value={customVideoUrl}
             onChange={(e) => setCustomVideoUrl(e.target.value)}
             placeholder="Paste YouTube video URL for custom ambient sound..."
-            className={`flex-1 ${theme.inputBg} ${theme.inputBorder} ${theme.textPrimary} placeholder-${theme.textMuted} rounded-xl`}
+            style={{backgroundColor: currentTheme === 'forest' ? 'rgba(51, 65, 85, 0.5)' : 'rgba(30, 58, 138, 0.5)'}}
+            className={`flex-1 ${theme.inputBorder} ${theme.textPrimary} placeholder-${theme.textMuted} rounded-xl`}
           />
           <Button
             onClick={handleCustomVideo}
@@ -137,7 +138,7 @@ export function YoutubePlaylist() {
             className={`h-24 flex flex-col items-center justify-center gap-2 rounded-xl transition-all duration-200 hover:scale-105 ${
               activeCategory === category.id
                 ? `${theme.accent}/20 border border-green-500/50 text-green-400`
-                : `${theme.inputBg} hover:bg-gray-700/50 ${theme.textSecondary} hover:${theme.textPrimary}`
+                : `${theme.inputBg} ${theme.cardHover} ${theme.textSecondary} hover:${theme.textPrimary}`
             }`}
           >
             {category.icon}
@@ -149,7 +150,7 @@ export function YoutubePlaylist() {
       {/* YouTube Player */}
       {activeCategory && (
         <div className="mb-6">
-          <div className="aspect-video bg-gray-900 rounded-xl overflow-hidden">
+          <div className={`aspect-video ${theme.inputBg} rounded-xl overflow-hidden`}>
             <iframe
               ref={playerRef}
               width="100%"

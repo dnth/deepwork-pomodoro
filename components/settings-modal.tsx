@@ -15,7 +15,7 @@ interface SettingsModalProps {
 
 export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
   const { settings, updateSettings, resetSettings } = useSettings()
-  const { theme } = useTheme()
+  const { theme, currentTheme } = useTheme()
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -40,7 +40,8 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                 max="60"
                 value={settings.pomodoroDuration}
                 onChange={(e) => updateSettings({ pomodoroDuration: Number.parseInt(e.target.value) || 25 })}
-                className={`${theme.inputBg} ${theme.inputBorder} ${theme.textPrimary}`}
+                style={{backgroundColor: currentTheme === 'forest' ? 'rgba(51, 65, 85, 0.5)' : 'rgba(30, 58, 138, 0.5)'}}
+                className={`${theme.inputBorder} ${theme.textPrimary}`}
               />
             </div>
 
@@ -55,7 +56,8 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                 max="30"
                 value={settings.shortBreakDuration}
                 onChange={(e) => updateSettings({ shortBreakDuration: Number.parseInt(e.target.value) || 5 })}
-                className={`${theme.inputBg} ${theme.inputBorder} ${theme.textPrimary}`}
+                style={{backgroundColor: currentTheme === 'forest' ? 'rgba(51, 65, 85, 0.5)' : 'rgba(30, 58, 138, 0.5)'}}
+                className={`${theme.inputBorder} ${theme.textPrimary}`}
               />
             </div>
 
@@ -70,7 +72,8 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                 max="60"
                 value={settings.longBreakDuration}
                 onChange={(e) => updateSettings({ longBreakDuration: Number.parseInt(e.target.value) || 15 })}
-                className={`${theme.inputBg} ${theme.inputBorder} ${theme.textPrimary}`}
+                style={{backgroundColor: currentTheme === 'forest' ? 'rgba(51, 65, 85, 0.5)' : 'rgba(30, 58, 138, 0.5)'}}
+                className={`${theme.inputBorder} ${theme.textPrimary}`}
               />
             </div>
           </div>
@@ -118,7 +121,7 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
             <Button
               onClick={resetSettings}
               variant="outline"
-              className={`flex-1 ${theme.inputBorder} ${theme.textSecondary} hover:${theme.textPrimary} hover:bg-gray-700 bg-transparent`}
+              className={`flex-1 ${theme.inputBorder} ${theme.textSecondary} hover:${theme.textPrimary} ${theme.cardHover} bg-transparent`}
             >
               Reset to Default
             </Button>
