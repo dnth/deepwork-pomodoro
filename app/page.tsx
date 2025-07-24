@@ -4,6 +4,7 @@ import { PomodoroTimer } from "@/components/pomodoro-timer"
 import { TodoList } from "@/components/todo-list"
 import { YoutubePlaylist } from "@/components/youtube-playlist"
 import { SettingsModal } from "@/components/settings-modal"
+import { DayProgressBar } from "@/components/day-progress-blocks"
 import { Button } from "@/components/ui/button"
 import { Moon, Sun } from "lucide-react"
 import { useState, useEffect } from "react"
@@ -39,7 +40,7 @@ export default function Home() {
 
       {/* Compact Header with App Name, Time, and Theme Toggle */}
       <header className="relative z-10 p-4 sm:p-6">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between mb-4">
           {/* Left: App Name */}
           <h1 className="text-xl sm:text-2xl font-bold text-theme-text-primary">Deep Work</h1>
           
@@ -77,6 +78,9 @@ export default function Home() {
             Theme
           </Button>
         </div>
+        
+        {/* Day Progress HP Bar */}
+        <DayProgressBar />
       </header>
 
       {/* Main Content */}
@@ -87,6 +91,7 @@ export default function Home() {
           <div>
             <DailyQuote />
           </div>
+
 
           {/* Two Column Layout */}
           <div className="grid lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
