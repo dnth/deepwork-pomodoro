@@ -142,6 +142,18 @@ export function usePomodoro() {
     }
   }, [state.isRunning])
 
+  // Update browser tab title with timer
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      const modeLabel = state.currentMode === "pomodoro" ? "Pomodoro" : 
+                       state.currentMode === "shortBreak" ? "Short Break" : "Long Break"
+      const timeDisplay = formatTime(state.timeLeft)
+      const statusIcon = state.isRunning ? "⏰" : "⏸️"
+      
+      document.title = `${statusIcon} ${timeDisplay} - ${modeLabel} | Deep Work`
+    }
+  }, [state.timeLeft, state.isRunning, state.currentMode, formatTime])
+
   // Handle timer completion
   useEffect(() => {
     if (state.timeLeft === 0 && state.isRunning) {
