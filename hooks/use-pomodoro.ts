@@ -50,17 +50,13 @@ export function usePomodoro() {
 
   const startTaskTimer = useCallback(
     (task: Todo) => {
-      console.log("Starting task timer for:", task) // Debug log
       const duration = getDuration("task", task.tag)
-      console.log("Task duration:", duration, "seconds") // Debug log
 
       // Update all state at once
       setCurrentMode("task")
       setCurrentTask(task)
       setTimeLeft(duration)
       setIsRunning(true)
-
-      console.log("Task timer started - mode: task, task:", task.text) // Debug log
     },
     [getDuration],
   )
@@ -97,7 +93,7 @@ export function usePomodoro() {
 
   // Timer countdown effect
   useEffect(() => {
-    let interval: NodeJS.Timeout
+    let interval: NodeJS.Timeout | null = null
 
     if (isRunning && timeLeft > 0) {
       interval = setInterval(() => {
@@ -139,8 +135,9 @@ export function usePomodoro() {
 
       // Auto-start next session if enabled and not a task timer
       if (settings.autoStartBreaks && currentMode !== "task") {
+        const newCompletedCount = currentMode === "pomodoro" ? completedToday + 1 : completedToday
         const nextMode =
-          currentMode === "pomodoro" ? (completedToday % 4 === 3 ? "longBreak" : "shortBreak") : "pomodoro"
+          currentMode === "pomodoro" ? (newCompletedCount % 4 === 0 ? "longBreak" : "shortBreak") : "pomodoro"
 
         setTimeout(() => {
           setMode(nextMode)
@@ -154,7 +151,11 @@ export function usePomodoro() {
       }
     }
 
-    return () => clearInterval(interval)
+    return () => {
+      if (interval) {
+        clearInterval(interval)
+      }
+    }
   }, [
     isRunning,
     timeLeft,
@@ -167,17 +168,13 @@ export function usePomodoro() {
     stopTaskTimer,
   ])
 
-  // Update timer when settings change (but not when in task mode)
+  // Update timer when settings change (but not when in task mode or running)
   useEffect(() => {
     if (!isRunning && currentMode !== "task") {
       setTimeLeft(getDuration(currentMode))
     }
-  }, [settings, currentMode, getDuration, isRunning])
+  }, [settings.pomodoroDuration, settings.shortBreakDuration, settings.longBreakDuration, currentMode, getDuration, isRunning])
 
-  // Debug effect to log state changes
-  useEffect(() => {
-    console.log("Pomodoro state:", { currentMode, currentTask: currentTask?.text, timeLeft, isRunning })
-  }, [currentMode, currentTask, timeLeft, isRunning])
 
   return {
     timeLeft,

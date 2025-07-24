@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Play, Pause, RotateCcw, Settings, X, Clock } from "lucide-react"
 import { usePomodoro } from "@/hooks/use-pomodoro"
+import { useSettings } from "@/hooks/use-settings"
 import { taskTagConfig } from "@/hooks/use-todos"
 
 interface PomodoroTimerProps {
@@ -10,6 +11,7 @@ interface PomodoroTimerProps {
 }
 
 export function PomodoroTimer({ onSettingsClick }: PomodoroTimerProps) {
+  const { settings } = useSettings()
   const {
     timeLeft,
     isRunning,
@@ -44,7 +46,11 @@ export function PomodoroTimer({ onSettingsClick }: PomodoroTimerProps) {
       return ((totalDuration - timeLeft) / totalDuration) * 100
     }
 
-    const totalDuration = currentMode === "pomodoro" ? 25 * 60 : currentMode === "shortBreak" ? 5 * 60 : 15 * 60
+    const totalDuration = currentMode === "pomodoro" 
+      ? settings.pomodoroDuration * 60 
+      : currentMode === "shortBreak" 
+        ? settings.shortBreakDuration * 60 
+        : settings.longBreakDuration * 60
     return ((totalDuration - timeLeft) / totalDuration) * 100
   }
 
