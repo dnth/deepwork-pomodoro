@@ -5,7 +5,7 @@ import { useState, useEffect } from "react"
 export type ThemePalette = "forest" | "midnight"
 
 export function useTheme() {
-  const [currentTheme, setCurrentTheme] = useState<ThemePalette>("forest")
+  const [currentTheme, setCurrentTheme] = useState<ThemePalette>("midnight")
 
   useEffect(() => {
     // Load from localStorage on client side
@@ -22,9 +22,12 @@ export function useTheme() {
   useEffect(() => {
     // Apply theme class to document
     const themeClass = `theme-${currentTheme}`
-    document.documentElement.className = document.documentElement.className
-      .replace(/theme-\w+/g, '')
-      .trim() + ` ${themeClass}`
+    
+    // Remove existing theme classes
+    document.documentElement.classList.remove('theme-forest', 'theme-midnight')
+    
+    // Add new theme class
+    document.documentElement.classList.add(themeClass)
   }, [currentTheme])
 
   const toggleTheme = () => {
