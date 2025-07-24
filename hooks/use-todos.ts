@@ -14,9 +14,9 @@ export interface Todo {
 }
 
 export const taskTagConfig = {
-  quick: { label: "Quick", duration: 10, color: "bg-[#3b82f6]", textColor: "text-[#60a5fa]" },
-  focus: { label: "Focus", duration: 25, color: "bg-[#22c55e]", textColor: "text-[#4ade80]" },
-  deep: { label: "Deep", duration: 50, color: "bg-[#a855f7]", textColor: "text-[#c084fc]" },
+  quick: { label: "Quick", duration: 10, color: "bg-blue-500", textColor: "text-blue-400", symbol: "⚡" },
+  focus: { label: "Focus", duration: 25, color: "bg-green-500", textColor: "text-green-400", symbol: "🎯" },
+  deep: { label: "Deep", duration: 50, color: "bg-purple-500", textColor: "text-purple-400", symbol: "🧠" },
 }
 
 export function useTodos() {

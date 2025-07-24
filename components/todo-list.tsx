@@ -93,12 +93,8 @@ export function TodoList() {
             </SelectTrigger>
             <SelectContent className="bg-theme-card-bg border-theme-card-border text-theme-text-primary min-w-[12rem]">
               {Object.entries(taskTagConfig).map(([key, config]) => (
-                <SelectItem key={key} value={key} className="hover:bg-theme-card-bg/40 focus:bg-theme-card-bg/40 focus:text-theme-text-primary data-[highlighted]:bg-theme-card-bg/40 data-[highlighted]:text-theme-text-primary">
-                  <div className="flex items-center gap-3 pl-2">
-                    <div className={`w-2 h-2 rounded-full ${config.color} flex-shrink-0`} />
-                    <span className="text-theme-text-primary font-medium">{config.label}</span>
-                    <span className="text-xs text-theme-text-muted ml-auto">({config.duration}min)</span>
-                  </div>
+                <SelectItem key={key} value={key} className="hover:bg-theme-card-bg/40 focus:bg-theme-card-bg/40 focus:text-theme-text-primary data-[highlighted]:bg-theme-card-bg/40 data-[highlighted]:text-theme-text-primary pl-2">
+                  {config.symbol}  {config.label} ({config.duration}min)
                 </SelectItem>
               ))}
             </SelectContent>
@@ -154,7 +150,7 @@ export function TodoList() {
                     )}
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className={`w-2 h-2 rounded-full ${tagConfig.color}`} />
+                    <span className="text-sm">{tagConfig.symbol}</span>
                     <span className={`text-xs ${tagConfig.textColor}`}>
                       {tagConfig.label} ({tagConfig.duration}min)
                     </span>
