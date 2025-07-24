@@ -4,7 +4,7 @@ import type React from "react"
 
 import { Button } from "@/components/ui/button"
 import { Trees, Flame, Cloud, Waves, Play, Pause, Volume2, VolumeX } from "lucide-react"
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import { Input } from "@/components/ui/input"
 
 interface AmbientCategory {
@@ -99,6 +99,49 @@ export function YoutubePlaylist() {
   const toggleMute = () => {
     setIsMuted(!isMuted)
   }
+
+  // Mobile media session for notification controls
+  useEffect(() => {
+    if ('mediaSession' in navigator && typeof window !== 'undefined' && window.innerWidth < 768) {
+      const currentCategory = activeCategory === "custom" 
+        ? { name: "Custom Ambient", description: "Your ambient sound" }
+        : ambientCategories.find(c => c.id === activeCategory)
+
+      if (activeCategory && currentCategory) {
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: currentCategory.name,
+          artist: 'Deep Work - Ambient Sounds',
+          album: 'Focus Session',
+          artwork: [
+            { src: '/favicon.ico', sizes: '96x96', type: 'image/x-icon' }
+          ]
+        })
+
+        // Set playback state
+        navigator.mediaSession.playbackState = isPlaying ? 'playing' : 'paused'
+
+        // Action handlers for mobile notification controls
+        navigator.mediaSession.setActionHandler('play', () => {
+          setIsPlaying(true)
+        })
+
+        navigator.mediaSession.setActionHandler('pause', () => {
+          setIsPlaying(false)
+        })
+
+        navigator.mediaSession.setActionHandler('stop', () => {
+          setIsPlaying(false)
+          setActiveCategory(null)
+        })
+      } else {
+        // Clear media session when no ambient sound is active
+        navigator.mediaSession.metadata = null
+        navigator.mediaSession.setActionHandler('play', null)
+        navigator.mediaSession.setActionHandler('pause', null)
+        navigator.mediaSession.setActionHandler('stop', null)
+      }
+    }
+  }, [activeCategory, isPlaying])
 
   return (
     <div className="bg-theme-card-bg/30 backdrop-blur-sm border border-theme-card-border/30 rounded-2xl p-4 sm:p-6 lg:p-8 shadow-2xl">
