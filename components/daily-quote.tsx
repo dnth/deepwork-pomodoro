@@ -29,14 +29,11 @@ export function DailyQuote() {
             value={quote}
             onChange={handleChange}
             placeholder="Enter your daily quote or motto..."
-            className={`bg-transparent border-none text-xl ${theme.textPrimary} placeholder:text-slate-400 p-0 h-auto font-medium italic focus-visible:ring-0 focus-visible:ring-offset-0`}
+            className={`bg-transparent border-none text-5xl ${theme.textPrimary} placeholder:text-slate-400 p-0 h-auto font-medium italic focus-visible:ring-0 focus-visible:ring-offset-0`}
           />
         </div>
       </div>
 
-      <div className={`mt-4 text-xs ${theme.textMuted}`}>
-        Your personal motivation for today - updates automatically as you type
-      </div>
     </div>
   )
 }

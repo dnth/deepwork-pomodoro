@@ -1,6 +1,6 @@
 "use client"
 
-import { useLocalStorage } from "./use-local-storage"
+import { useState, useEffect } from "react"
 
 export type ThemePalette = "forest" | "midnight"
 
@@ -42,30 +42,53 @@ const themes: Record<ThemePalette, ThemeColors> = {
   },
   midnight: {
     name: "Midnight Productivity",
-    background: "from-slate-900 via-blue-950 to-slate-800", // Deep navy theme
-    backgroundGradient: "bg-gradient-to-br from-slate-900 via-blue-950 to-slate-800",
-    cardBg: "bg-slate-700/30", // #1e293b with opacity
-    cardBorder: "border-slate-600/30",
-    cardHover: "hover:bg-slate-700/40",
-    textPrimary: "text-slate-50", // #f8fafc
-    textSecondary: "text-slate-200",
-    textMuted: "text-slate-400",
-    accent: "bg-teal-500", // #14b8a6
-    accentHover: "hover:bg-teal-600",
-    progress: "bg-teal-400",
-    progressBg: "bg-slate-600",
-    inputBg: "bg-slate-800/50",
-    inputBorder: "border-slate-500",
+    background: "from-slate-900 via-blue-950 to-blue-900", // Deep navy theme
+    backgroundGradient: "bg-gradient-to-br from-slate-900 via-blue-950 to-blue-900",
+    cardBg: "bg-blue-900/30", // More blue tint
+    cardBorder: "border-blue-700/30",
+    cardHover: "hover:bg-blue-900/40",
+    textPrimary: "text-blue-50", // Slightly blue tinted white
+    textSecondary: "text-blue-200",
+    textMuted: "text-blue-300",
+    accent: "bg-cyan-500", // More distinct from green
+    accentHover: "hover:bg-cyan-600",
+    progress: "bg-cyan-400",
+    progressBg: "bg-blue-800",
+    inputBg: "bg-blue-900/50",
+    inputBorder: "border-blue-600",
   },
 }
 
 export function useTheme() {
-  const [currentTheme, setCurrentTheme] = useLocalStorage<ThemePalette>("theme-palette", "forest")
+  const [currentTheme, setCurrentTheme] = useState<ThemePalette>("forest")
+
+  useEffect(() => {
+    // Load from localStorage on client side
+    try {
+      const saved = localStorage.getItem("theme-palette")
+      if (saved) {
+        setCurrentTheme(JSON.parse(saved) as ThemePalette)
+      }
+    } catch (error) {
+      console.error("Error loading theme from localStorage:", error)
+    }
+  }, [])
 
   const theme = themes[currentTheme]
+  console.log("useTheme hook rendered - currentTheme:", currentTheme, "theme:", theme.name)
 
   const toggleTheme = () => {
-    setCurrentTheme(currentTheme === "forest" ? "midnight" : "forest")
+    const newTheme = currentTheme === "forest" ? "midnight" : "forest"
+    console.log("Toggling theme from", currentTheme, "to", newTheme)
+    console.log("Current theme object:", theme)
+    console.log("New theme object:", themes[newTheme])
+    
+    setCurrentTheme(newTheme)
+    try {
+      localStorage.setItem("theme-palette", JSON.stringify(newTheme))
+    } catch (error) {
+      console.error("Error saving theme to localStorage:", error)
+    }
   }
 
   return {
