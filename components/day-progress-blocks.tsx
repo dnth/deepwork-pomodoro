@@ -4,6 +4,8 @@ import { useState, useEffect } from "react"
 
 export function DayProgressBar() {
   const [currentTime, setCurrentTime] = useState(new Date())
+  const [workStartHour, setWorkStartHour] = useState(10)
+  const [workEndHour, setWorkEndHour] = useState(17)
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -12,9 +14,6 @@ export function DayProgressBar() {
 
     return () => clearInterval(timer)
   }, [])
-
-  const workStartHour = 10 // 10 AM
-  const workEndHour = 17 // 5 PM
   const totalWorkHours = workEndHour - workStartHour
   const currentHour = currentTime.getHours()
   const currentMinutes = currentTime.getMinutes()
@@ -36,8 +35,42 @@ export function DayProgressBar() {
     return `${hoursLeft} hours left today`
   }
 
+  const hourOptions = Array.from({ length: 24 }, (_, i) => i)
+
   return (
     <div className="w-full mb-4">
+      {/* Work Hours Configuration */}
+      <div className="flex gap-4 mb-4 justify-center">
+        <div className="flex items-center gap-2">
+          <label className="text-theme-text-secondary text-sm">Start:</label>
+          <select 
+            value={workStartHour}
+            onChange={(e) => setWorkStartHour(Number(e.target.value))}
+            className="px-2 py-1 bg-theme-surface border border-theme-border rounded text-theme-text text-sm"
+          >
+            {hourOptions.map(hour => (
+              <option key={hour} value={hour}>
+                {hour === 0 ? '12 AM' : hour === 12 ? '12 PM' : hour > 12 ? `${hour - 12} PM` : `${hour} AM`}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="flex items-center gap-2">
+          <label className="text-theme-text-secondary text-sm">End:</label>
+          <select 
+            value={workEndHour}
+            onChange={(e) => setWorkEndHour(Number(e.target.value))}
+            className="px-2 py-1 bg-theme-surface border border-theme-border rounded text-theme-text text-sm"
+          >
+            {hourOptions.map(hour => (
+              <option key={hour} value={hour}>
+                {hour === 0 ? '12 AM' : hour === 12 ? '12 PM' : hour > 12 ? `${hour - 12} PM` : `${hour} AM`}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+      
       {/* HP Bar Container */}
       <div className="relative bg-red-900/20 border-2 border-red-700/40 rounded-lg overflow-hidden h-6 shadow-inner">
         {/* HP Bar Fill */}
