@@ -30,11 +30,6 @@ export function DayProgressBar() {
   const hoursLeft = Math.max(0, workEndHour - currentHour)
   const isAfterWork = currentHour >= workEndHour
 
-  const getStatusText = () => {
-    if (isAfterWork) return ""
-    if (currentHour < workStartHour) return `Work starts in ${workStartHour - currentHour} hours`
-    return `${hoursLeft} hours left today`
-  }
 
   const hourOptions = Array.from({ length: 24 }, (_, i) => i)
 
@@ -44,6 +39,11 @@ export function DayProgressBar() {
 
   return (
     <div className="w-full">
+      {/* Title */}
+      <div className="text-center mb-2">
+        <h3 className="text-sm font-semibold text-theme-text-primary">Time left today</h3>
+      </div>
+      
       {/* Compact Progress Bar with Integrated Time Controls */}
       <div className="flex items-center gap-2 mb-2">
         <Select value={workStartHour.toString()} onValueChange={(value) => setWorkStartHour(Number(value))}>
@@ -74,14 +74,14 @@ export function DayProgressBar() {
           <div className="absolute inset-0 flex items-center justify-center px-2 text-white font-bold text-xs drop-shadow-lg">
             <span>
               {isAfterWork ? "DAY COMPLETE" : 
-               currentHour < workStartHour ? "DAY ENERGY" :
+               currentHour < workStartHour ? `WORK STARTS IN ${workStartHour - currentHour}H` :
                `${hoursLeft}H ${60 - currentMinutes}M LEFT`}
             </span>
           </div>
           
-          {/* Segmented Lines */}
+          {/* Segmented Lines - 30 minute sections */}
           <div className="absolute inset-0 flex">
-            {Array.from({ length: 6 }, (_, i) => (
+            {Array.from({ length: totalWorkHours * 2 }, (_, i) => (
               <div 
                 key={i} 
                 className="flex-1 border-r border-black/20 last:border-r-0" 
@@ -103,15 +103,6 @@ export function DayProgressBar() {
           </SelectContent>
         </Select>
       </div>
-      
-      {/* Compact Status */}
-      {getStatusText() && (
-        <div className="text-center">
-          <div className="text-theme-text-secondary text-xs">
-            {getStatusText()}
-          </div>
-        </div>
-      )}
     </div>
   )
 }
