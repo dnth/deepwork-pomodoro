@@ -29,6 +29,11 @@ export function useSettings() {
 
   const resetSettings = () => {
     setSettings(defaultSettings)
+    // Clear all local user data
+    localStorage.removeItem("daily-quote")
+    localStorage.removeItem("theme-palette") 
+    localStorage.removeItem("pomodoro-todos")
+    localStorage.removeItem("pomodoro-completed-today")
   }
 
   return {
