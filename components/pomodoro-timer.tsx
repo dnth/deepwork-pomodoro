@@ -1,16 +1,14 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { Play, Pause, RotateCcw, Settings, X, Clock } from "lucide-react"
+import { Play, Pause, RotateCcw, X, Clock } from "lucide-react"
 import { usePomodoro } from "@/hooks/use-pomodoro"
 import { useSettings } from "@/hooks/use-settings"
 import { taskTagConfig } from "@/hooks/use-todos"
 
-interface PomodoroTimerProps {
-  onSettingsClick: () => void
-}
+interface PomodoroTimerProps {}
 
-export function PomodoroTimer({ onSettingsClick }: PomodoroTimerProps) {
+export function PomodoroTimer() {
   const { settings } = useSettings()
   const {
     timeLeft,
@@ -60,21 +58,11 @@ export function PomodoroTimer({ onSettingsClick }: PomodoroTimerProps) {
   return (
     <div className="w-full bg-theme-card-bg/30 backdrop-blur-sm border border-theme-card-border/30 rounded-2xl p-4 sm:p-6 lg:p-8 shadow-2xl">
       {/* Header */}
-      <div className="flex justify-between items-center mb-4 sm:mb-6">
-        <div className="flex items-center gap-2 sm:gap-3">
-          <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-theme-text-primary">{getTimerTitle()}</h2>
-          {isTaskMode && (
-            <span className="text-xs bg-theme-task-accent text-white px-2 py-1 sm:px-3 sm:py-1.5 rounded-full font-medium">TASK MODE</span>
-          )}
-        </div>
-        <Button
-          onClick={onSettingsClick}
-          variant="ghost"
-          size="sm"
-          className="text-theme-text-muted hover:text-theme-text-primary hover:bg-theme-card-bg/40 rounded-lg p-2"
-        >
-          <Settings className="w-5 h-5" />
-        </Button>
+      <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
+        <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-theme-text-primary">{getTimerTitle()}</h2>
+        {isTaskMode && (
+          <span className="text-xs bg-theme-task-accent text-white px-2 py-1 sm:px-3 sm:py-1.5 rounded-full font-medium">TASK MODE</span>
+        )}
       </div>
 
       {/* Current Task Display - Always show when in task mode */}

@@ -6,6 +6,9 @@ import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { useSettings } from "@/hooks/use-settings"
+import { useTheme } from "next-themes"
+import { Moon, Sun } from "lucide-react"
+import { useState, useEffect } from "react"
 
 interface SettingsModalProps {
   isOpen: boolean
@@ -14,6 +17,16 @@ interface SettingsModalProps {
 
 export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
   const { settings, updateSettings, resetSettings } = useSettings()
+  const { theme, setTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  const toggleTheme = () => {
+    setTheme(theme === 'dark' ? 'light' : 'dark')
+  }
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -108,6 +121,25 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                 checked={settings.soundAlerts}
                 onCheckedChange={(checked) => updateSettings({ soundAlerts: checked })}
               />
+            </div>
+
+            <div className="flex items-center justify-between">
+              <Label className="text-theme-text-secondary">
+                Theme
+              </Label>
+              <Button
+                onClick={toggleTheme}
+                variant="outline"
+                size="sm"
+                className="border-theme-input-border text-theme-text-secondary hover:text-theme-text-primary hover:bg-theme-card-bg/40 bg-transparent"
+              >
+                {mounted && (theme === 'dark' ? (
+                  <Sun className="w-4 h-4 mr-2" />
+                ) : (
+                  <Moon className="w-4 h-4 mr-2" />
+                ))}
+                {mounted ? (theme === 'dark' ? 'Light' : 'Dark') : 'Theme'}
+              </Button>
             </div>
           </div>
 

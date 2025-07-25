@@ -5,15 +5,12 @@ import { TodoList } from "@/components/todo-list"
 import { YoutubePlaylist } from "@/components/youtube-playlist"
 import { SettingsModal } from "@/components/settings-modal"
 import { DayProgressBar } from "@/components/day-progress-blocks"
-import { Button } from "@/components/ui/button"
-import { Moon, Sun } from "lucide-react"
+import { Settings } from "lucide-react"
 import { useState, useEffect } from "react"
 import { DailyQuote } from "@/components/daily-quote"
-import { useTheme } from "next-themes"
 
 export default function Home() {
   const [showSettings, setShowSettings] = useState(false)
-  const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
   const [currentTime, setCurrentTime] = useState(new Date())
 
@@ -31,55 +28,44 @@ export default function Home() {
     return () => clearInterval(timer)
   }, [])
 
-  const toggleTheme = () => {
-    setTheme(theme === 'dark' ? 'light' : 'dark')
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-theme-background-from via-theme-background-via to-theme-background-to">
 
-      {/* Compact Header with App Name, Time, and Theme Toggle */}
+      {/* Compact Header with App Name, Time, and Progress Bar */}
       <header className="relative z-10 p-4 sm:p-6">
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between mb-2">
           {/* Left: App Name */}
           <h1 className="text-xl sm:text-2xl font-bold text-theme-text-primary">Deep Work</h1>
           
-          {/* Center: Time and Date */}
-          <div className="text-center">
-            <div className="text-theme-text-primary text-lg sm:text-xl font-light tracking-wide">
-              {mounted ? currentTime.toLocaleTimeString('en-US', { 
-                hour: '2-digit', 
-                minute: '2-digit', 
-                second: '2-digit',
-                hour12: true 
-              }) : '--:--:-- --'}
+          {/* Right: Current Time and Settings */}
+          <div className="flex items-center gap-3">
+            <div className="text-right">
+              <div className="text-theme-text-primary text-lg sm:text-xl font-light tracking-wide">
+                {mounted ? currentTime.toLocaleTimeString('en-US', { 
+                  hour: '2-digit', 
+                  minute: '2-digit', 
+                  hour12: true 
+                }) : '--:-- --'}
+              </div>
+              <div className="text-theme-text-secondary text-xs -mt-0.5">
+                {mounted ? currentTime.toLocaleDateString('en-US', { 
+                  weekday: 'short', 
+                  month: 'short', 
+                  day: 'numeric' 
+                }) : '--- --- --'}
+              </div>
             </div>
-            <div className="text-theme-text-secondary text-xs sm:text-sm -mt-1">
-              {mounted ? currentTime.toLocaleDateString('en-US', { 
-                weekday: 'short', 
-                month: 'short', 
-                day: 'numeric' 
-              }) : '--- --- --'}
-            </div>
+            <button
+              onClick={() => setShowSettings(true)}
+              className="text-theme-text-secondary hover:text-theme-text-primary hover:bg-white/10 rounded-lg p-2 transition-colors"
+            >
+              <Settings className="w-4 h-4" />
+            </button>
           </div>
-          
-          {/* Right: Theme Toggle */}
-          <Button
-            onClick={toggleTheme}
-            variant="ghost"
-            size="sm"
-            className="text-theme-text-secondary hover:text-theme-text-primary hover:bg-white/10 rounded-lg"
-          >
-            {mounted && (theme === 'dark' ? (
-              <Sun className="w-4 h-4 mr-2" />
-            ) : (
-              <Moon className="w-4 h-4 mr-2" />
-            ))}
-            Theme
-          </Button>
         </div>
         
-        {/* Day Progress HP Bar */}
+        {/* Compact Day Progress HP Bar */}
         <DayProgressBar />
       </header>
 
@@ -97,7 +83,7 @@ export default function Home() {
           <div className="grid lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
             {/* Pomodoro Timer - Left Column */}
             <div className="w-full">
-              <PomodoroTimer onSettingsClick={() => setShowSettings(true)} />
+              <PomodoroTimer />
             </div>
 
             {/* Todo List - Right Column */}

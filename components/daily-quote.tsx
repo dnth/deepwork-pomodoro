@@ -6,7 +6,7 @@ import { Edit3 } from "lucide-react"
 import { useLocalStorage } from "@/hooks/use-local-storage"
 
 export function DailyQuote() {
-  const [quote, setQuote] = useLocalStorage("daily-quote", "Focus on progress, not perfection.")
+  const [quote, setQuote] = useLocalStorage("daily-quote", "Dream in years. Plan in months. Evaluate in weeks. Ship daily.")
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuote(e.target.value)
