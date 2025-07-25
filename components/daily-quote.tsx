@@ -27,7 +27,7 @@ export function DailyQuote() {
             value={quote}
             onChange={handleChange}
             placeholder="Enter your theme of the day..."
-            className="bg-transparent border-none text-lg sm:text-2xl lg:text-4xl text-theme-text-primary placeholder:text-theme-text-muted p-0 h-auto font-medium italic focus-visible:ring-0 focus-visible:ring-offset-0"
+            className="bg-transparent border-none text-base sm:text-lg lg:text-xl text-theme-text-primary placeholder:text-theme-text-muted p-0 h-auto font-medium italic focus-visible:ring-0 focus-visible:ring-offset-0"
           />
         </div>
       </div>
