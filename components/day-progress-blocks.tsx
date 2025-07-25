@@ -2,11 +2,12 @@
 
 import { useState, useEffect } from "react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useLocalStorage } from "@/hooks/use-local-storage"
 
 export function DayProgressBar() {
   const [currentTime, setCurrentTime] = useState(new Date())
-  const [workStartHour, setWorkStartHour] = useState(10)
-  const [workEndHour, setWorkEndHour] = useState(17)
+  const [workStartHour, setWorkStartHour] = useLocalStorage("work-start-hour", 10)
+  const [workEndHour, setWorkEndHour] = useLocalStorage("work-end-hour", 17)
 
   useEffect(() => {
     const timer = setInterval(() => {
