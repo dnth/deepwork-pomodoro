@@ -107,54 +107,6 @@ export function TodoList() {
           <div className="text-center text-theme-text-muted py-8">No tasks yet. Add one above!</div>
         ) : (
           <>
-            {/* Completed Tasks Section */}
-            {completedTasks.length > 0 && (
-              <div className="space-y-3">
-                <h3 className="text-sm font-medium text-theme-text-secondary flex items-center gap-2">
-                  ✅ Completed ({completedTasks.length})
-                </h3>
-                {completedTasks.map((todo) => {
-                  const tagConfig = taskTagConfig[todo.tag]
-
-                  return (
-                    <div
-                      key={todo.id}
-                      className="flex items-center gap-3 p-3 sm:p-4 bg-theme-input-bg/30 rounded-xl hover:bg-theme-card-bg/30 transition-colors group"
-                    >
-                      <Checkbox
-                        checked={todo.completed}
-                        onCheckedChange={() => toggleTodo(todo.id)}
-                        className="border-theme-input-border data-[state=checked]:bg-theme-progress data-[state=checked]:border-theme-progress"
-                      />
-
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-1 sm:mb-2">
-                          <span className="flex-1 transition-all text-theme-text-muted line-through">
-                            {todo.text}
-                          </span>
-                          <span className="text-sm">{tagConfig.symbol}</span>
-                          <span className={`text-xs ${tagConfig.textColor} opacity-70`}>
-                            {tagConfig.label} ({tagConfig.duration}min)
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center gap-2">
-                        <Button
-                          onClick={() => deleteTodo(todo.id)}
-                          variant="ghost"
-                          size="sm"
-                          className="opacity-0 group-hover:opacity-100 text-theme-text-muted hover:text-red-400 transition-all p-2"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
-            )}
-
             {/* Incomplete Tasks Section */}
             {incompleteTasks.length > 0 && (
               <div className="space-y-3">
@@ -167,7 +119,7 @@ export function TodoList() {
                   return (
                     <div
                       key={todo.id}
-                      className="flex items-center gap-3 p-3 sm:p-4 bg-theme-input-bg/50 rounded-xl hover:bg-theme-card-bg/40 transition-colors group"
+                      className="flex items-center gap-2 p-2 bg-theme-input-bg/50 rounded-lg hover:bg-theme-card-bg/40 transition-colors group"
                     >
                       <Checkbox
                         checked={todo.completed}
@@ -175,15 +127,17 @@ export function TodoList() {
                         className="border-theme-input-border data-[state=checked]:bg-theme-progress data-[state=checked]:border-theme-progress"
                       />
 
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-1 sm:mb-2">
-                          <span className="flex-1 transition-all text-theme-text-primary">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <span className="flex-1 transition-all text-theme-text-primary text-sm break-words">
                             {todo.text}
                           </span>
-                          <span className="text-sm">{tagConfig.symbol}</span>
-                          <span className={`text-xs ${tagConfig.textColor}`}>
-                            {tagConfig.label} ({tagConfig.duration}min)
-                          </span>
+                          <div className="flex items-center gap-1 flex-shrink-0">
+                            <span className="text-sm">{tagConfig.symbol}</span>
+                            <span className={`text-xs ${tagConfig.textColor} whitespace-nowrap`}>
+                              {tagConfig.label} ({tagConfig.duration}min)
+                            </span>
+                          </div>
                         </div>
                       </div>
 
@@ -192,7 +146,57 @@ export function TodoList() {
                           onClick={() => deleteTodo(todo.id)}
                           variant="ghost"
                           size="sm"
-                          className="opacity-0 group-hover:opacity-100 text-theme-text-muted hover:text-red-400 transition-all p-2"
+                          className="opacity-0 group-hover:opacity-100 text-theme-text-muted hover:text-red-400 transition-all p-1"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            )}
+
+            {/* Completed Tasks Section */}
+            {completedTasks.length > 0 && (
+              <div className="space-y-3">
+                <h3 className="text-sm font-medium text-theme-text-secondary flex items-center gap-2">
+                  ✅ Completed ({completedTasks.length})
+                </h3>
+                {completedTasks.map((todo) => {
+                  const tagConfig = taskTagConfig[todo.tag]
+
+                  return (
+                    <div
+                      key={todo.id}
+                      className="flex items-center gap-2 p-2 bg-theme-input-bg/30 rounded-lg hover:bg-theme-card-bg/30 transition-colors group"
+                    >
+                      <Checkbox
+                        checked={todo.completed}
+                        onCheckedChange={() => toggleTodo(todo.id)}
+                        className="border-theme-input-border data-[state=checked]:bg-theme-progress data-[state=checked]:border-theme-progress"
+                      />
+
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <span className="flex-1 transition-all text-theme-text-muted line-through text-sm break-words">
+                            {todo.text}
+                          </span>
+                          <div className="flex items-center gap-1 flex-shrink-0">
+                            <span className="text-sm">{tagConfig.symbol}</span>
+                            <span className={`text-xs ${tagConfig.textColor} opacity-70 whitespace-nowrap`}>
+                              {tagConfig.label} ({tagConfig.duration}min)
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <Button
+                          onClick={() => deleteTodo(todo.id)}
+                          variant="ghost"
+                          size="sm"
+                          className="opacity-0 group-hover:opacity-100 text-theme-text-muted hover:text-red-400 transition-all p-1"
                         >
                           <Trash2 className="w-4 h-4" />
                         </Button>
