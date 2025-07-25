@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 export function DayProgressBar() {
   const [currentTime, setCurrentTime] = useState(new Date())
@@ -42,32 +43,34 @@ export function DayProgressBar() {
       {/* Work Hours Configuration */}
       <div className="flex gap-4 mb-4 justify-center">
         <div className="flex items-center gap-2">
-          <label className="text-theme-text-secondary text-sm">Start:</label>
-          <select 
-            value={workStartHour}
-            onChange={(e) => setWorkStartHour(Number(e.target.value))}
-            className="px-2 py-1 bg-theme-surface border border-theme-border rounded text-theme-text text-sm"
-          >
-            {hourOptions.map(hour => (
-              <option key={hour} value={hour}>
-                {hour === 0 ? '12 AM' : hour === 12 ? '12 PM' : hour > 12 ? `${hour - 12} PM` : `${hour} AM`}
-              </option>
-            ))}
-          </select>
+          <label className="text-muted-foreground text-sm">Start:</label>
+          <Select value={workStartHour.toString()} onValueChange={(value) => setWorkStartHour(Number(value))}>
+            <SelectTrigger className="w-24">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {hourOptions.map(hour => (
+                <SelectItem key={hour} value={hour.toString()}>
+                  {hour === 0 ? '12 AM' : hour === 12 ? '12 PM' : hour > 12 ? `${hour - 12} PM` : `${hour} AM`}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
         <div className="flex items-center gap-2">
-          <label className="text-theme-text-secondary text-sm">End:</label>
-          <select 
-            value={workEndHour}
-            onChange={(e) => setWorkEndHour(Number(e.target.value))}
-            className="px-2 py-1 bg-theme-surface border border-theme-border rounded text-theme-text text-sm"
-          >
-            {hourOptions.map(hour => (
-              <option key={hour} value={hour}>
-                {hour === 0 ? '12 AM' : hour === 12 ? '12 PM' : hour > 12 ? `${hour - 12} PM` : `${hour} AM`}
-              </option>
-            ))}
-          </select>
+          <label className="text-muted-foreground text-sm">End:</label>
+          <Select value={workEndHour.toString()} onValueChange={(value) => setWorkEndHour(Number(value))}>
+            <SelectTrigger className="w-24">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {hourOptions.map(hour => (
+                <SelectItem key={hour} value={hour.toString()}>
+                  {hour === 0 ? '12 AM' : hour === 12 ? '12 PM' : hour > 12 ? `${hour - 12} PM` : `${hour} AM`}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       </div>
       
