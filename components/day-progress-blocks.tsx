@@ -27,8 +27,52 @@ export function DayProgressBar() {
   const totalMinutesInDay = totalWorkHours * 60
   const progressPercentage = Math.min(100, (totalMinutesCompleted / totalMinutesInDay) * 100)
 
-  const hoursLeft = Math.max(0, workEndHour - currentHour)
+  const hoursLeft = Math.max(0, workEndHour - currentHour - (currentMinutes > 0 ? 1 : 0))
+  const minutesLeft = currentMinutes > 0 ? 60 - currentMinutes : 0
   const isAfterWork = currentHour >= workEndHour
+
+  // Calculate remaining percentage and color with gradual transition
+  const remainingPercentage = 100 - progressPercentage
+  const getBarStyle = () => {
+    const percentage = remainingPercentage / 100
+    
+    if (percentage > 0.8) {
+      // Pure green
+      return { background: 'linear-gradient(to right, #4ade80, #22c55e)' }
+    } else if (percentage > 0.6) {
+      // Green to yellow-green
+      const greenMix = (percentage - 0.6) / 0.2
+      return { 
+        background: `linear-gradient(to right, 
+          rgb(${Math.round(74 + (255 - 74) * (1 - greenMix))}, ${Math.round(222 + (255 - 222) * (1 - greenMix))}, ${Math.round(128 * greenMix)}), 
+          rgb(${Math.round(34 + (255 - 34) * (1 - greenMix))}, ${Math.round(197 + (255 - 197) * (1 - greenMix))}, ${Math.round(94 * greenMix)}))` 
+      }
+    } else if (percentage > 0.4) {
+      // Yellow-green to yellow
+      const yellowMix = (percentage - 0.4) / 0.2
+      return { 
+        background: `linear-gradient(to right, 
+          rgb(255, ${Math.round(255 - (255 - 222) * (1 - yellowMix))}, ${Math.round(128 * yellowMix)}), 
+          rgb(255, ${Math.round(255 - (255 - 197) * (1 - yellowMix))}, ${Math.round(94 * yellowMix)}))` 
+      }
+    } else if (percentage > 0.2) {
+      // Yellow to orange
+      const orangeMix = (percentage - 0.2) / 0.2
+      return { 
+        background: `linear-gradient(to right, 
+          rgb(255, ${Math.round(222 - (222 - 165) * (1 - orangeMix))}, ${Math.round(128 * orangeMix)}), 
+          rgb(255, ${Math.round(197 - (197 - 149) * (1 - orangeMix))}, ${Math.round(94 * orangeMix)}))` 
+      }
+    } else {
+      // Orange to red
+      const redMix = percentage / 0.2
+      return { 
+        background: `linear-gradient(to right, 
+          rgb(255, ${Math.round(165 * redMix)}, ${Math.round(165 * redMix)}), 
+          rgb(255, ${Math.round(149 * redMix)}, ${Math.round(149 * redMix)}))` 
+      }
+    }
+  }
 
 
   const hourOptions = Array.from({ length: 24 }, (_, i) => i)
@@ -63,8 +107,11 @@ export function DayProgressBar() {
         <div className="flex-1 relative bg-red-900/20 border-2 border-red-700/40 rounded-lg overflow-hidden h-8 shadow-inner">
           {/* HP Bar Fill */}
           <div 
-            className="absolute top-0 left-0 h-full bg-gradient-to-r from-green-400 to-green-500 transition-all duration-1000 ease-out"
-            style={{ width: `${100 - progressPercentage}%` }}
+            className="absolute top-0 left-0 h-full transition-all duration-1000 ease-out"
+            style={{ 
+              width: `${100 - progressPercentage}%`,
+              ...getBarStyle()
+            }}
           />
           
           {/* HP Bar Shine Effect */}
@@ -75,7 +122,7 @@ export function DayProgressBar() {
             <span>
               {isAfterWork ? "DAY COMPLETE" : 
                currentHour < workStartHour ? `WORK STARTS IN ${workStartHour - currentHour}H` :
-               `${hoursLeft}H ${60 - currentMinutes}M LEFT`}
+               `${hoursLeft}H ${minutesLeft}M LEFT`}
             </span>
           </div>
           
