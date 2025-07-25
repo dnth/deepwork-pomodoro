@@ -96,7 +96,7 @@ export function DayProgressBar() {
           </SelectTrigger>
           <SelectContent>
             {hourOptions.map(hour => (
-              <SelectItem key={hour} value={hour.toString()}>
+              <SelectItem key={hour} value={hour.toString()} disabled={hour >= workEndHour}>
                 {formatHour(hour)}
               </SelectItem>
             ))}
@@ -143,7 +143,7 @@ export function DayProgressBar() {
           </SelectTrigger>
           <SelectContent>
             {hourOptions.map(hour => (
-              <SelectItem key={hour} value={hour.toString()}>
+              <SelectItem key={hour} value={hour.toString()} disabled={hour <= workStartHour}>
                 {formatHour(hour)}
               </SelectItem>
             ))}
