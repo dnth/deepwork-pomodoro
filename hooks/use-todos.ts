@@ -31,7 +31,7 @@ export function useTodos() {
         createdAt: new Date(),
         tag,
       }
-      setTodos((prev) => [...prev, newTodo])
+      setTodos((prev) => [newTodo, ...prev])
     },
     [setTodos],
   )
