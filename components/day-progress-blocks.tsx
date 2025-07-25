@@ -20,17 +20,20 @@ export function DayProgressBar() {
   const currentHour = currentTime.getHours()
   const currentMinutes = currentTime.getMinutes()
 
-  // Calculate progress
-  const isWorkDay = currentHour >= workStartHour && currentHour < workEndHour
-  const hoursCompleted = Math.max(0, Math.min(currentHour - workStartHour, totalWorkHours))
-  const minutesInCurrentHour = isWorkDay && currentHour < workEndHour ? currentMinutes : 0
-  const totalMinutesCompleted = hoursCompleted * 60 + minutesInCurrentHour
+  // Calculate progress with minute precision
+  const currentTimeInMinutes = currentHour * 60 + currentMinutes
+  const workStartInMinutes = workStartHour * 60
+  const workEndInMinutes = workEndHour * 60
+  
+  const isWorkDay = currentTimeInMinutes >= workStartInMinutes && currentTimeInMinutes < workEndInMinutes
+  const totalMinutesCompleted = Math.max(0, Math.min(currentTimeInMinutes - workStartInMinutes, totalWorkHours * 60))
   const totalMinutesInDay = totalWorkHours * 60
   const progressPercentage = Math.min(100, (totalMinutesCompleted / totalMinutesInDay) * 100)
 
-  const hoursLeft = Math.max(0, workEndHour - currentHour - (currentMinutes > 0 ? 1 : 0))
-  const minutesLeft = currentMinutes > 0 ? 60 - currentMinutes : 0
-  const isAfterWork = currentHour >= workEndHour
+  const totalMinutesLeft = Math.max(0, workEndInMinutes - currentTimeInMinutes)
+  const hoursLeft = Math.floor(totalMinutesLeft / 60)
+  const minutesLeft = totalMinutesLeft % 60
+  const isAfterWork = currentTimeInMinutes >= workEndInMinutes
 
   // Calculate remaining percentage and color with gradual transition
   const remainingPercentage = 100 - progressPercentage
@@ -86,7 +89,7 @@ export function DayProgressBar() {
     <div className="w-full">
       {/* Title */}
       <div className="text-center mb-2">
-        <h3 className="text-sm font-semibold text-theme-text-primary">Time left today</h3>
+        <h3 className="text-sm font-semibold text-theme-text-primary">Time left</h3>
       </div>
       
       {/* Compact Progress Bar with Integrated Time Controls */}
@@ -122,7 +125,7 @@ export function DayProgressBar() {
           <div className="absolute inset-0 flex items-center justify-center px-2 text-white font-bold text-xs drop-shadow-lg">
             <span>
               {isAfterWork ? "DAY COMPLETE" : 
-               currentHour < workStartHour ? `WORK STARTS IN ${workStartHour - currentHour}H` :
+               currentTimeInMinutes < workStartInMinutes ? `WORK STARTS IN ${Math.floor((workStartInMinutes - currentTimeInMinutes) / 60)}H ${(workStartInMinutes - currentTimeInMinutes) % 60}M` :
                `${hoursLeft}H ${minutesLeft}M LEFT`}
             </span>
           </div>
