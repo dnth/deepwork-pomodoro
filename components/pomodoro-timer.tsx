@@ -1,12 +1,10 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { Play, Pause, RotateCcw, X, Clock } from "lucide-react"
+import { Play, Pause, RotateCcw } from "lucide-react"
 import { usePomodoro } from "@/hooks/use-pomodoro"
 import { useSettings } from "@/hooks/use-settings"
-import { taskTagConfig } from "@/hooks/use-todos"
 
-interface PomodoroTimerProps {}
 
 export function PomodoroTimer() {
   const { settings } = useSettings()
@@ -14,13 +12,12 @@ export function PomodoroTimer() {
     timeLeft,
     isRunning,
     currentMode,
-    currentTask,
     completedToday,
     setMode,
     startTimer,
     pauseTimer,
     resetTimer,
-    stopTaskTimer,
+    resetCompletedToday,
     formatTime,
   } = usePomodoro()
 
@@ -31,19 +28,10 @@ export function PomodoroTimer() {
   ] as const
 
   const getTimerTitle = () => {
-    if (currentMode === "task" && currentTask) {
-      const tagConfig = taskTagConfig[currentTask.tag]
-      return `${tagConfig.label} Task`
-    }
     return currentMode === "pomodoro" ? "Pomodoro" : currentMode === "shortBreak" ? "Short Break" : "Long Break"
   }
 
   const getProgressPercentage = () => {
-    if (currentMode === "task" && currentTask) {
-      const totalDuration = taskTagConfig[currentTask.tag].duration * 60
-      return ((totalDuration - timeLeft) / totalDuration) * 100
-    }
-
     const totalDuration = currentMode === "pomodoro" 
       ? settings.pomodoroDuration * 60 
       : currentMode === "shortBreak" 
@@ -52,8 +40,6 @@ export function PomodoroTimer() {
     return ((totalDuration - timeLeft) / totalDuration) * 100
   }
 
-  const isTaskMode = currentMode === "task"
-  const hasCurrentTask = currentTask !== null
 
   return (
     <div className="w-full bg-theme-card-bg/30 backdrop-blur-sm border border-theme-card-border/30 rounded-2xl p-4 sm:p-6 lg:p-8 shadow-2xl">
@@ -61,9 +47,6 @@ export function PomodoroTimer() {
       <div className="flex items-center justify-between mb-4 sm:mb-6">
         <div className="flex items-center gap-2 sm:gap-3">
           <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-theme-text-primary">{getTimerTitle()}</h2>
-          {isTaskMode && (
-            <span className="text-xs bg-theme-task-accent text-white px-2 py-1 sm:px-3 sm:py-1.5 rounded-full font-medium">TASK MODE</span>
-          )}
         </div>
         
         {/* Stats */}
@@ -75,35 +58,6 @@ export function PomodoroTimer() {
         </div>
       </div>
 
-      {/* Current Task Display - Always show when in task mode */}
-      {isTaskMode && hasCurrentTask && (
-        <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-theme-task-bg/10 border border-theme-task-border/30 rounded-xl">
-          <div className="flex items-center justify-between">
-            <div className="flex-1">
-              <div className="flex items-center gap-2 mb-2 sm:mb-3">
-                <Clock className="w-4 h-4 text-theme-task-text" />
-                <span className="font-medium text-theme-text-primary">Working on:</span>
-              </div>
-              <p className="text-theme-text-primary font-medium text-lg mb-2 sm:mb-3">{currentTask.text}</p>
-              <div className="flex items-center gap-2">
-                <div className={`w-3 h-3 rounded-full ${taskTagConfig[currentTask.tag].color}`} />
-                <span className={`text-sm ${taskTagConfig[currentTask.tag].textColor} font-medium`}>
-                  {taskTagConfig[currentTask.tag].label} ({taskTagConfig[currentTask.tag].duration} minutes)
-                </span>
-              </div>
-            </div>
-            <Button
-              onClick={stopTaskTimer}
-              variant="ghost"
-              size="sm"
-              className="text-theme-text-muted hover:text-red-400 hover:bg-red-500/10 p-2"
-              title="Stop task timer"
-            >
-              <X className="w-5 h-5" />
-            </Button>
-          </div>
-        </div>
-      )}
 
       {/* Mode Tabs */}
       <div className="flex bg-theme-input-bg/50 rounded-xl p-1 mb-6 sm:mb-8">
@@ -113,7 +67,7 @@ export function PomodoroTimer() {
             variant="ghost"
             onClick={() => setMode(mode.key)}
             className={`flex-1 rounded-lg p-2 sm:p-3 transition-all duration-200 ${
-              currentMode === mode.key && !isTaskMode
+              currentMode === mode.key
                 ? "bg-theme-accent text-theme-text-primary shadow-lg"
                 : "text-theme-text-secondary hover:text-theme-text-primary hover:bg-theme-card-bg/40"
             }`}
@@ -150,7 +104,7 @@ export function PomodoroTimer() {
               fill="transparent"
               strokeDasharray={`${2 * Math.PI * 54}`}
               strokeDashoffset={`${2 * Math.PI * 54 * (1 - getProgressPercentage() / 100)}`}
-              className={`${isTaskMode ? "text-theme-task-text" : "text-theme-progress"} transition-all duration-1000 ease-linear`}
+              className="text-theme-progress transition-all duration-1000 ease-linear"
               strokeLinecap="round"
             />
           </svg>
@@ -169,12 +123,16 @@ export function PomodoroTimer() {
         </Button>
 
         <Button
-          onClick={resetTimer}
+          onClick={() => {
+            resetTimer()
+            resetCompletedToday()
+          }}
           variant="outline"
           size="lg"
           className="border-theme-input-border text-theme-text-secondary hover:text-theme-text-primary hover:bg-theme-card-bg/40 px-4 sm:px-6 py-2 sm:py-3 rounded-xl bg-transparent"
         >
-          <RotateCcw className="w-4 h-4 sm:w-5 sm:h-5" />
+          <RotateCcw className="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-2" />
+          Reset
         </Button>
       </div>
 

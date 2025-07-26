@@ -113,6 +113,10 @@ export function usePomodoro() {
     dispatch({ type: "RESET", duration })
   }, [state.currentMode, getDuration])
 
+  const resetCompletedToday = useCallback(() => {
+    setCompletedToday(0)
+  }, [setCompletedToday])
+
 
   const formatTime = useCallback((seconds: number) => {
     const mins = Math.floor(seconds / 60)
@@ -196,6 +200,7 @@ export function usePomodoro() {
     startTimer,
     pauseTimer,
     resetTimer,
+    resetCompletedToday,
     formatTime,
   }
 }
