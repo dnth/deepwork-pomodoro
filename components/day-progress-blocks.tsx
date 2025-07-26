@@ -108,7 +108,7 @@ export function DayProgressBar() {
         </Select>
         
         {/* HP Bar Container */}
-        <div className="flex-1 relative bg-red-900/20 border-2 border-red-700/40 rounded-lg overflow-hidden h-8 shadow-inner">
+        <div className="flex-1 relative bg-theme-progress-bg border-2 border-theme-progress-bg rounded-lg overflow-hidden h-8 shadow-inner">
           {/* HP Bar Fill */}
           <div 
             className="absolute top-0 left-0 h-full transition-all duration-1000 ease-out"
