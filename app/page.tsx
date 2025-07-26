@@ -38,31 +38,33 @@ export default function Home() {
           {/* Left: App Name */}
           <h1 className="text-xl sm:text-2xl font-bold text-theme-text-primary">Deep Work</h1>
           
-          {/* Right: Current Time and Settings */}
-          <div className="flex items-center gap-3">
-            <div className="text-right">
-              <div className="text-theme-text-primary text-lg sm:text-xl font-light tracking-wide">
+          {/* Center: Current Time */}
+          <div className="absolute left-1/2 transform -translate-x-1/2 text-center">
+            <div className="flex items-center gap-3 text-theme-text-primary">
+              <span className="text-lg sm:text-xl font-light tracking-wider">
                 {mounted ? currentTime.toLocaleTimeString('en-US', { 
                   hour: '2-digit', 
                   minute: '2-digit', 
-                  hour12: true 
-                }) : '--:-- --'}
-              </div>
-              <div className="text-theme-text-secondary text-xs -mt-0.5">
+                  hour12: false 
+                }) : '--:--'}
+              </span>
+              <span className="text-theme-text-secondary text-xs sm:text-sm uppercase tracking-widest">
                 {mounted ? currentTime.toLocaleDateString('en-US', { 
                   weekday: 'short', 
                   month: 'short', 
                   day: 'numeric' 
                 }) : '--- --- --'}
-              </div>
+              </span>
             </div>
-            <button
-              onClick={() => setShowSettings(true)}
-              className="text-theme-text-secondary hover:text-theme-text-primary hover:bg-white/10 rounded-lg p-2 transition-colors"
-            >
-              <Settings className="w-4 h-4" />
-            </button>
           </div>
+          
+          {/* Right: Settings */}
+          <button
+            onClick={() => setShowSettings(true)}
+            className="text-theme-text-secondary hover:text-theme-text-primary hover:bg-white/10 rounded-lg p-2 transition-colors"
+          >
+            <Settings className="w-4 h-4" />
+          </button>
         </div>
         
         {/* Compact Day Progress HP Bar */}
