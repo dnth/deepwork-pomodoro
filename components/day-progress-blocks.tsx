@@ -3,11 +3,13 @@
 import { useState, useEffect } from "react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useLocalStorage } from "@/hooks/use-local-storage"
+import { Edit3 } from "lucide-react"
 
 export function DayProgressBar() {
   const [currentTime, setCurrentTime] = useState(new Date())
   const [workStartHour, setWorkStartHour] = useLocalStorage("work-start-hour", 10)
   const [workEndHour, setWorkEndHour] = useLocalStorage("work-end-hour", 17)
+  const [editingTime, setEditingTime] = useState<'start' | 'end' | null>(null)
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -85,30 +87,27 @@ export function DayProgressBar() {
     return hour === 0 ? '12AM' : hour === 12 ? '12PM' : hour > 12 ? `${hour - 12}PM` : `${hour}AM`
   }
 
+  const handleTimeChange = (type: 'start' | 'end', value: string) => {
+    if (type === 'start') {
+      setWorkStartHour(Number(value))
+    } else {
+      setWorkEndHour(Number(value))
+    }
+    setEditingTime(null)
+  }
+
   return (
     <div className="w-full">
       {/* Title */}
       <div className="text-center mb-2">
         <h3 className="text-sm font-semibold text-theme-text-primary">Time left</h3>
       </div>
-      
-      {/* Compact Progress Bar with Integrated Time Controls */}
-      <div className="flex items-center gap-2 mb-2">
-        <Select value={workStartHour.toString()} onValueChange={(value) => setWorkStartHour(Number(value))}>
-          <SelectTrigger className="w-20 h-8 text-sm">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            {hourOptions.map(hour => (
-              <SelectItem key={hour} value={hour.toString()} disabled={hour >= workEndHour}>
-                {formatHour(hour)}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        
-        {/* HP Bar Container */}
-        <div className="flex-1 relative bg-theme-progress-bg border-2 border-theme-progress-bg rounded-lg overflow-hidden h-8 shadow-inner">
+
+      {/* Progress Bar */}
+      <div className="mb-2 relative">
+        <div className="relative bg-theme-progress-bg border-2 border-theme-progress-bg rounded-lg overflow-hidden h-8 shadow-inner cursor-pointer group">
+          {/* Subtle pulse animation on first load to indicate interactivity */}
+          <div className="absolute inset-0 animate-pulse opacity-20 bg-white/10 rounded-lg pointer-events-none" />
           {/* HP Bar Fill */}
           <div 
             className="absolute top-0 left-0 h-full transition-all duration-1000 ease-out"
@@ -122,7 +121,7 @@ export function DayProgressBar() {
           <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse" />
           
           {/* HP Text Overlay */}
-          <div className="absolute inset-0 flex items-center justify-center px-2 text-white font-bold text-xs drop-shadow-lg">
+          <div className="absolute inset-0 flex items-center justify-center px-2 text-white font-bold text-xs drop-shadow-lg pointer-events-none">
             <span>
               {isAfterWork ? "DAY COMPLETE" : 
                currentTimeInMinutes < workStartInMinutes ? `WORK STARTS IN ${Math.floor((workStartInMinutes - currentTimeInMinutes) / 60)}H ${(workStartInMinutes - currentTimeInMinutes) % 60}M` :
@@ -130,8 +129,38 @@ export function DayProgressBar() {
             </span>
           </div>
           
+          {/* Clickable Time Display - Start */}
+          <div 
+            className="absolute left-1 top-1/2 -translate-y-1/2 px-2 py-1 rounded text-xs font-semibold text-white hover:scale-105 transition-all cursor-pointer z-10 group/time shadow-lg hover:shadow-xl bg-black/60 hover:bg-black/70 backdrop-blur-sm border border-white/30 hover:border-white/50"
+            onClick={(e) => {
+              e.stopPropagation()
+              setEditingTime('start')
+            }}
+            title="Click to edit start time"
+          >
+            <div className="flex items-center gap-1">
+              <span>{formatHour(workStartHour)}</span>
+              <Edit3 className="w-2.5 h-2.5 opacity-70 group-hover/time:opacity-100 transition-all duration-200" />
+            </div>
+          </div>
+          
+          {/* Clickable Time Display - End */}
+          <div 
+            className="absolute right-1 top-1/2 -translate-y-1/2 px-2 py-1 rounded text-xs font-semibold text-white hover:scale-105 transition-all cursor-pointer z-10 group/time shadow-lg hover:shadow-xl bg-black/60 hover:bg-black/70 backdrop-blur-sm border border-white/30 hover:border-white/50"
+            onClick={(e) => {
+              e.stopPropagation()
+              setEditingTime('end')
+            }}
+            title="Click to edit end time"
+          >
+            <div className="flex items-center gap-1">
+              <span>{formatHour(workEndHour)}</span>
+              <Edit3 className="w-2.5 h-2.5 opacity-70 group-hover/time:opacity-100 transition-all duration-200" />
+            </div>
+          </div>
+          
           {/* Segmented Lines - 30 minute sections */}
-          <div className="absolute inset-0 flex">
+          <div className="absolute inset-0 flex pointer-events-none">
             {Array.from({ length: totalWorkHours * 2 }, (_, i) => (
               <div 
                 key={i} 
@@ -140,20 +169,51 @@ export function DayProgressBar() {
             ))}
           </div>
         </div>
-        
-        <Select value={workEndHour.toString()} onValueChange={(value) => setWorkEndHour(Number(value))}>
-          <SelectTrigger className="w-20 h-8 text-sm">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            {hourOptions.map(hour => (
-              <SelectItem key={hour} value={hour.toString()} disabled={hour <= workStartHour}>
-                {formatHour(hour)}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+
+        {/* Inline Dropdown - Start Time */}
+        {editingTime === 'start' && (
+          <div className="absolute left-0 top-10 z-50">
+            <Select value={workStartHour.toString()} onValueChange={(value) => handleTimeChange('start', value)}>
+              <SelectTrigger className="w-20 h-8 text-xs">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {hourOptions.map(hour => (
+                  <SelectItem key={hour} value={hour.toString()} disabled={hour >= workEndHour}>
+                    {formatHour(hour)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        )}
+
+        {/* Inline Dropdown - End Time */}
+        {editingTime === 'end' && (
+          <div className="absolute right-0 top-10 z-50">
+            <Select value={workEndHour.toString()} onValueChange={(value) => handleTimeChange('end', value)}>
+              <SelectTrigger className="w-20 h-8 text-xs">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {hourOptions.map(hour => (
+                  <SelectItem key={hour} value={hour.toString()} disabled={hour <= workStartHour}>
+                    {formatHour(hour)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        )}
       </div>
+
+      {/* Click outside to close */}
+      {editingTime && (
+        <div 
+          className="fixed inset-0 z-40"
+          onClick={() => setEditingTime(null)}
+        />
+      )}
     </div>
   )
 }
