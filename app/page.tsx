@@ -101,6 +101,30 @@ export default function Home() {
 
       {/* Settings Modal */}
       <SettingsModal isOpen={showSettings} onClose={() => setShowSettings(false)} />
+      
+      {/* Footer */}
+      <footer className="relative z-10 p-4 sm:p-6">
+        <div className="text-center text-theme-text-secondary text-sm">
+          Made by{' '}
+          <a 
+            href="https://dicksonneoh.com" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-theme-text-primary hover:underline"
+          >
+            Dickson Neoh
+          </a>
+          {' • '}
+          <a 
+            href="https://www.buymeacoffee.com/dicksonneoh" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-theme-text-primary hover:underline"
+          >
+            Buy me a coffee
+          </a>
+        </div>
+      </footer>
     </div>
   )
 }
