@@ -46,7 +46,15 @@ export function TodoList() {
       {/* Header */}
       <div className="flex justify-between items-center mb-4 sm:mb-6">
         <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-theme-text-primary">To Do</h2>
-        <span className="text-theme-task-text font-semibold text-sm sm:text-base">{Math.round(progress)}%</span>
+        <div className="flex items-center gap-3">
+          <div className="text-theme-text-secondary">
+            <span className="text-theme-text-primary font-semibold text-sm sm:text-base">
+              {todos.filter((t) => t.completed).length}/{todos.length}
+            </span>
+            <span className="ml-1 text-theme-text-secondary text-xs sm:text-sm">completed</span>
+          </div>
+          <span className="text-theme-task-text font-semibold text-sm sm:text-base">{Math.round(progress)}%</span>
+        </div>
       </div>
 
       {/* Progress Bar */}
@@ -91,14 +99,6 @@ export function TodoList() {
         >
           <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
         </Button>
-      </div>
-
-      {/* Task Counter */}
-      <div className="text-theme-text-secondary mb-4 sm:mb-6">
-        <span className="text-theme-text-primary font-semibold">
-          {todos.filter((t) => t.completed).length}/{todos.length}
-        </span>
-        <span className="ml-2 text-theme-text-secondary">completed</span>
       </div>
 
       {/* Task Lists */}

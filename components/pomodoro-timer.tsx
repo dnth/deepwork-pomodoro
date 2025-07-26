@@ -58,11 +58,21 @@ export function PomodoroTimer() {
   return (
     <div className="w-full bg-theme-card-bg/30 backdrop-blur-sm border border-theme-card-border/30 rounded-2xl p-4 sm:p-6 lg:p-8 shadow-2xl">
       {/* Header */}
-      <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
-        <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-theme-text-primary">{getTimerTitle()}</h2>
-        {isTaskMode && (
-          <span className="text-xs bg-theme-task-accent text-white px-2 py-1 sm:px-3 sm:py-1.5 rounded-full font-medium">TASK MODE</span>
-        )}
+      <div className="flex items-center justify-between mb-4 sm:mb-6">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-theme-text-primary">{getTimerTitle()}</h2>
+          {isTaskMode && (
+            <span className="text-xs bg-theme-task-accent text-white px-2 py-1 sm:px-3 sm:py-1.5 rounded-full font-medium">TASK MODE</span>
+          )}
+        </div>
+        
+        {/* Stats */}
+        <div className="text-right">
+          <div className="text-theme-text-secondary">
+            <span className="text-theme-text-primary font-semibold text-sm sm:text-base">{completedToday}</span>
+            <span className="ml-1 text-theme-text-secondary text-xs sm:text-sm">completed today</span>
+          </div>
+        </div>
       </div>
 
       {/* Current Task Display - Always show when in task mode */}
@@ -168,13 +178,6 @@ export function PomodoroTimer() {
         </Button>
       </div>
 
-      {/* Stats */}
-      <div className="text-center">
-        <div className="text-theme-text-secondary">
-          <span className="text-2xl font-bold text-theme-text-primary">{completedToday}</span>
-          <span className="ml-2">completed today</span>
-        </div>
-      </div>
     </div>
   )
 }
