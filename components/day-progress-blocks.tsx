@@ -98,10 +98,6 @@ export function DayProgressBar() {
 
   return (
     <div className="w-full">
-      {/* Title */}
-      <div className="text-center mb-2">
-        <h3 className="text-sm font-semibold text-theme-text-primary">Time left</h3>
-      </div>
 
       {/* Progress Bar */}
       <div className="mb-2 relative">
@@ -123,7 +119,7 @@ export function DayProgressBar() {
           {/* HP Text Overlay */}
           <div className="absolute inset-0 flex items-center justify-center px-2 text-white font-bold text-xs drop-shadow-lg pointer-events-none">
             <span>
-              {isAfterWork ? "DAY COMPLETE" : 
+              {isAfterWork ? "SPRINT COMPLETE" : 
                currentTimeInMinutes < workStartInMinutes ? `WORK STARTS IN ${Math.floor((workStartInMinutes - currentTimeInMinutes) / 60)}H ${(workStartInMinutes - currentTimeInMinutes) % 60}M` :
                `${hoursLeft}H ${minutesLeft}M LEFT`}
             </span>
