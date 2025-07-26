@@ -179,7 +179,7 @@ export function YoutubePlaylist() {
           />
           <Button
             onClick={handleCustomVideo}
-            className="bg-theme-accent hover:bg-theme-accent-hover text-theme-text-primary rounded-xl px-4 sm:px-6 text-sm sm:text-base"
+            className="bg-theme-accent hover:bg-theme-accent-hover text-theme-text-primary rounded-xl px-4 sm:px-6 text-xs sm:text-sm font-medium"
           >
             Load Video
           </Button>
