@@ -40,15 +40,21 @@ export default function Home() {
           
           {/* Center: Current Time */}
           <div className="absolute left-1/2 transform -translate-x-1/2 text-center">
-            <div className="flex items-center gap-3 text-theme-text-primary">
-              <span className="text-lg sm:text-xl font-light tracking-wider">
+            <div className="flex items-center gap-3 sm:gap-4">
+              {/* Time Display */}
+              <span className="text-xl sm:text-2xl lg:text-3xl font-bold text-theme-text-primary font-mono tracking-wider drop-shadow-lg">
                 {mounted ? currentTime.toLocaleTimeString('en-US', { 
                   hour: '2-digit', 
                   minute: '2-digit', 
                   hour12: false 
                 }) : '--:--'}
               </span>
-              <span className="text-theme-text-secondary text-xs sm:text-sm uppercase tracking-widest">
+              
+              {/* Separator */}
+              <div className="w-px h-6 bg-theme-text-secondary/30"></div>
+              
+              {/* Date Display */}
+              <span className="text-theme-text-secondary text-xs sm:text-sm font-medium uppercase tracking-widest">
                 {mounted ? currentTime.toLocaleDateString('en-US', { 
                   weekday: 'short', 
                   month: 'short', 
