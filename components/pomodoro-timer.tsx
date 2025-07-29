@@ -79,35 +79,67 @@ export function PomodoroTimer() {
 
       {/* Timer Display */}
       <div className="text-center mb-6 sm:mb-8">
-        <div className="text-4xl sm:text-6xl lg:text-8xl font-bold text-theme-text-primary mb-3 sm:mb-4 font-mono tracking-tight">
-          {formatTime(timeLeft)}
+        {/* Enhanced Timer Display */}
+        <div className="relative mb-6 sm:mb-8">
+          {/* Background glow effect */}
+          <div className="absolute inset-0 bg-gradient-to-r from-theme-accent/20 via-theme-progress/20 to-theme-accent/20 rounded-3xl blur-3xl scale-110 opacity-60 animate-pulse"></div>
+          
+          {/* Timer container */}
+          <div className="relative bg-gradient-to-br from-theme-card-bg/80 to-theme-card-bg/40 backdrop-blur-xl border border-theme-card-border/50 rounded-3xl p-6 sm:p-8 lg:p-10 shadow-2xl">
+            {/* Timer digits */}
+            <div className="text-5xl sm:text-7xl lg:text-9xl font-black text-theme-text-primary font-mono tracking-wider leading-none mb-2 sm:mb-3">
+              {formatTime(timeLeft)}
+            </div>
+            
+            {/* Timer status indicator */}
+            <div className="flex items-center justify-center gap-2 mb-4">
+              <div className={`w-3 h-3 rounded-full ${isRunning ? 'bg-theme-progress animate-pulse' : 'bg-theme-text-muted'}`}></div>
+              <span className="text-sm sm:text-base font-medium text-theme-text-secondary uppercase tracking-wider">
+                {isRunning ? 'Running' : 'Paused'}
+              </span>
+            </div>
+            
+            {/* Progress percentage */}
+            <div className="text-xs sm:text-sm font-medium text-theme-text-muted uppercase tracking-wider">
+              {Math.round(getProgressPercentage())}% Complete
+            </div>
+          </div>
         </div>
 
-        {/* Progress Ring */}
-        <div className="relative w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32 mx-auto mb-4 sm:mb-6">
-          <svg className="w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32 transform -rotate-90" viewBox="0 0 120 120">
+        {/* Enhanced Progress Ring */}
+        <div className="relative w-28 h-28 sm:w-32 sm:h-32 lg:w-36 lg:h-36 mx-auto mb-4 sm:mb-6">
+          {/* Ring background glow */}
+          <div className="absolute inset-0 bg-theme-progress/20 rounded-full blur-lg scale-110"></div>
+          
+          <svg className="relative w-28 h-28 sm:w-32 sm:h-32 lg:w-36 lg:h-36 transform -rotate-90 drop-shadow-lg" viewBox="0 0 120 120">
             <circle
               cx="60"
               cy="60"
               r="54"
               stroke="currentColor"
-              strokeWidth="8"
+              strokeWidth="10"
               fill="transparent"
-              className="text-theme-progress-bg"
+              className="text-theme-progress-bg/50"
             />
             <circle
               cx="60"
               cy="60"
               r="54"
               stroke="currentColor"
-              strokeWidth="8"
+              strokeWidth="10"
               fill="transparent"
               strokeDasharray={`${2 * Math.PI * 54}`}
               strokeDashoffset={`${2 * Math.PI * 54 * (1 - getProgressPercentage() / 100)}`}
-              className="text-theme-progress transition-all duration-1000 ease-linear"
+              className="text-theme-progress transition-all duration-1000 ease-linear drop-shadow-lg"
               strokeLinecap="round"
+              filter="drop-shadow(0 0 8px hsl(var(--theme-progress)/0.5))"
             />
           </svg>
+          
+          {/* Center indicator */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className={`w-4 h-4 rounded-full ${isRunning ? 'bg-theme-progress animate-ping' : 'bg-theme-text-muted'}`}></div>
+          </div>
         </div>
       </div>
 
