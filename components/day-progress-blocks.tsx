@@ -9,7 +9,6 @@ export function DayProgressBar() {
   const [currentTime, setCurrentTime] = useState(new Date())
   const [workStartHour, setWorkStartHour] = useLocalStorage("work-start-hour", 10)
   const [workEndHour, setWorkEndHour] = useLocalStorage("work-end-hour", 17)
-  const [editingTime, setEditingTime] = useState<'start' | 'end' | null>(null)
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -93,7 +92,6 @@ export function DayProgressBar() {
     } else {
       setWorkEndHour(Number(value))
     }
-    setEditingTime(null)
   }
 
   return (
@@ -125,34 +123,36 @@ export function DayProgressBar() {
             </span>
           </div>
           
-          {/* Clickable Time Display - Start */}
-          <div 
-            className="absolute left-1 top-1/2 -translate-y-1/2 px-2 py-1 rounded text-xs font-semibold text-white hover:scale-105 transition-all cursor-pointer z-10 group/time shadow-lg hover:shadow-xl bg-black/60 hover:bg-black/70 backdrop-blur-sm border border-white/30 hover:border-white/50"
-            onClick={(e) => {
-              e.stopPropagation()
-              setEditingTime('start')
-            }}
-            title="Click to edit start time"
-          >
-            <div className="flex items-center gap-1">
-              <span>{formatHour(workStartHour)}</span>
-              <Edit3 className="w-2.5 h-2.5 opacity-70 group-hover/time:opacity-100 transition-all duration-200" />
-            </div>
+          {/* Start Time Dropdown */}
+          <div className="absolute left-1 top-1/2 -translate-y-1/2 z-10">
+            <Select value={workStartHour.toString()} onValueChange={(value) => handleTimeChange('start', value)}>
+              <SelectTrigger className="w-20 h-6 text-xs bg-black/60 hover:bg-black/70 backdrop-blur-sm border border-white/30 hover:border-white/50 text-white font-semibold shadow-lg hover:shadow-xl transition-all">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {hourOptions.map(hour => (
+                  <SelectItem key={hour} value={hour.toString()} disabled={hour >= workEndHour}>
+                    {formatHour(hour)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
           
-          {/* Clickable Time Display - End */}
-          <div 
-            className="absolute right-1 top-1/2 -translate-y-1/2 px-2 py-1 rounded text-xs font-semibold text-white hover:scale-105 transition-all cursor-pointer z-10 group/time shadow-lg hover:shadow-xl bg-black/60 hover:bg-black/70 backdrop-blur-sm border border-white/30 hover:border-white/50"
-            onClick={(e) => {
-              e.stopPropagation()
-              setEditingTime('end')
-            }}
-            title="Click to edit end time"
-          >
-            <div className="flex items-center gap-1">
-              <span>{formatHour(workEndHour)}</span>
-              <Edit3 className="w-2.5 h-2.5 opacity-70 group-hover/time:opacity-100 transition-all duration-200" />
-            </div>
+          {/* End Time Dropdown */}
+          <div className="absolute right-1 top-1/2 -translate-y-1/2 z-10">
+            <Select value={workEndHour.toString()} onValueChange={(value) => handleTimeChange('end', value)}>
+              <SelectTrigger className="w-20 h-6 text-xs bg-black/60 hover:bg-black/70 backdrop-blur-sm border border-white/30 hover:border-white/50 text-white font-semibold shadow-lg hover:shadow-xl transition-all">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {hourOptions.map(hour => (
+                  <SelectItem key={hour} value={hour.toString()} disabled={hour <= workStartHour}>
+                    {formatHour(hour)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
           
           {/* Segmented Lines - 30 minute sections */}
@@ -166,50 +166,7 @@ export function DayProgressBar() {
           </div>
         </div>
 
-        {/* Inline Dropdown - Start Time */}
-        {editingTime === 'start' && (
-          <div className="absolute left-0 top-10 z-50">
-            <Select value={workStartHour.toString()} onValueChange={(value) => handleTimeChange('start', value)}>
-              <SelectTrigger className="w-20 h-8 text-xs">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {hourOptions.map(hour => (
-                  <SelectItem key={hour} value={hour.toString()} disabled={hour >= workEndHour}>
-                    {formatHour(hour)}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        )}
-
-        {/* Inline Dropdown - End Time */}
-        {editingTime === 'end' && (
-          <div className="absolute right-0 top-10 z-50">
-            <Select value={workEndHour.toString()} onValueChange={(value) => handleTimeChange('end', value)}>
-              <SelectTrigger className="w-20 h-8 text-xs">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {hourOptions.map(hour => (
-                  <SelectItem key={hour} value={hour.toString()} disabled={hour <= workStartHour}>
-                    {formatHour(hour)}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        )}
       </div>
-
-      {/* Click outside to close */}
-      {editingTime && (
-        <div 
-          className="fixed inset-0 z-40"
-          onClick={() => setEditingTime(null)}
-        />
-      )}
     </div>
   )
 }
