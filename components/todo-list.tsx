@@ -10,7 +10,7 @@ import { Plus, Trash2 } from "lucide-react"
 import { useTodos, taskTagConfig, type TaskTag, type Todo } from "@/hooks/use-todos"
 import { useState } from "react"
 export function TodoList() {
-  const { todos, addTodo, toggleTodo, deleteTodo } = useTodos()
+  const { todos, addTodo, toggleTodo, deleteTodo, clearCompletedTodos } = useTodos()
   const [newTask, setNewTask] = useState("")
   const [selectedTag, setSelectedTag] = useState<TaskTag>("focus")
 
@@ -160,9 +160,19 @@ export function TodoList() {
             {/* Completed Tasks Section */}
             {completedTasks.length > 0 && (
               <div className="space-y-3">
-                <h3 className="text-sm font-medium text-theme-text-secondary flex items-center gap-2">
-                  ✅ Completed ({completedTasks.length})
-                </h3>
+                <div className="flex items-center justify-between">
+                  <h3 className="text-sm font-medium text-theme-text-secondary flex items-center gap-2">
+                    ✅ Completed ({completedTasks.length})
+                  </h3>
+                  <Button
+                    onClick={clearCompletedTodos}
+                    variant="ghost"
+                    size="sm"
+                    className="text-theme-text-muted hover:text-red-400 transition-all text-xs"
+                  >
+                    Clear All
+                  </Button>
+                </div>
                 {completedTasks.map((todo) => {
                   const tagConfig = taskTagConfig[todo.tag]
 

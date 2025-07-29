@@ -63,6 +63,10 @@ export function useTodos() {
     return (completed / todos.length) * 100
   }, [todos])
 
+  const clearCompletedTodos = useCallback(() => {
+    setTodos((prev) => prev.filter((todo) => !todo.completed))
+  }, [setTodos])
+
   return {
     todos,
     addTodo,
@@ -70,5 +74,6 @@ export function useTodos() {
     deleteTodo,
     updateTodoTag,
     getProgress,
+    clearCompletedTodos,
   }
 }
