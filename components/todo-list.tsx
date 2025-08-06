@@ -260,7 +260,11 @@ export function TodoList() {
 
                       <div className="flex-1 min-w-0">
                         {editingId === todo.id ? (
-                          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+                          <div
+                            className="flex items-center gap-2 sm:gap-3 flex-wrap [>*]:shrink-0"
+                            role="group"
+                            aria-label="Edit task"
+                          >
                             <Input
                               autoFocus
                               value={editingText}
@@ -269,18 +273,21 @@ export function TodoList() {
                                 if (e.key === "Enter") saveEditing()
                                 if (e.key === "Escape") cancelEditing()
                               }}
-                              className="flex-1 bg-theme-input-bg border-theme-input-border text-theme-text-primary rounded-xl text-sm p-2"
+                              className="min-w-0 flex-1 bg-theme-input-bg border-theme-input-border text-theme-text-primary rounded-xl text-sm p-2"
                             />
+
                             {/* Segmented control while editing */}
                             <ToggleGroup
                               type="single"
                               value={editingTag}
                               onValueChange={(v) => v && setEditingTag(v as TaskTag)}
                               className="bg-theme-input-bg border border-theme-input-border rounded-xl p-1"
+                              aria-label="Task type"
                             >
                               <ToggleGroupItem
                                 value="focus"
                                 className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-xs rounded-lg px-2 py-1"
+                                aria-label="Focus 25 minutes"
                               >
                                 {taskTagConfig["focus"].symbol}&nbsp;25m
                               </ToggleGroupItem>
@@ -288,6 +295,7 @@ export function TodoList() {
                                 <ToggleGroupItem
                                   value="deep"
                                   className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-xs rounded-lg px-2 py-1"
+                                  aria-label="Deep Work 50 minutes"
                                 >
                                   {taskTagConfig["deep"].symbol}&nbsp;50m
                                 </ToggleGroupItem>
@@ -296,15 +304,26 @@ export function TodoList() {
                               <ToggleGroupItem
                                 value={"quick" as unknown as TaskTag}
                                 className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-xs rounded-lg px-2 py-1"
+                                aria-label="Quick 5 minutes"
                               >
                                 {(taskTagConfig as any)["quick"]?.symbol ?? "⚡"}&nbsp;5m
                               </ToggleGroupItem>
                             </ToggleGroup>
-                            <div className="flex gap-2">
-                              <Button onClick={saveEditing} size="sm" className="bg-theme-accent hover:bg-theme-accent-hover text-theme-text-primary rounded-xl px-3">
+
+                            <div className="flex items-center gap-2 sm:gap-2">
+                              <Button
+                                onClick={saveEditing}
+                                size="sm"
+                                className="bg-theme-accent hover:bg-theme-accent-hover text-theme-text-primary rounded-xl px-3"
+                              >
                                 Save
                               </Button>
-                              <Button onClick={cancelEditing} size="sm" variant="ghost" className="text-theme-text-muted">
+                              <Button
+                                onClick={cancelEditing}
+                                size="sm"
+                                variant="ghost"
+                                className="text-theme-text-muted"
+                              >
                                 Cancel
                               </Button>
                             </div>
@@ -400,7 +419,11 @@ export function TodoList() {
 
                       <div className="flex-1 min-w-0">
                         {editingId === todo.id ? (
-                          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+                          <div
+                            className="flex items-center gap-2 sm:gap-3 flex-wrap [>*]:shrink-0"
+                            role="group"
+                            aria-label="Edit task"
+                          >
                             <Input
                               autoFocus
                               value={editingText}
@@ -409,18 +432,21 @@ export function TodoList() {
                                 if (e.key === "Enter") saveEditing()
                                 if (e.key === "Escape") cancelEditing()
                               }}
-                              className="flex-1 bg-theme-input-bg border-theme-input-border text-theme-text-primary rounded-xl text-sm p-2"
+                              className="min-w-0 flex-1 bg-theme-input-bg border-theme-input-border text-theme-text-primary rounded-xl text-sm p-2"
                             />
+
                             {/* Segmented control while editing (keep available to change tag) */}
                             <ToggleGroup
                               type="single"
                               value={editingTag}
                               onValueChange={(v) => v && setEditingTag(v as TaskTag)}
                               className="bg-theme-input-bg border border-theme-input-border rounded-xl p-1"
+                              aria-label="Task type"
                             >
                               <ToggleGroupItem
                                 value="focus"
                                 className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-xs rounded-lg px-2 py-1"
+                                aria-label="Focus 25 minutes"
                               >
                                 {taskTagConfig["focus"].symbol}&nbsp;25m
                               </ToggleGroupItem>
@@ -428,6 +454,7 @@ export function TodoList() {
                                 <ToggleGroupItem
                                   value="deep"
                                   className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-xs rounded-lg px-2 py-1"
+                                  aria-label="Deep Work 50 minutes"
                                 >
                                   {taskTagConfig["deep"].symbol}&nbsp;50m
                                 </ToggleGroupItem>
@@ -436,15 +463,26 @@ export function TodoList() {
                               <ToggleGroupItem
                                 value={"quick" as unknown as TaskTag}
                                 className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-xs rounded-lg px-2 py-1"
+                                aria-label="Quick 5 minutes"
                               >
                                 {(taskTagConfig as any)["quick"]?.symbol ?? "⚡"}&nbsp;5m
                               </ToggleGroupItem>
                             </ToggleGroup>
-                            <div className="flex gap-2">
-                              <Button onClick={saveEditing} size="sm" className="bg-theme-accent hover:bg-theme-accent-hover text-theme-text-primary rounded-xl px-3">
+
+                            <div className="flex items-center gap-2 sm:gap-2">
+                              <Button
+                                onClick={saveEditing}
+                                size="sm"
+                                className="bg-theme-accent hover:bg-theme-accent-hover text-theme-text-primary rounded-xl px-3"
+                              >
                                 Save
                               </Button>
-                              <Button onClick={cancelEditing} size="sm" variant="ghost" className="text-theme-text-muted">
+                              <Button
+                                onClick={cancelEditing}
+                                size="sm"
+                                variant="ghost"
+                                className="text-theme-text-muted"
+                              >
                                 Cancel
                               </Button>
                             </div>
