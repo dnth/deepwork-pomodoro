@@ -67,6 +67,30 @@ export function useTodos() {
     setTodos((prev) => prev.filter((todo) => !todo.completed))
   }, [setTodos])
 
+  // Reorder within the same section (incomplete with incomplete, completed with completed)
+  const reorderTodos = useCallback((sourceId: string, targetId: string) => {
+    setTodos((prev) => {
+      const sourceIndex = prev.findIndex((t) => t.id === sourceId)
+      const targetIndex = prev.findIndex((t) => t.id === targetId)
+      if (sourceIndex === -1 || targetIndex === -1) return prev
+
+      const source = prev[sourceIndex]
+      const target = prev[targetIndex]
+
+      // Only allow reordering within same completion group to keep sections intact
+      if (source.completed !== target.completed) return prev
+
+      const next = [...prev]
+      // Remove source
+      next.splice(sourceIndex, 1)
+      // Find new index of target after removal adjustment
+      const adjustedTargetIndex = next.findIndex((t) => t.id === targetId)
+      // Insert before target
+      next.splice(adjustedTargetIndex, 0, source)
+      return next
+    })
+  }, [setTodos])
+
   return {
     todos,
     addTodo,
@@ -75,5 +99,6 @@ export function useTodos() {
     updateTodoTag,
     getProgress,
     clearCompletedTodos,
+    reorderTodos,
   }
 }

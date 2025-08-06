@@ -6,13 +6,20 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Plus, Trash2 } from "lucide-react"
+import { Plus, Trash2, GripVertical } from "lucide-react"
 import { useTodos, taskTagConfig, type TaskTag, type Todo } from "@/hooks/use-todos"
-import { useState } from "react"
+import { useState, useRef, useCallback } from "react"
+
+type DragState = {
+  draggedId: string | null
+  overId: string | null
+}
+
 export function TodoList() {
-  const { todos, addTodo, toggleTodo, deleteTodo, clearCompletedTodos } = useTodos()
+  const { todos, addTodo, toggleTodo, deleteTodo, clearCompletedTodos, reorderTodos } = useTodos()
   const [newTask, setNewTask] = useState("")
   const [selectedTag, setSelectedTag] = useState<TaskTag>("focus")
+  const [drag, setDrag] = useState<DragState>({ draggedId: null, overId: null })
 
   const getProgress = () => {
     if (todos.length === 0) return 0
@@ -40,6 +47,33 @@ export function TodoList() {
     }
   }
 
+  const onDragStart = useCallback((id: string, e: React.DragEvent) => {
+    setDrag({ draggedId: id, overId: null })
+    e.dataTransfer.effectAllowed = "move"
+    e.dataTransfer.setData("text/plain", id)
+  }, [])
+
+  const onDragEnter = useCallback((id: string) => {
+    setDrag((d) => ({ ...d, overId: id }))
+  }, [])
+
+  const onDragEnd = useCallback(() => {
+    setDrag({ draggedId: null, overId: null })
+  }, [])
+
+  const onDropOnItem = useCallback((targetId: string, e: React.DragEvent) => {
+    e.preventDefault()
+    const sourceId = e.dataTransfer.getData("text/plain") || drag.draggedId
+    if (!sourceId || sourceId === targetId) {
+      onDragEnd()
+      return
+    }
+    reorderTodos(sourceId, targetId)
+    onDragEnd()
+  }, [drag.draggedId, onDragEnd, reorderTodos])
+
+  const draggableItemClasses = (id: string, base: string) =>
+    `${base} ${drag.overId === id ? "ring-2 ring-theme-accent/60" : ""}`
 
   return (
     <div className="w-full bg-theme-card-bg/30 backdrop-blur-sm border border-theme-card-border/30 rounded-2xl p-4 sm:p-6 lg:p-8 shadow-2xl">
@@ -77,15 +111,15 @@ export function TodoList() {
           className="flex-1 bg-theme-input-bg border-theme-input-border text-theme-text-primary placeholder:text-slate-400 rounded-xl text-sm sm:text-base p-2 sm:p-3"
         />
         <Select value={selectedTag} onValueChange={(value: TaskTag) => setSelectedTag(value)}>
-          <SelectTrigger 
+          <SelectTrigger
               className="w-36 sm:w-44 bg-theme-input-bg border-theme-input-border text-theme-text-primary rounded-xl text-sm p-2 sm:p-3">
             <SelectValue />
           </SelectTrigger>
           <SelectContent className="bg-theme-card-bg border-theme-card-border text-theme-text-primary min-w-[12rem]">
             {Object.entries(taskTagConfig).map(([key, config]) => (
-              <SelectItem 
-                key={key} 
-                value={key} 
+              <SelectItem
+                key={key}
+                value={key}
                 className="hover:bg-theme-accent/20 hover:text-theme-text-primary hover:font-medium focus:bg-theme-accent/20 focus:text-theme-text-primary data-[highlighted]:bg-theme-accent/20 data-[highlighted]:text-theme-text-primary p-2 sm:p-3 text-left justify-start"
               >
                 {config.symbol}  {config.label} ({config.duration}min)
@@ -119,8 +153,21 @@ export function TodoList() {
                   return (
                     <div
                       key={todo.id}
-                      className="flex items-center gap-2 p-2 bg-theme-input-bg/50 rounded-lg hover:bg-theme-card-bg/40 transition-colors group"
+                      draggable
+                      onDragStart={(e) => onDragStart(todo.id, e)}
+                      onDragEnter={() => onDragEnter(todo.id)}
+                      onDragOver={(e) => e.preventDefault()}
+                      onDrop={(e) => onDropOnItem(todo.id, e)}
+                      onDragEnd={onDragEnd}
+                      className={draggableItemClasses(
+                        todo.id,
+                        "flex items-center gap-2 p-2 bg-theme-input-bg/50 rounded-lg hover:bg-theme-card-bg/40 transition-colors group cursor-grab active:cursor-grabbing"
+                      )}
                     >
+                      <div className="text-theme-text-muted opacity-60 group-hover:opacity-100 flex items-center">
+                        <GripVertical className="w-4 h-4" />
+                      </div>
+
                       <Checkbox
                         checked={todo.completed}
                         onCheckedChange={() => toggleTodo(todo.id)}
@@ -179,8 +226,21 @@ export function TodoList() {
                   return (
                     <div
                       key={todo.id}
-                      className="flex items-center gap-2 p-2 bg-theme-input-bg/30 rounded-lg hover:bg-theme-card-bg/30 transition-colors group"
+                      draggable
+                      onDragStart={(e) => onDragStart(todo.id, e)}
+                      onDragEnter={() => onDragEnter(todo.id)}
+                      onDragOver={(e) => e.preventDefault()}
+                      onDrop={(e) => onDropOnItem(todo.id, e)}
+                      onDragEnd={onDragEnd}
+                      className={draggableItemClasses(
+                        todo.id,
+                        "flex items-center gap-2 p-2 bg-theme-input-bg/30 rounded-lg hover:bg-theme-card-bg/30 transition-colors group cursor-grab active:cursor-grabbing"
+                      )}
                     >
+                      <div className="text-theme-text-muted opacity-60 group-hover:opacity-100 flex items-center">
+                        <GripVertical className="w-4 h-4" />
+                      </div>
+
                       <Checkbox
                         checked={todo.completed}
                         onCheckedChange={() => toggleTodo(todo.id)}
