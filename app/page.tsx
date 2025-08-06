@@ -5,16 +5,18 @@ import { TodoList } from "@/components/todo-list"
 import { YoutubePlaylist } from "@/components/youtube-playlist"
 import { SettingsModal } from "@/components/settings-modal"
 import { DayProgressBar } from "@/components/day-progress-blocks"
-import { Settings } from "lucide-react"
+import { Settings, Rows3, Columns3 } from "lucide-react"
 import { useState, useEffect } from "react"
 import { DailyQuote } from "@/components/daily-quote"
+import { useLayout } from "@/hooks/use-layout"
 
 export default function Home() {
   const [showSettings, setShowSettings] = useState(false)
   const [mounted, setMounted] = useState(false)
   const [currentTime, setCurrentTime] = useState(new Date())
+  const { effectiveLayout, preferredLayout, toggleLayout, isMobile, hydrated } = useLayout()
 
-  // Only show theme toggle after mounting to prevent hydration mismatch
+  // Only show UI that depends on client state after mounting to prevent hydration mismatch
   useEffect(() => {
     setMounted(true)
   }, [])
@@ -28,6 +30,12 @@ export default function Home() {
     return () => clearInterval(timer)
   }, [])
 
+  // Compute classes for the two-panel area with smooth transitions
+  const panelGridBase =
+    "grid transition-[grid-template-columns,gap] duration-300 ease-in-out will-change-transform gap-4 sm:gap-6 " +
+    (effectiveLayout === "horizontal" ? "lg:gap-8" : "")
+  const panelGridCols =
+    effectiveLayout === "horizontal" ? "lg:grid-cols-2" : "grid-cols-1"
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-theme-background-from via-theme-background-via to-theme-background-to">
@@ -43,31 +51,50 @@ export default function Home() {
             <div className="flex items-center gap-2 sm:gap-3">
               {/* Time Display */}
               <span className="text-xl sm:text-2xl lg:text-3xl font-light text-theme-text-primary font-mono tracking-wider">
-                {mounted ? currentTime.toLocaleTimeString('en-US', { 
-                  hour: '2-digit', 
-                  minute: '2-digit', 
-                  hour12: false 
+                {mounted ? currentTime.toLocaleTimeString('en-US', {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  hour12: false
                 }) : '--:--'}
               </span>
               
               {/* Date Display */}
               <span className="text-theme-text-secondary text-xs sm:text-sm uppercase tracking-widest">
-                {mounted ? currentTime.toLocaleDateString('en-US', { 
-                  weekday: 'short', 
-                  month: 'short', 
-                  day: 'numeric' 
+                {mounted ? currentTime.toLocaleDateString('en-US', {
+                  weekday: 'short',
+                  month: 'short',
+                  day: 'numeric'
                 }) : '--- --- --'}
               </span>
             </div>
           </div>
           
-          {/* Right: Settings */}
-          <button
-            onClick={() => setShowSettings(true)}
-            className="text-theme-text-secondary hover:text-theme-text-primary hover:bg-white/10 rounded-lg p-2 transition-colors"
-          >
-            <Settings className="w-4 h-4" />
-          </button>
+          {/* Right: Layout Toggle + Settings */}
+          <div className="flex items-center gap-1.5">
+            {/* Hide toggle on mobile (auto vertical) and until hydrated to avoid mismatch */}
+            {!isMobile && hydrated ? (
+              <button
+                onClick={toggleLayout}
+                aria-label={`Switch to ${preferredLayout === "horizontal" ? "vertical" : "horizontal"} layout`}
+                title={`Switch to ${preferredLayout === "horizontal" ? "vertical" : "horizontal"} layout`}
+                className="text-theme-text-secondary hover:text-theme-text-primary hover:bg-white/10 rounded-lg p-2 transition-colors"
+              >
+                {preferredLayout === "horizontal" ? (
+                  <Rows3 className="w-4 h-4" />
+                ) : (
+                  <Columns3 className="w-4 h-4" />
+                )}
+              </button>
+            ) : null}
+            <button
+              onClick={() => setShowSettings(true)}
+              className="text-theme-text-secondary hover:text-theme-text-primary hover:bg-white/10 rounded-lg p-2 transition-colors"
+              aria-label="Open settings"
+              title="Settings"
+            >
+              <Settings className="w-4 h-4" />
+            </button>
+          </div>
         </div>
         
         {/* Compact Day Progress HP Bar */}
@@ -83,16 +110,17 @@ export default function Home() {
             <DailyQuote />
           </div>
 
-
-          {/* Two Column Layout */}
-          <div className="grid lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
+          {/* Two Panel Layout (Pomodoro + Todo) */}
+          <div
+            className={`${panelGridBase} ${panelGridCols}`}
+          >
             {/* Pomodoro Timer - Left Column */}
-            <div className="w-full">
+            <div className="w-full transition-transform duration-300 motion-reduce:transition-none">
               <PomodoroTimer />
             </div>
 
             {/* Todo List - Right Column */}
-            <div className="w-full">
+            <div className="w-full transition-transform duration-300 motion-reduce:transition-none">
               <TodoList />
             </div>
           </div>
@@ -111,18 +139,18 @@ export default function Home() {
       <footer className="relative z-10 p-4 sm:p-6">
         <div className="text-center text-theme-text-secondary text-sm">
           Made by{' '}
-          <a 
-            href="https://dicksonneoh.com" 
-            target="_blank" 
+          <a
+            href="https://dicksonneoh.com"
+            target="_blank"
             rel="noopener noreferrer"
             className="text-theme-text-primary hover:underline"
           >
             Dickson Neoh
           </a>
           {' • '}
-          <a 
-            href="https://www.buymeacoffee.com/dicksonneoh" 
-            target="_blank" 
+          <a
+            href="https://www.buymeacoffee.com/dicksonneoh"
+            target="_blank"
             rel="noopener noreferrer"
             className="text-theme-text-primary hover:underline"
           >
