@@ -43,6 +43,13 @@ export function useTodos() {
     [setTodos],
   )
 
+  const updateTodoText = useCallback(
+    (id: string, text: string) => {
+      setTodos((prev) => prev.map((todo) => (todo.id === id ? { ...todo, text } : todo)))
+    },
+    [setTodos],
+  )
+
   const deleteTodo = useCallback(
     (id: string) => {
       setTodos((prev) => prev.filter((todo) => todo.id !== id))
@@ -97,6 +104,7 @@ export function useTodos() {
     toggleTodo,
     deleteTodo,
     updateTodoTag,
+    updateTodoText,
     getProgress,
     clearCompletedTodos,
     reorderTodos,

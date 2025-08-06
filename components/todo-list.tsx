@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Plus, Trash2, GripVertical } from "lucide-react"
+import { Plus, Trash2, GripVertical, Pencil } from "lucide-react"
 import { useTodos, taskTagConfig, type TaskTag, type Todo } from "@/hooks/use-todos"
 import { useState, useRef, useCallback } from "react"
 
@@ -16,10 +16,13 @@ type DragState = {
 }
 
 export function TodoList() {
-  const { todos, addTodo, toggleTodo, deleteTodo, clearCompletedTodos, reorderTodos } = useTodos()
+  const { todos, addTodo, toggleTodo, deleteTodo, clearCompletedTodos, reorderTodos, updateTodoText, updateTodoTag } = useTodos()
   const [newTask, setNewTask] = useState("")
   const [selectedTag, setSelectedTag] = useState<TaskTag>("focus")
   const [drag, setDrag] = useState<DragState>({ draggedId: null, overId: null })
+  const [editingId, setEditingId] = useState<string | null>(null)
+  const [editingText, setEditingText] = useState<string>("")
+  const [editingTag, setEditingTag] = useState<TaskTag>("focus")
 
   const getProgress = () => {
     if (todos.length === 0) return 0
@@ -74,6 +77,32 @@ export function TodoList() {
 
   const draggableItemClasses = (id: string, base: string) =>
     `${base} ${drag.overId === id ? "ring-2 ring-theme-accent/60" : ""}`
+
+  const startEditing = (todo: Todo) => {
+    setEditingId(todo.id)
+    setEditingText(todo.text)
+    setEditingTag(todo.tag)
+  }
+
+  const cancelEditing = () => {
+    setEditingId(null)
+    setEditingText("")
+  }
+
+  const saveEditing = () => {
+    if (!editingId) return
+    const trimmed = editingText.trim()
+    if (trimmed.length === 0) {
+      // If text becomes empty, do not save; simply cancel
+      cancelEditing()
+      return
+    }
+    updateTodoText(editingId, trimmed)
+    if (editingTag) {
+      updateTodoTag(editingId, editingTag)
+    }
+    cancelEditing()
+  }
 
   return (
     <div className="w-full bg-theme-card-bg/30 backdrop-blur-sm border border-theme-card-border/30 rounded-2xl p-4 sm:p-6 lg:p-8 shadow-2xl">
@@ -175,20 +204,69 @@ export function TodoList() {
                       />
 
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2">
-                          <span className="flex-1 transition-all text-theme-text-primary text-sm break-words">
-                            {todo.text}
-                          </span>
-                          <div className="flex items-center gap-1 flex-shrink-0">
-                            <span className="text-sm">{tagConfig.symbol}</span>
-                            <span className={`text-xs ${tagConfig.textColor} whitespace-nowrap`}>
-                              {tagConfig.label} ({tagConfig.duration}min)
-                            </span>
+                        {editingId === todo.id ? (
+                          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+                            <Input
+                              autoFocus
+                              value={editingText}
+                              onChange={(e) => setEditingText(e.target.value)}
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter") saveEditing()
+                                if (e.key === "Escape") cancelEditing()
+                              }}
+                              className="flex-1 bg-theme-input-bg border-theme-input-border text-theme-text-primary rounded-xl text-sm p-2"
+                            />
+                            <Select value={editingTag} onValueChange={(v: TaskTag) => setEditingTag(v)}>
+                              <SelectTrigger className="w-36 bg-theme-input-bg border-theme-input-border text-theme-text-primary rounded-xl text-sm p-2">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent className="bg-theme-card-bg border-theme-card-border text-theme-text-primary min-w-[12rem]">
+                                {Object.entries(taskTagConfig).map(([key, config]) => (
+                                  <SelectItem
+                                    key={key}
+                                    value={key}
+                                    className="hover:bg-theme-accent/20 hover:text-theme-text-primary hover:font-medium focus:bg-theme-accent/20 focus:text-theme-text-primary data-[highlighted]:bg-theme-accent/20 data-[highlighted]:text-theme-text-primary p-2 text-left justify-start"
+                                  >
+                                    {config.symbol} {config.label} ({config.duration}min)
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <div className="flex gap-2">
+                              <Button onClick={saveEditing} size="sm" className="bg-theme-accent hover:bg-theme-accent-hover text-theme-text-primary rounded-xl px-3">
+                                Save
+                              </Button>
+                              <Button onClick={cancelEditing} size="sm" variant="ghost" className="text-theme-text-muted">
+                                Cancel
+                              </Button>
+                            </div>
                           </div>
-                        </div>
+                        ) : (
+                          <div className="flex items-center gap-2">
+                            <span className="flex-1 transition-all text-theme-text-primary text-sm break-words">
+                              {todo.text}
+                            </span>
+                            <div className="flex items-center gap-1 flex-shrink-0">
+                              <span className="text-sm">{tagConfig.symbol}</span>
+                              <span className={`text-xs ${tagConfig.textColor} whitespace-nowrap`}>
+                                {tagConfig.label} ({tagConfig.duration}min)
+                              </span>
+                            </div>
+                          </div>
+                        )}
                       </div>
 
                       <div className="flex items-center gap-2">
+                        {editingId === todo.id ? null : (
+                          <Button
+                            onClick={() => startEditing(todo)}
+                            variant="ghost"
+                            size="sm"
+                            className="opacity-0 group-hover:opacity-100 text-theme-text-muted hover:text-theme-text-primary transition-all p-1"
+                          >
+                            <Pencil className="w-4 h-4" />
+                          </Button>
+                        )}
                         <Button
                           onClick={() => deleteTodo(todo.id)}
                           variant="ghost"
