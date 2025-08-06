@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import { Plus, Trash2, GripVertical, Pencil } from "lucide-react"
 import { useTodos, taskTagConfig, type TaskTag, type Todo } from "@/hooks/use-todos"
 import { useState, useRef, useCallback } from "react"
@@ -38,7 +39,12 @@ export function TodoList() {
 
   const handleAddTask = () => {
     if (newTask.trim()) {
-      addTodo(newTask.trim(), selectedTag)
+      // Map unsupported UI values to supported tags:
+      // - "break" (5m) -> "quick"
+      // - "custom" removed (no longer selectable)
+      const normalizedTag = (selectedTag as any) === "break" ? "quick" : selectedTag
+      console.log("[TodoList] handleAddTask", { text: newTask.trim(), selectedTag, normalizedTag })
+      addTodo(newTask.trim(), normalizedTag as TaskTag)
       setNewTask("")
       setSelectedTag("focus")
     }
@@ -130,38 +136,66 @@ export function TodoList() {
         </div>
       </div>
 
-      {/* Add Task Input */}
-      <div className="flex gap-2 sm:gap-3 mb-4 sm:mb-6">
-        <Input
-          value={newTask}
-          onChange={(e) => setNewTask(e.target.value)}
-          onKeyPress={handleKeyPress}
-          placeholder="What would you like to focus on?"
-          className="flex-1 bg-theme-input-bg border-theme-input-border text-theme-text-primary placeholder:text-slate-400 rounded-xl text-sm sm:text-base p-2 sm:p-3"
-        />
-        <Select value={selectedTag} onValueChange={(value: TaskTag) => setSelectedTag(value)}>
-          <SelectTrigger
-              className="w-36 sm:w-44 bg-theme-input-bg border-theme-input-border text-theme-text-primary rounded-xl text-sm p-2 sm:p-3">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent className="bg-theme-card-bg border-theme-card-border text-theme-text-primary min-w-[12rem]">
-            {Object.entries(taskTagConfig).map(([key, config]) => (
-              <SelectItem
-                key={key}
-                value={key}
-                className="hover:bg-theme-accent/20 hover:text-theme-text-primary hover:font-medium focus:bg-theme-accent/20 focus:text-theme-text-primary data-[highlighted]:bg-theme-accent/20 data-[highlighted]:text-theme-text-primary p-2 sm:p-3 text-left justify-start"
+      {/* Add Task Composer (Two-line layout) */}
+      <div className="mb-4 sm:mb-6 space-y-1.5">
+        {/* Row 1: Full-width input */}
+        <div className="flex gap-2 sm:gap-3">
+          <Input
+            value={newTask}
+            onChange={(e) => setNewTask(e.target.value)}
+            onKeyPress={handleKeyPress}
+            placeholder="What would you like to focus on?"
+            className="flex-1 bg-theme-input-bg border-theme-input-border text-theme-text-primary placeholder:text-slate-400 rounded-xl text-sm sm:text-base p-2 sm:p-3"
+          />
+        </div>
+
+        {/* Row 2: Full-width, compact toolbar */}
+        <div className="w-full">
+          <div className="flex items-center gap-2 sm:gap-2.5 bg-theme-input-bg/70 border border-theme-input-border/70 rounded-lg px-2 py-1.5">
+            <div className="min-w-0 flex-1 overflow-x-auto no-scrollbar">
+              <ToggleGroup
+                type="single"
+                value={selectedTag}
+                onValueChange={(v) => v && setSelectedTag(v as TaskTag)}
+                className="flex flex-row gap-1"
               >
-                {config.symbol}  {config.label} ({config.duration}min)
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <Button
-          onClick={handleAddTask}
-          className="bg-theme-accent hover:bg-theme-accent-hover text-theme-text-primary rounded-xl px-3 sm:px-4"
-        >
-          <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
-        </Button>
+                <ToggleGroupItem
+                  value="focus"
+                  className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-[11px] sm:text-xs rounded-md px-2 py-0.5"
+                  aria-label="Focus 25 minutes"
+                >
+                  {taskTagConfig["focus"].symbol}&nbsp;25m
+                </ToggleGroupItem>
+
+                {"deep" in taskTagConfig ? (
+                  <ToggleGroupItem
+                    value="deep"
+                    className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-[11px] sm:text-xs rounded-md px-2 py-0.5"
+                    aria-label="Deep Work 50 minutes"
+                  >
+                    {taskTagConfig["deep"].symbol}&nbsp;50m
+                  </ToggleGroupItem>
+                ) : null}
+
+                {/* 5m option maps to "quick" tag */}
+                <ToggleGroupItem
+                  value={"quick" as unknown as TaskTag}
+                  className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-[11px] sm:text-xs rounded-md px-2 py-0.5"
+                  aria-label="Quick 5 minutes"
+                >
+                  {(taskTagConfig as any)["quick"]?.symbol ?? "⚡"}&nbsp;5m
+                </ToggleGroupItem>
+              </ToggleGroup>
+            </div>
+
+            <Button
+              onClick={handleAddTask}
+              className="bg-theme-accent hover:bg-theme-accent-hover text-theme-text-primary rounded-md px-2.5 sm:px-3 h-8 sm:h-9 flex-shrink-0"
+            >
+              <Plus className="w-4 h-4" />
+            </Button>
+          </div>
+        </div>
       </div>
 
       {/* Task Lists */}
@@ -177,7 +211,10 @@ export function TodoList() {
                   📋 To Do ({incompleteTasks.length})
                 </h3>
                 {incompleteTasks.map((todo) => {
-                  const tagConfig = taskTagConfig[todo.tag]
+                  const tagConfig = (taskTagConfig as any)[todo.tag]
+                  if (!tagConfig) {
+                    console.warn("[TodoList] Missing tag config for todo", { id: todo.id, tag: todo.tag, text: todo.text })
+                  }
 
                   return (
                     <div
@@ -216,22 +253,35 @@ export function TodoList() {
                               }}
                               className="flex-1 bg-theme-input-bg border-theme-input-border text-theme-text-primary rounded-xl text-sm p-2"
                             />
-                            <Select value={editingTag} onValueChange={(v: TaskTag) => setEditingTag(v)}>
-                              <SelectTrigger className="w-36 bg-theme-input-bg border-theme-input-border text-theme-text-primary rounded-xl text-sm p-2">
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent className="bg-theme-card-bg border-theme-card-border text-theme-text-primary min-w-[12rem]">
-                                {Object.entries(taskTagConfig).map(([key, config]) => (
-                                  <SelectItem
-                                    key={key}
-                                    value={key}
-                                    className="hover:bg-theme-accent/20 hover:text-theme-text-primary hover:font-medium focus:bg-theme-accent/20 focus:text-theme-text-primary data-[highlighted]:bg-theme-accent/20 data-[highlighted]:text-theme-text-primary p-2 text-left justify-start"
-                                  >
-                                    {config.symbol} {config.label} ({config.duration}min)
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
+                            {/* Segmented control while editing */}
+                            <ToggleGroup
+                              type="single"
+                              value={editingTag}
+                              onValueChange={(v) => v && setEditingTag(v as TaskTag)}
+                              className="bg-theme-input-bg border border-theme-input-border rounded-xl p-1"
+                            >
+                              <ToggleGroupItem
+                                value="focus"
+                                className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-xs rounded-lg px-2 py-1"
+                              >
+                                {taskTagConfig["focus"].symbol}&nbsp;25m
+                              </ToggleGroupItem>
+                              {"deep" in taskTagConfig ? (
+                                <ToggleGroupItem
+                                  value="deep"
+                                  className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-xs rounded-lg px-2 py-1"
+                                >
+                                  {taskTagConfig["deep"].symbol}&nbsp;50m
+                                </ToggleGroupItem>
+                              ) : null}
+                              {/* 5m option maps to "quick" tag */}
+                              <ToggleGroupItem
+                                value={"quick" as unknown as TaskTag}
+                                className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-xs rounded-lg px-2 py-1"
+                              >
+                                {(taskTagConfig as any)["quick"]?.symbol ?? "⚡"}&nbsp;5m
+                              </ToggleGroupItem>
+                            </ToggleGroup>
                             <div className="flex gap-2">
                               <Button onClick={saveEditing} size="sm" className="bg-theme-accent hover:bg-theme-accent-hover text-theme-text-primary rounded-xl px-3">
                                 Save
@@ -247,9 +297,11 @@ export function TodoList() {
                               {todo.text}
                             </span>
                             <div className="flex items-center gap-1 flex-shrink-0">
-                              <span className="text-sm">{tagConfig.symbol}</span>
-                              <span className={`text-xs ${tagConfig.textColor} whitespace-nowrap`}>
-                                {tagConfig.label} ({tagConfig.duration}min)
+                              <span className="text-sm">
+                                {(taskTagConfig as any)[todo.tag]?.symbol ?? "🎯"}
+                              </span>
+                              <span className={`text-xs ${((taskTagConfig as any)[todo.tag]?.textColor ?? "text-theme-text-secondary")} whitespace-nowrap`}>
+                                {(taskTagConfig as any)[todo.tag]?.label ?? "Focus"} ({(taskTagConfig as any)[todo.tag]?.duration ?? 25}min)
                               </span>
                             </div>
                           </div>
@@ -299,7 +351,10 @@ export function TodoList() {
                   </Button>
                 </div>
                 {completedTasks.map((todo) => {
-                  const tagConfig = taskTagConfig[todo.tag]
+                  const tagConfig = (taskTagConfig as any)[todo.tag]
+                  if (!tagConfig) {
+                    console.warn("[TodoList] Missing tag config (completed) for todo", { id: todo.id, tag: todo.tag, text: todo.text })
+                  }
 
                   return (
                     <div
@@ -331,9 +386,11 @@ export function TodoList() {
                             {todo.text}
                           </span>
                           <div className="flex items-center gap-1 flex-shrink-0">
-                            <span className="text-sm">{tagConfig.symbol}</span>
-                            <span className={`text-xs ${tagConfig.textColor} opacity-70 whitespace-nowrap`}>
-                              {tagConfig.label} ({tagConfig.duration}min)
+                            <span className="text-sm">
+                              {(taskTagConfig as any)[todo.tag]?.symbol ?? "🎯"}
+                            </span>
+                            <span className={`text-xs ${((taskTagConfig as any)[todo.tag]?.textColor ?? "text-theme-text-secondary")} opacity-70 whitespace-nowrap`}>
+                              {((taskTagConfig as any)[todo.tag]?.label ?? "Focus")} ({((taskTagConfig as any)[todo.tag]?.duration ?? 25)}min)
                             </span>
                           </div>
                         </div>
