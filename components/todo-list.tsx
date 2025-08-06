@@ -136,63 +136,81 @@ export function TodoList() {
         </div>
       </div>
 
-      {/* Add Task Composer (Two-line layout) */}
-      <div className="mb-4 sm:mb-6 space-y-1.5">
-        {/* Row 1: Full-width input */}
-        <div className="flex gap-2 sm:gap-3">
-          <Input
-            value={newTask}
-            onChange={(e) => setNewTask(e.target.value)}
-            onKeyPress={handleKeyPress}
-            placeholder="What would you like to focus on?"
-            className="flex-1 bg-theme-input-bg border-theme-input-border text-theme-text-primary placeholder:text-slate-400 rounded-xl text-sm sm:text-base p-2 sm:p-3"
-          />
-        </div>
-
-        {/* Row 2: Full-width, compact toolbar */}
-        <div className="w-full">
-          <div className="flex items-center gap-2 sm:gap-2.5 bg-theme-input-bg/70 border border-theme-input-border/70 rounded-lg px-2 py-1.5">
-            <div className="min-w-0 flex-1 overflow-x-auto no-scrollbar">
-              <ToggleGroup
-                type="single"
-                value={selectedTag}
-                onValueChange={(v) => v && setSelectedTag(v as TaskTag)}
-                className="flex flex-row gap-1"
+      {/* Add Task Composer (Single-row, responsive) */}
+      <div className="mb-4 sm:mb-6">
+        <div
+          className="w-full flex items-center gap-2 sm:gap-3 bg-theme-input-bg/70 border border-theme-input-border/70 rounded-xl px-2.5 py-2 flex-wrap"
+          role="group"
+          aria-label="Add new task"
+        >
+          {/* Task type selector */}
+          <div className="flex-shrink-0">
+            <ToggleGroup
+              type="single"
+              value={selectedTag}
+              onValueChange={(v) => v && setSelectedTag(v as TaskTag)}
+              className="flex flex-row gap-1"
+              aria-label="Task type"
+            >
+              <ToggleGroupItem
+                value="focus"
+                className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-[11px] sm:text-xs rounded-md px-2 py-0.5"
+                aria-label="Focus 25 minutes"
               >
+                {taskTagConfig["focus"].symbol}&nbsp;25m
+              </ToggleGroupItem>
+
+              {"deep" in taskTagConfig ? (
                 <ToggleGroupItem
-                  value="focus"
+                  value="deep"
                   className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-[11px] sm:text-xs rounded-md px-2 py-0.5"
-                  aria-label="Focus 25 minutes"
+                  aria-label="Deep Work 50 minutes"
                 >
-                  {taskTagConfig["focus"].symbol}&nbsp;25m
+                  {taskTagConfig["deep"].symbol}&nbsp;50m
                 </ToggleGroupItem>
+              ) : null}
 
-                {"deep" in taskTagConfig ? (
-                  <ToggleGroupItem
-                    value="deep"
-                    className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-[11px] sm:text-xs rounded-md px-2 py-0.5"
-                    aria-label="Deep Work 50 minutes"
-                  >
-                    {taskTagConfig["deep"].symbol}&nbsp;50m
-                  </ToggleGroupItem>
-                ) : null}
+              {/* 5m option maps to "quick" tag */}
+              <ToggleGroupItem
+                value={"quick" as unknown as TaskTag}
+                className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-[11px] sm:text-xs rounded-md px-2 py-0.5"
+                aria-label="Quick 5 minutes"
+              >
+                {(taskTagConfig as any)["quick"]?.symbol ?? "⚡"}&nbsp;5m
+              </ToggleGroupItem>
+            </ToggleGroup>
+          </div>
 
-                {/* 5m option maps to "quick" tag */}
-                <ToggleGroupItem
-                  value={"quick" as unknown as TaskTag}
-                  className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-[11px] sm:text-xs rounded-md px-2 py-0.5"
-                  aria-label="Quick 5 minutes"
-                >
-                  {(taskTagConfig as any)["quick"]?.symbol ?? "⚡"}&nbsp;5m
-                </ToggleGroupItem>
-              </ToggleGroup>
-            </div>
+          {/* Input field */}
+          <div className="min-w-0 flex-1">
+            <label htmlFor="new-task-input" className="sr-only">
+              New task
+            </label>
+            <Input
+              id="new-task-input"
+              value={newTask}
+              onChange={(e) => setNewTask(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault()
+                  handleAddTask()
+                }
+              }}
+              placeholder="What would you like to focus on?"
+              className="w-full bg-theme-input-bg border-theme-input-border text-theme-text-primary placeholder:text-slate-400 rounded-lg text-sm sm:text-base h-9 sm:h-10 px-3"
+              aria-label="Task description"
+            />
+          </div>
 
+          {/* Add button */}
+          <div className="flex-shrink-0">
             <Button
               onClick={handleAddTask}
-              className="bg-theme-accent hover:bg-theme-accent-hover text-theme-text-primary rounded-md px-2.5 sm:px-3 h-8 sm:h-9 flex-shrink-0"
+              aria-label="Add task"
+              className="bg-theme-accent hover:bg-theme-accent-hover text-theme-text-primary rounded-md px-2.5 sm:px-3 h-9 sm:h-10"
             >
               <Plus className="w-4 h-4" />
+              <span className="sr-only">Add</span>
             </Button>
           </div>
         </div>
