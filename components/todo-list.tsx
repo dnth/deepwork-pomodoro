@@ -301,7 +301,7 @@ export function TodoList() {
                                 {(taskTagConfig as any)[todo.tag]?.symbol ?? "🎯"}
                               </span>
                               <span className={`text-xs ${((taskTagConfig as any)[todo.tag]?.textColor ?? "text-theme-text-secondary")} whitespace-nowrap`}>
-                                {(taskTagConfig as any)[todo.tag]?.label ?? "Focus"} ({(taskTagConfig as any)[todo.tag]?.duration ?? 25}min)
+                                {(taskTagConfig as any)[todo.tag]?.label ?? "Focus"} ({(taskTagConfig as any)[todo.tag]?.duration ?? 25}m)
                               </span>
                             </div>
                           </div>
