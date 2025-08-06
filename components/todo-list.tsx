@@ -381,22 +381,84 @@ export function TodoList() {
                       />
 
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2">
-                          <span className="flex-1 transition-all text-theme-text-muted line-through text-sm break-words">
-                            {todo.text}
-                          </span>
-                          <div className="flex items-center gap-1 flex-shrink-0">
-                            <span className="text-sm">
-                              {(taskTagConfig as any)[todo.tag]?.symbol ?? "🎯"}
-                            </span>
-                            <span className={`text-xs ${((taskTagConfig as any)[todo.tag]?.textColor ?? "text-theme-text-secondary")} opacity-70 whitespace-nowrap`}>
-                              {((taskTagConfig as any)[todo.tag]?.label ?? "Focus")} ({((taskTagConfig as any)[todo.tag]?.duration ?? 25)}min)
-                            </span>
+                        {editingId === todo.id ? (
+                          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+                            <Input
+                              autoFocus
+                              value={editingText}
+                              onChange={(e) => setEditingText(e.target.value)}
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter") saveEditing()
+                                if (e.key === "Escape") cancelEditing()
+                              }}
+                              className="flex-1 bg-theme-input-bg border-theme-input-border text-theme-text-primary rounded-xl text-sm p-2"
+                            />
+                            {/* Segmented control while editing (keep available to change tag) */}
+                            <ToggleGroup
+                              type="single"
+                              value={editingTag}
+                              onValueChange={(v) => v && setEditingTag(v as TaskTag)}
+                              className="bg-theme-input-bg border border-theme-input-border rounded-xl p-1"
+                            >
+                              <ToggleGroupItem
+                                value="focus"
+                                className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-xs rounded-lg px-2 py-1"
+                              >
+                                {taskTagConfig["focus"].symbol}&nbsp;25m
+                              </ToggleGroupItem>
+                              {"deep" in taskTagConfig ? (
+                                <ToggleGroupItem
+                                  value="deep"
+                                  className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-xs rounded-lg px-2 py-1"
+                                >
+                                  {taskTagConfig["deep"].symbol}&nbsp;50m
+                                </ToggleGroupItem>
+                              ) : null}
+                              {/* 5m option maps to "quick" tag */}
+                              <ToggleGroupItem
+                                value={"quick" as unknown as TaskTag}
+                                className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-xs rounded-lg px-2 py-1"
+                              >
+                                {(taskTagConfig as any)["quick"]?.symbol ?? "⚡"}&nbsp;5m
+                              </ToggleGroupItem>
+                            </ToggleGroup>
+                            <div className="flex gap-2">
+                              <Button onClick={saveEditing} size="sm" className="bg-theme-accent hover:bg-theme-accent-hover text-theme-text-primary rounded-xl px-3">
+                                Save
+                              </Button>
+                              <Button onClick={cancelEditing} size="sm" variant="ghost" className="text-theme-text-muted">
+                                Cancel
+                              </Button>
+                            </div>
                           </div>
-                        </div>
+                        ) : (
+                          <div className="flex items-center gap-2">
+                            <span className="flex-1 transition-all text-theme-text-muted line-through text-sm break-words">
+                              {todo.text}
+                            </span>
+                            <div className="flex items-center gap-1 flex-shrink-0">
+                              <span className="text-sm">
+                                {(taskTagConfig as any)[todo.tag]?.symbol ?? "🎯"}
+                              </span>
+                              <span className={`text-xs ${((taskTagConfig as any)[todo.tag]?.textColor ?? "text-theme-text-secondary")} opacity-70 whitespace-nowrap`}>
+                                {((taskTagConfig as any)[todo.tag]?.label ?? "Focus")} ({((taskTagConfig as any)[todo.tag]?.duration ?? 25)}m)
+                              </span>
+                            </div>
+                          </div>
+                        )}
                       </div>
 
                       <div className="flex items-center gap-2">
+                        {editingId === todo.id ? null : (
+                          <Button
+                            onClick={() => startEditing(todo)}
+                            variant="ghost"
+                            size="sm"
+                            className="opacity-0 group-hover:opacity-100 text-theme-text-muted hover:text-theme-text-primary transition-all p-1"
+                          >
+                            <Pencil className="w-4 h-4" />
+                          </Button>
+                        )}
                         <Button
                           onClick={() => deleteTodo(todo.id)}
                           variant="ghost"
