@@ -17,18 +17,45 @@ export function DayProgressBar() {
 
     return () => clearInterval(timer)
   }, [])
-  const totalWorkHours = workEndHour - workStartHour
+  // Ensure end is always after start within the same day.
+  // Switch to 30-minute granularity for both start and end selections.
+  // Persist values as minutes since midnight in localStorage for precision.
+  const DEFAULT_WORK_DURATION_MIN = 8 * 60
+
+  // Migrate old hour-based keys (if any) into minute-based ones once.
+  // We reuse the same keys to avoid losing user settings.
+  const ensureMinutes = (val: number) => {
+    // If value looks like hours (0..23), convert to minutes.
+    return val <= 23 ? val * 60 : val
+  }
+
+  // Re-wire local storage to minute-based values while preserving existing values.
+  // We still read from same keys but convert on the fly.
+  const [workStartRaw, setWorkStartRaw] = useLocalStorage("work-start-hour", 10) // may be hours or minutes
+  const [workEndRaw, setWorkEndRaw] = useLocalStorage("work-end-hour", 17) // may be hours or minutes
+
+  const workStartMin = ensureMinutes(workStartRaw)
+  const workEndMin = ensureMinutes(workEndRaw)
+
+  const adjustedEndMin =
+    workEndMin <= workStartMin
+      ? Math.min(23 * 60 + 59, workStartMin + DEFAULT_WORK_DURATION_MIN)
+      : workEndMin
+
+  const totalWorkMinutes = Math.max(0, adjustedEndMin - workStartMin)
+
+  // Current time in minutes
   const currentHour = currentTime.getHours()
   const currentMinutes = currentTime.getMinutes()
 
   // Calculate progress with minute precision
   const currentTimeInMinutes = currentHour * 60 + currentMinutes
-  const workStartInMinutes = workStartHour * 60
-  const workEndInMinutes = workEndHour * 60
+  const workStartInMinutes = workStartMin
+  const workEndInMinutes = adjustedEndMin
   
   const isWorkDay = currentTimeInMinutes >= workStartInMinutes && currentTimeInMinutes < workEndInMinutes
-  const totalMinutesCompleted = Math.max(0, Math.min(currentTimeInMinutes - workStartInMinutes, totalWorkHours * 60))
-  const totalMinutesInDay = totalWorkHours * 60
+  const totalMinutesCompleted = Math.max(0, Math.min(currentTimeInMinutes - workStartInMinutes, totalWorkMinutes))
+  const totalMinutesInDay = Math.max(1, totalWorkMinutes)
   const progressPercentage = Math.min(100, (totalMinutesCompleted / totalMinutesInDay) * 100)
 
   const totalMinutesLeft = Math.max(0, workEndInMinutes - currentTimeInMinutes)
@@ -80,17 +107,54 @@ export function DayProgressBar() {
   }
 
 
-  const hourOptions = Array.from({ length: 24 }, (_, i) => i)
+  // Build 30-minute options: 0, 30, 60, 90, ... , 23*60, 23*60+30
+  const minuteOptions = Array.from({ length: 48 }, (_, i) => i * 30)
 
-  const formatHour = (hour: number) => {
-    return hour === 0 ? '12AM' : hour === 12 ? '12PM' : hour > 12 ? `${hour - 12}PM` : `${hour}AM`
+  const formatTime = (mins: number) => {
+    const h = Math.floor(mins / 60)
+    const m = mins % 60
+    const ampm = h === 0 ? "12AM" : h < 12 ? `${h}AM` : h === 12 ? "12PM" : `${h - 12}PM`
+    const mm = m === 0 ? "" : `:${m.toString().padStart(2, "0")}`
+    // Insert minutes into the am/pm display
+    if (m === 0) return ampm
+    // Convert like "1PM" -> "1:30PM"
+    const match = ampm.match(/^(\d+)(AM|PM)$/)
+    if (match) {
+      return `${match[1]}:${m.toString().padStart(2, "0")}${match[2]}`
+    }
+    return ampm
+  }
+
+  const clamp = (n: number, min: number, max: number) => Math.max(min, Math.min(max, n))
+
+  const setWorkStartMin = (mins: number) => {
+    // Persist as minutes; keep original key for backward compatibility
+    setWorkStartRaw(mins)
+  }
+  const setWorkEndMin = (mins: number) => {
+    setWorkEndRaw(mins)
   }
 
   const handleTimeChange = (type: 'start' | 'end', value: string) => {
+    const incomingMin = Number(value)
+
     if (type === 'start') {
-      setWorkStartHour(Number(value))
+      // If moving start to or past the current adjusted end, bump end to start + default, clamped.
+      if (incomingMin >= adjustedEndMin) {
+        const nextEnd = clamp(incomingMin + DEFAULT_WORK_DURATION_MIN, incomingMin + 30, 23 * 60 + 59)
+        setWorkStartMin(incomingMin)
+        setWorkEndMin(nextEnd)
+      } else {
+        setWorkStartMin(incomingMin)
+      }
     } else {
-      setWorkEndHour(Number(value))
+      // If choosing an end at/before start, auto-adjust to start + default, clamped.
+      if (incomingMin <= workStartMin) {
+        const nextEnd = clamp(workStartMin + DEFAULT_WORK_DURATION_MIN, workStartMin + 30, 23 * 60 + 59)
+        setWorkEndMin(nextEnd)
+      } else {
+        setWorkEndMin(incomingMin)
+      }
     }
   }
 
@@ -125,14 +189,15 @@ export function DayProgressBar() {
           
           {/* Start Time Dropdown */}
           <div className="absolute left-1 top-1/2 -translate-y-1/2 z-10">
-            <Select value={workStartHour.toString()} onValueChange={(value) => handleTimeChange('start', value)}>
-              <SelectTrigger className="w-20 h-6 text-xs bg-black/60 hover:bg-black/70 backdrop-blur-sm border border-white/30 hover:border-white/50 text-white font-semibold shadow-lg hover:shadow-xl transition-all">
+            <Select value={workStartMin.toString()} onValueChange={(value) => handleTimeChange('start', value)}>
+              <SelectTrigger className="w-24 h-6 text-xs bg-black/60 hover:bg-black/70 backdrop-blur-sm border border-white/30 hover:border-white/50 text-white font-semibold shadow-lg hover:shadow-xl transition-all">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                {hourOptions.map(hour => (
-                  <SelectItem key={hour} value={hour.toString()} disabled={hour >= workEndHour}>
-                    {formatHour(hour)}
+                {minuteOptions.map(mins => (
+                  // Allow starting at any 30-min increment; we auto-adjust end when needed
+                  <SelectItem key={mins} value={mins.toString()}>
+                    {formatTime(mins)}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -141,14 +206,14 @@ export function DayProgressBar() {
           
           {/* End Time Dropdown */}
           <div className="absolute right-1 top-1/2 -translate-y-1/2 z-10">
-            <Select value={workEndHour.toString()} onValueChange={(value) => handleTimeChange('end', value)}>
-              <SelectTrigger className="w-20 h-6 text-xs bg-black/60 hover:bg-black/70 backdrop-blur-sm border border-white/30 hover:border-white/50 text-white font-semibold shadow-lg hover:shadow-xl transition-all">
+            <Select value={workEndMin.toString()} onValueChange={(value) => handleTimeChange('end', value)}>
+              <SelectTrigger className="w-24 h-6 text-xs bg-black/60 hover:bg-black/70 backdrop-blur-sm border border-white/30 hover:border-white/50 text-white font-semibold shadow-lg hover:shadow-xl transition-all">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                {hourOptions.map(hour => (
-                  <SelectItem key={hour} value={hour.toString()} disabled={hour <= workStartHour}>
-                    {formatHour(hour)}
+                {minuteOptions.map(mins => (
+                  <SelectItem key={mins} value={mins.toString()} disabled={mins <= workStartMin}>
+                    {formatTime(mins)}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -157,10 +222,10 @@ export function DayProgressBar() {
           
           {/* Segmented Lines - 30 minute sections */}
           <div className="absolute inset-0 flex pointer-events-none">
-            {Array.from({ length: totalWorkHours * 2 }, (_, i) => (
-              <div 
-                key={i} 
-                className="flex-1 border-r border-black/20 last:border-r-0" 
+            {Array.from({ length: Math.max(0, Math.floor(totalWorkMinutes / 30)) }, (_, i) => (
+              <div
+                key={i}
+                className="flex-1 border-r border-black/20 last:border-r-0"
               />
             ))}
           </div>
