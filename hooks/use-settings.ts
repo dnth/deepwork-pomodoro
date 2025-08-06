@@ -9,6 +9,7 @@ interface Settings {
   autoStartBreaks: boolean
   notifications: boolean
   soundAlerts: boolean
+  enhancedVisualization: boolean
 }
 
 const defaultSettings: Settings = {
@@ -18,6 +19,7 @@ const defaultSettings: Settings = {
   autoStartBreaks: false,
   notifications: true,
   soundAlerts: true,
+  enhancedVisualization: false,
 }
 
 export function useSettings() {

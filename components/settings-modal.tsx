@@ -124,6 +124,17 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
             </div>
 
             <div className="flex items-center justify-between">
+              <Label className="text-theme-text-secondary" htmlFor="enhancedVisualization">
+                Enhanced Focus Ring
+              </Label>
+              <Switch
+                id="enhancedVisualization"
+                checked={settings.enhancedVisualization}
+                onCheckedChange={(checked) => updateSettings({ enhancedVisualization: checked })}
+              />
+            </div>
+
+            <div className="flex items-center justify-between">
               <Label className="text-theme-text-secondary">
                 Theme
               </Label>

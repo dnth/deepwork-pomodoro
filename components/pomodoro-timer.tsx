@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Play, Pause, RotateCcw } from "lucide-react"
 import { usePomodoro } from "@/hooks/use-pomodoro"
 import { useSettings } from "@/hooks/use-settings"
+import { FocusRing } from "@/components/focus-ring"
 
 
 export function PomodoroTimer() {
@@ -32,12 +33,20 @@ export function PomodoroTimer() {
   }
 
   const getProgressPercentage = () => {
-    const totalDuration = currentMode === "pomodoro" 
-      ? settings.pomodoroDuration * 60 
-      : currentMode === "shortBreak" 
-        ? settings.shortBreakDuration * 60 
+    const totalDuration = currentMode === "pomodoro"
+      ? settings.pomodoroDuration * 60
+      : currentMode === "shortBreak"
+        ? settings.shortBreakDuration * 60
         : settings.longBreakDuration * 60
     return ((totalDuration - timeLeft) / totalDuration) * 100
+  }
+
+  const getTotalDuration = () => {
+    return currentMode === "pomodoro"
+      ? settings.pomodoroDuration * 60
+      : currentMode === "shortBreak"
+        ? settings.shortBreakDuration * 60
+        : settings.longBreakDuration * 60
   }
 
 
@@ -85,9 +94,11 @@ export function PomodoroTimer() {
           <div className="absolute inset-0 bg-gradient-to-r from-theme-accent/20 via-theme-progress/20 to-theme-accent/20 rounded-3xl blur-3xl scale-110 opacity-60 animate-pulse"></div>
           
           {/* Timer container */}
-          <div className="relative bg-gradient-to-br from-theme-card-bg/80 to-theme-card-bg/40 backdrop-blur-xl border border-theme-card-border/50 rounded-3xl p-6 sm:p-8 lg:p-10 shadow-2xl">
+          <div className="relative bg-gradient-to-br from-theme-card-bg/80 to-theme-card-bg/40 backdrop-blur-xl border border-theme-card-border/50 rounded-3xl p-6 sm:p-8 lg:p-10 shadow-2xl overflow-hidden">
             {/* Timer digits */}
-            <div className="text-5xl sm:text-7xl lg:text-9xl font-black text-theme-text-primary font-mono tracking-wider leading-none mb-2 sm:mb-3">
+            <div className="font-black text-theme-text-primary font-mono tracking-tight leading-none mb-2 sm:mb-3
+                            w-full max-w-full whitespace-nowrap overflow-hidden"
+                 style={{ fontSize: "clamp(2.5rem, 12vw, 6.5rem)" }}>
               {formatTime(timeLeft)}
             </div>
             
@@ -106,40 +117,53 @@ export function PomodoroTimer() {
           </div>
         </div>
 
-        {/* Enhanced Progress Ring */}
-        <div className="relative w-28 h-28 sm:w-32 sm:h-32 lg:w-36 lg:h-36 mx-auto mb-4 sm:mb-6">
-          {/* Ring background glow */}
-          <div className="absolute inset-0 bg-theme-progress/20 rounded-full blur-lg scale-110"></div>
-          
-          <svg className="relative w-28 h-28 sm:w-32 sm:h-32 lg:w-36 lg:h-36 transform -rotate-90 drop-shadow-lg" viewBox="0 0 120 120">
-            <circle
-              cx="60"
-              cy="60"
-              r="54"
-              stroke="currentColor"
-              strokeWidth="10"
-              fill="transparent"
-              className="text-theme-progress-bg/50"
+        {/* Progress Ring - Enhanced or Classic */}
+        <div className="flex justify-center mb-4 sm:mb-6">
+          {settings.enhancedVisualization ? (
+            <FocusRing
+              timeLeft={timeLeft}
+              totalDuration={getTotalDuration()}
+              isRunning={isRunning}
+              currentMode={currentMode}
+              size={144}
+              className=""
             />
-            <circle
-              cx="60"
-              cy="60"
-              r="54"
-              stroke="currentColor"
-              strokeWidth="10"
-              fill="transparent"
-              strokeDasharray={`${2 * Math.PI * 54}`}
-              strokeDashoffset={`${2 * Math.PI * 54 * (1 - getProgressPercentage() / 100)}`}
-              className="text-theme-progress transition-all duration-1000 ease-linear drop-shadow-lg"
-              strokeLinecap="round"
-              filter="drop-shadow(0 0 8px hsl(var(--theme-progress)/0.5))"
-            />
-          </svg>
-          
-          {/* Center indicator */}
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className={`w-4 h-4 rounded-full ${isRunning ? 'bg-theme-progress animate-ping' : 'bg-theme-text-muted'}`}></div>
-          </div>
+          ) : (
+            <div className="relative w-28 h-28 sm:w-32 sm:h-32 lg:w-36 lg:h-36">
+              {/* Ring background glow */}
+              <div className="absolute inset-0 bg-theme-progress/20 rounded-full blur-lg scale-110"></div>
+              
+              <svg className="relative w-28 h-28 sm:w-32 sm:h-32 lg:w-36 lg:h-36 transform -rotate-90 drop-shadow-lg" viewBox="0 0 120 120">
+                <circle
+                  cx="60"
+                  cy="60"
+                  r="54"
+                  stroke="currentColor"
+                  strokeWidth="10"
+                  fill="transparent"
+                  className="text-theme-progress-bg/50"
+                />
+                <circle
+                  cx="60"
+                  cy="60"
+                  r="54"
+                  stroke="currentColor"
+                  strokeWidth="10"
+                  fill="transparent"
+                  strokeDasharray={`${2 * Math.PI * 54}`}
+                  strokeDashoffset={`${2 * Math.PI * 54 * (1 - getProgressPercentage() / 100)}`}
+                  className="text-theme-progress transition-all duration-1000 ease-linear drop-shadow-lg"
+                  strokeLinecap="round"
+                  filter="drop-shadow(0 0 8px hsl(var(--theme-progress)/0.5))"
+                />
+              </svg>
+              
+              {/* Center indicator */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className={`w-4 h-4 rounded-full ${isRunning ? 'bg-theme-progress animate-ping' : 'bg-theme-text-muted'}`}></div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
