@@ -117,6 +117,11 @@ export function usePomodoro() {
     setCompletedToday(0)
   }, [setCompletedToday])
 
+  // Allow setting a custom remaining time without changing mode
+  const resetTimerTo = useCallback((seconds: number) => {
+    const safe = Math.max(0, Math.floor(seconds))
+    dispatch({ type: "RESET", duration: safe })
+  }, [])
 
   const formatTime = useCallback((seconds: number) => {
     const mins = Math.floor(seconds / 60)
@@ -200,6 +205,7 @@ export function usePomodoro() {
     startTimer,
     pauseTimer,
     resetTimer,
+    resetTimerTo,
     resetCompletedToday,
     formatTime,
   }

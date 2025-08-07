@@ -5,7 +5,21 @@ import { Play, Pause, RotateCcw } from "lucide-react"
 import { usePomodoro } from "@/hooks/use-pomodoro"
 import { useSettings } from "@/hooks/use-settings"
 import { FocusRing } from "@/components/focus-ring"
+import { useEffect, useMemo, useState } from "react"
 
+type Preset = "deep" | "focus" | "quick"
+
+const presetConfig = {
+  deep: { label: "Deep", minutes: 50 },
+  focus: { label: "Focus", minutes: 25 },
+  quick: { label: "Quick", minutes: 5 },
+} as const satisfies Record<Preset, { label: string; minutes: number }>
+
+const presetToMode = {
+  deep: "pomodoro",
+  focus: "pomodoro",
+  quick: "shortBreak",
+} as const satisfies Record<Preset, "pomodoro" | "shortBreak">
 
 export function PomodoroTimer() {
   const { settings } = useSettings()
@@ -18,37 +32,58 @@ export function PomodoroTimer() {
     startTimer,
     pauseTimer,
     resetTimer,
+    resetTimerTo,
     resetCompletedToday,
     formatTime,
   } = usePomodoro()
 
-  const modes = [
-    { key: "pomodoro", label: "Pomodoro" },
-    { key: "shortBreak", label: "Short break" },
-    { key: "longBreak", label: "Long break" },
-  ] as const
+  // Track the selected preset locally (default to "focus")
+  const [selectedPreset, setSelectedPreset] = useState<Preset>("focus")
+
+  // On mount: if not running, default to "focus" and sync underlying mode; do not reset if already running
+  useEffect(() => {
+    if (!isRunning) {
+      setSelectedPreset("focus")
+      setMode(presetToMode["focus"])
+      // Align initial duration to 25m for Focus
+      resetTimerTo(presetConfig["focus"].minutes * 60)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []) // run once on mount
+
+  // Total duration in seconds based on selected preset
+  const totalDurationSec = useMemo(
+    () => presetConfig[selectedPreset].minutes * 60,
+    [selectedPreset]
+  )
 
   const getTimerTitle = () => {
-    return currentMode === "pomodoro" ? "Pomodoro" : currentMode === "shortBreak" ? "Short Break" : "Long Break"
+    return presetConfig[selectedPreset].label
   }
 
   const getProgressPercentage = () => {
-    const totalDuration = currentMode === "pomodoro"
-      ? settings.pomodoroDuration * 60
-      : currentMode === "shortBreak"
-        ? settings.shortBreakDuration * 60
-        : settings.longBreakDuration * 60
-    return ((totalDuration - timeLeft) / totalDuration) * 100
+    const total = totalDurationSec
+    return total > 0 ? ((total - timeLeft) / total) * 100 : 0
   }
 
   const getTotalDuration = () => {
-    return currentMode === "pomodoro"
-      ? settings.pomodoroDuration * 60
-      : currentMode === "shortBreak"
-        ? settings.shortBreakDuration * 60
-        : settings.longBreakDuration * 60
+    return totalDurationSec
   }
 
+  // Handle preset button clicks
+  const handleSelectPreset = (preset: Preset) => {
+    setSelectedPreset(preset)
+    const mapped = presetToMode[preset]
+    setMode(mapped)
+    // Apply precise duration per preset
+    resetTimerTo(presetConfig[preset].minutes * 60)
+  }
+
+  const presets: { key: Preset; label: string }[] = [
+    { key: "deep", label: presetConfig.deep.label },
+    { key: "focus", label: presetConfig.focus.label },
+    { key: "quick", label: presetConfig.quick.label },
+  ]
 
   return (
     <div className="w-full bg-theme-card-bg/30 backdrop-blur-sm border border-theme-card-border/30 rounded-2xl p-4 sm:p-6 lg:p-8 shadow-2xl">
@@ -67,23 +102,25 @@ export function PomodoroTimer() {
         </div>
       </div>
 
-
-      {/* Mode Tabs */}
+      {/* Preset Buttons */}
       <div className="flex bg-theme-input-bg/50 rounded-xl p-1 mb-6 sm:mb-8">
-        {modes.map((mode) => (
-          <Button
-            key={mode.key}
-            variant="ghost"
-            onClick={() => setMode(mode.key)}
-            className={`flex-1 rounded-lg p-2 sm:p-3 transition-all duration-200 ${
-              currentMode === mode.key
-                ? "bg-theme-accent text-theme-text-primary shadow-lg"
-                : "text-theme-text-secondary hover:text-theme-text-primary hover:bg-theme-card-bg/40"
-            }`}
-          >
-            {mode.label}
-          </Button>
-        ))}
+        {presets.map((p) => {
+          const isActive = selectedPreset === p.key
+          return (
+            <Button
+              key={p.key}
+              variant="ghost"
+              onClick={() => handleSelectPreset(p.key)}
+              className={`flex-1 rounded-lg p-2 sm:p-3 transition-all duration-200 ${
+                isActive
+                  ? "bg-theme-accent text-theme-text-primary shadow-lg"
+                  : "text-theme-text-secondary hover:text-theme-text-primary hover:bg-theme-card-bg/40"
+              }`}
+            >
+              {p.label}
+            </Button>
+          )
+        })}
       </div>
 
       {/* Timer Display */}
