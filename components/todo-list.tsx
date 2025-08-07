@@ -17,9 +17,21 @@ type DragState = {
 }
 
 export function TodoList() {
-  const { todos, addTodo, toggleTodo, deleteTodo, clearCompletedTodos, reorderTodos, updateTodoText, updateTodoTag } = useTodos()
+  const {
+    todos,
+    addTodo,
+    toggleTodo,
+    deleteTodo,
+    clearCompletedTodos,
+    reorderTodos,
+    updateTodoText,
+    updateTodoTag,
+    // consume persisted selection from hook
+    selectedTag,
+    setSelectedTag,
+  } = useTodos()
   const [newTask, setNewTask] = useState("")
-  const [selectedTag, setSelectedTag] = useState<TaskTag>("focus")
+  // remove local selectedTag state; use the hook's persisted value instead
   const [drag, setDrag] = useState<DragState>({ draggedId: null, overId: null })
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editingText, setEditingText] = useState<string>("")
@@ -46,7 +58,8 @@ export function TodoList() {
       console.log("[TodoList] handleAddTask", { text: newTask.trim(), selectedTag, normalizedTag })
       addTodo(newTask.trim(), normalizedTag as TaskTag)
       setNewTask("")
-      setSelectedTag("focus")
+      // Do NOT reset selectedTag; keep user's last choice persistent
+      // setSelectedTag("focus")
     }
   }
 

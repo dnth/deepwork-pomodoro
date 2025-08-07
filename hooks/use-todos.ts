@@ -20,7 +20,10 @@ export const taskTagConfig = {
 }
 
 export function useTodos() {
+  // Persist todos
   const [todos, setTodos] = useLocalStorage<Todo[]>("pomodoro-todos", [])
+  // Persist last selected task tag (defaults to "focus" only the very first time)
+  const [selectedTag, setSelectedTag] = useLocalStorage<TaskTag>("pomodoro-selected-tag", "focus")
 
   const addTodo = useCallback(
     (text: string, tag: TaskTag = "focus") => {
@@ -32,6 +35,7 @@ export function useTodos() {
         tag,
       }
       setTodos((prev) => [newTodo, ...prev])
+      // Do NOT update selectedTag here; selection should be controlled by the UI and remain unchanged on add.
     },
     [setTodos],
   )
@@ -108,5 +112,8 @@ export function useTodos() {
     getProgress,
     clearCompletedTodos,
     reorderTodos,
+    // expose persisted selection
+    selectedTag,
+    setSelectedTag,
   }
 }
