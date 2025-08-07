@@ -1,5 +1,12 @@
 "use client"
 
+/**
+ * Simplified persistence:
+ * - Persist only the last user-entered YouTube URL so it persists across sessions.
+ * - Storage key: app.youtube.custom_url.v1
+ * - SSR safe: localStorage access guarded and inside effects.
+ */
+
 import type React from "react"
 
 import { Button } from "@/components/ui/button"
@@ -14,6 +21,8 @@ interface AmbientCategory {
   videoId: string
   description: string
 }
+
+const STORAGE_KEY_SIMPLE = "app.youtube.custom_url.v1"
 
 const ambientCategories: AmbientCategory[] = [
   {
@@ -51,18 +60,43 @@ export function YoutubePlaylist() {
   const [isPlaying, setIsPlaying] = useState(false)
   const [isMuted, setIsMuted] = useState(false)
   const playerRef = useRef<any>(null)
+
+  // Persist only this input field across sessions
   const [customVideoUrl, setCustomVideoUrl] = useState("")
   const [customVideoId, setCustomVideoId] = useState<string | null>(null)
   const [isPlaylist, setIsPlaylist] = useState(false)
   const [playlistId, setPlaylistId] = useState<string | null>(null)
 
+  // Load saved URL on mount
+  useEffect(() => {
+    if (typeof window === "undefined") return
+    try {
+      const saved = window.localStorage.getItem(STORAGE_KEY_SIMPLE)
+      if (saved) setCustomVideoUrl(saved)
+    } catch {}
+  }, [])
+
+  // Save URL when it changes (small debounce)
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  useEffect(() => {
+    if (typeof window === "undefined") return
+    if (debounceRef.current) clearTimeout(debounceRef.current)
+    debounceRef.current = setTimeout(() => {
+      try {
+        window.localStorage.setItem(STORAGE_KEY_SIMPLE, customVideoUrl)
+      } catch {}
+    }, 200)
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current)
+    }
+  }, [customVideoUrl])
+
+  // Extract IDs from the stored/entered URL
   const extractVideoId = (url: string): { videoId: string | null; playlistId: string | null } => {
-    // Extract playlist ID
     const playlistRegex = /[?&]list=([^&]+)/
     const playlistMatch = url.match(playlistRegex)
     const playlistId = playlistMatch ? playlistMatch[1] : null
 
-    // Extract video ID
     const videoRegex = /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/
     const videoMatch = url.match(videoRegex)
     const videoId = videoMatch ? videoMatch[1] : null
@@ -70,9 +104,17 @@ export function YoutubePlaylist() {
     return { videoId, playlistId }
   }
 
+  const handleCategoryClick = (category: AmbientCategory) => {
+    setActiveCategory(category.id)
+    setIsPlaying(true)
+  }
+
+  const togglePlayPause = () => setIsPlaying((v) => !v)
+  const toggleMute = () => setIsMuted((v) => !v)
+
+  // Use the current input as source of truth when loading video
   const handleCustomVideo = () => {
     const { videoId, playlistId } = extractVideoId(customVideoUrl)
-    
     if (playlistId) {
       setPlaylistId(playlistId)
       setIsPlaylist(true)
@@ -87,23 +129,10 @@ export function YoutubePlaylist() {
     }
   }
 
-  const handleCategoryClick = (category: AmbientCategory) => {
-    setActiveCategory(category.id)
-    setIsPlaying(true)
-  }
-
-  const togglePlayPause = () => {
-    setIsPlaying(!isPlaying)
-  }
-
-  const toggleMute = () => {
-    setIsMuted(!isMuted)
-  }
-
-  // Mobile media session for notification controls
+  // Mobile media session for notification controls (unchanged)
   useEffect(() => {
     if ('mediaSession' in navigator && typeof window !== 'undefined' && window.innerWidth < 768) {
-      const currentCategory = activeCategory === "custom" 
+      const currentCategory = activeCategory === "custom"
         ? { name: "Custom Ambient", description: "Your ambient sound" }
         : ambientCategories.find(c => c.id === activeCategory)
 
@@ -117,24 +146,14 @@ export function YoutubePlaylist() {
           ]
         })
 
-        // Set playback state
         navigator.mediaSession.playbackState = isPlaying ? 'playing' : 'paused'
-
-        // Action handlers for mobile notification controls
-        navigator.mediaSession.setActionHandler('play', () => {
-          setIsPlaying(true)
-        })
-
-        navigator.mediaSession.setActionHandler('pause', () => {
-          setIsPlaying(false)
-        })
-
+        navigator.mediaSession.setActionHandler('play', () => setIsPlaying(true))
+        navigator.mediaSession.setActionHandler('pause', () => setIsPlaying(false))
         navigator.mediaSession.setActionHandler('stop', () => {
           setIsPlaying(false)
           setActiveCategory(null)
         })
       } else {
-        // Clear media session when no ambient sound is active
         navigator.mediaSession.metadata = null
         navigator.mediaSession.setActionHandler('play', null)
         navigator.mediaSession.setActionHandler('pause', null)
@@ -149,31 +168,26 @@ export function YoutubePlaylist() {
       <div className="flex justify-between items-center mb-4 sm:mb-6">
         <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-theme-text-primary">Ambient Sounds</h2>
         <div className="flex gap-2">
-          <Button
-            onClick={togglePlayPause}
-            variant="ghost"
-            size="sm"
-            className="text-theme-text-muted hover:text-theme-text-primary hover:bg-theme-card-bg/40"
-          >
+          <Button onClick={togglePlayPause} variant="ghost" size="sm" className="text-theme-text-muted hover:text-theme-text-primary hover:bg-theme-card-bg/40">
             {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
           </Button>
-          <Button
-            onClick={toggleMute}
-            variant="ghost"
-            size="sm"
-            className="text-theme-text-muted hover:text-theme-text-primary hover:bg-theme-card-bg/40"
-          >
+          <Button onClick={toggleMute} variant="ghost" size="sm" className="text-theme-text-muted hover:text-theme-text-primary hover:bg-theme-card-bg/40">
             {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
           </Button>
         </div>
       </div>
 
-      {/* Custom Video Input */}
+      {/* Custom Video Input (persisted) */}
       <div className="mb-4 sm:mb-6">
         <div className="flex gap-2 sm:gap-3">
           <Input
             value={customVideoUrl}
             onChange={(e) => setCustomVideoUrl(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleCustomVideo()
+              }
+            }}
             placeholder="Paste YouTube video or playlist URL"
             className="flex-1 bg-theme-input-bg border-theme-input-border text-theme-text-primary placeholder:text-slate-400 rounded-xl text-sm sm:text-base p-2 sm:p-3"
           />
@@ -185,6 +199,7 @@ export function YoutubePlaylist() {
           </Button>
         </div>
       </div>
+
 
       {/* Category Grid */}
       <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-4 sm:mb-6">
@@ -215,7 +230,7 @@ export function YoutubePlaylist() {
               height="100%"
               src={`https://www.youtube.com/embed/${
                 activeCategory === "custom"
-                  ? isPlaylist 
+                  ? isPlaylist
                     ? `videoseries?list=${playlistId}`
                     : `${customVideoId}?playlist=${customVideoId}`
                   : `${ambientCategories.find((c) => c.id === activeCategory)?.videoId}?playlist=${
