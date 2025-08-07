@@ -11,6 +11,12 @@ import { Plus, Trash2, GripVertical, Pencil } from "lucide-react"
 import { useTodos, taskTagConfig, type TaskTag, type Todo } from "@/hooks/use-todos"
 import { useState, useRef, useCallback } from "react"
 
+const TASK_TYPE_ORDER = ["deep", "focus", "quick"] as const
+const TASK_TYPE_PRIORITY: Record<string, number> = { deep: 0, focus: 1, quick: 2 }
+function compareTaskTags(a: string, b: string) {
+  return (TASK_TYPE_PRIORITY[a] ?? 999) - (TASK_TYPE_PRIORITY[b] ?? 999)
+}
+
 type DragState = {
   draggedId: string | null
   overId: string | null
@@ -165,14 +171,6 @@ export function TodoList() {
               className="flex flex-row gap-1"
               aria-label="Task type"
             >
-              <ToggleGroupItem
-                value="focus"
-                className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-[11px] sm:text-xs rounded-md px-2 py-0.5"
-                aria-label="Focus 25 minutes"
-              >
-                {taskTagConfig["focus"].symbol}&nbsp;25m
-              </ToggleGroupItem>
-
               {"deep" in taskTagConfig ? (
                 <ToggleGroupItem
                   value="deep"
@@ -182,6 +180,14 @@ export function TodoList() {
                   {taskTagConfig["deep"].symbol}&nbsp;50m
                 </ToggleGroupItem>
               ) : null}
+
+              <ToggleGroupItem
+                value="focus"
+                className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-[11px] sm:text-xs rounded-md px-2 py-0.5"
+                aria-label="Focus 25 minutes"
+              >
+                {taskTagConfig["focus"].symbol}&nbsp;25m
+              </ToggleGroupItem>
 
               {/* 5m option maps to "quick" tag */}
               <ToggleGroupItem
@@ -297,13 +303,6 @@ export function TodoList() {
                               className="bg-theme-input-bg border border-theme-input-border rounded-xl p-1"
                               aria-label="Task type"
                             >
-                              <ToggleGroupItem
-                                value="focus"
-                                className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-xs rounded-lg px-2 py-1"
-                                aria-label="Focus 25 minutes"
-                              >
-                                {taskTagConfig["focus"].symbol}&nbsp;25m
-                              </ToggleGroupItem>
                               {"deep" in taskTagConfig ? (
                                 <ToggleGroupItem
                                   value="deep"
@@ -313,6 +312,13 @@ export function TodoList() {
                                   {taskTagConfig["deep"].symbol}&nbsp;50m
                                 </ToggleGroupItem>
                               ) : null}
+                              <ToggleGroupItem
+                                value="focus"
+                                className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-xs rounded-lg px-2 py-1"
+                                aria-label="Focus 25 minutes"
+                              >
+                                {taskTagConfig["focus"].symbol}&nbsp;25m
+                              </ToggleGroupItem>
                               {/* 5m option maps to "quick" tag */}
                               <ToggleGroupItem
                                 value={"quick" as unknown as TaskTag}
@@ -456,13 +462,6 @@ export function TodoList() {
                               className="bg-theme-input-bg border border-theme-input-border rounded-xl p-1"
                               aria-label="Task type"
                             >
-                              <ToggleGroupItem
-                                value="focus"
-                                className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-xs rounded-lg px-2 py-1"
-                                aria-label="Focus 25 minutes"
-                              >
-                                {taskTagConfig["focus"].symbol}&nbsp;25m
-                              </ToggleGroupItem>
                               {"deep" in taskTagConfig ? (
                                 <ToggleGroupItem
                                   value="deep"
@@ -472,6 +471,13 @@ export function TodoList() {
                                   {taskTagConfig["deep"].symbol}&nbsp;50m
                                 </ToggleGroupItem>
                               ) : null}
+                              <ToggleGroupItem
+                                value="focus"
+                                className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-xs rounded-lg px-2 py-1"
+                                aria-label="Focus 25 minutes"
+                              >
+                                {taskTagConfig["focus"].symbol}&nbsp;25m
+                              </ToggleGroupItem>
                               {/* 5m option maps to "quick" tag */}
                               <ToggleGroupItem
                                 value={"quick" as unknown as TaskTag}
