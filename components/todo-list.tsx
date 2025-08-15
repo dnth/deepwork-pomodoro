@@ -373,7 +373,7 @@ export function TodoList() {
                         >
                           <Trash2 className="w-4 h-4" />
                         </Button>
-                        <div className="flex items-center gap-1 min-w-0 flex-shrink pl-2">
+                        <div className="flex items-center gap-1 min-w-0 flex-shrink pl-2 mr-2">
                           <span className="text-caption">
                             {(taskTagConfig as any)[todo.tag]?.symbol ?? "🎯"}
                           </span>
@@ -530,7 +530,7 @@ export function TodoList() {
                         >
                           <Trash2 className="w-4 h-4" />
                         </Button>
-                        <div className="flex items-center gap-1 min-w-0 flex-shrink pl-2">
+                        <div className="flex items-center gap-1 min-w-0 flex-shrink pl-2 mr-2">
                           <span className="text-caption">
                             {(taskTagConfig as any)[todo.tag]?.symbol ?? "🎯"}
                           </span>
