@@ -58,7 +58,7 @@ export function PomodoroTimer() {
   )
 
   const getTimerTitle = () => {
-    return presetConfig[selectedPreset].label
+    return "Pomodoro Timer"
   }
 
   const getProgressPercentage = () => {
@@ -90,14 +90,14 @@ export function PomodoroTimer() {
       {/* Header */}
       <div className="flex items-center justify-between mb-4 sm:mb-6">
         <div className="flex items-center gap-2 sm:gap-3">
-          <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-theme-text-primary">{getTimerTitle()}</h2>
+          <h2 className="text-body-lg sm:text-title-sm lg:text-title font-bold text-theme-text-primary">{getTimerTitle()}</h2>
         </div>
         
         {/* Stats */}
         <div className="text-right">
           <div className="text-theme-text-secondary">
-            <span className="text-theme-text-primary font-semibold text-sm sm:text-base">{completedToday}</span>
-            <span className="ml-1 text-theme-text-secondary text-xs sm:text-sm">completed today</span>
+            <span className="text-theme-text-primary font-semibold text-caption sm:text-body">{completedToday}</span>
+            <span className="ml-1 text-theme-text-secondary text-label sm:text-caption">completed today</span>
           </div>
         </div>
       </div>
@@ -142,13 +142,13 @@ export function PomodoroTimer() {
             {/* Timer status indicator */}
             <div className="flex items-center justify-center gap-2 mb-4">
               <div className={`w-3 h-3 rounded-full ${isRunning ? 'bg-theme-progress animate-pulse' : 'bg-theme-text-muted'}`}></div>
-              <span className="text-sm sm:text-base font-medium text-theme-text-secondary uppercase tracking-wider">
+              <span className="text-caption sm:text-body font-medium text-theme-text-secondary uppercase tracking-wider">
                 {isRunning ? 'Running' : 'Paused'}
               </span>
             </div>
             
             {/* Progress percentage */}
-            <div className="text-xs sm:text-sm font-medium text-theme-text-muted uppercase tracking-wider">
+            <div className="text-label sm:text-caption font-medium text-theme-text-muted uppercase tracking-wider">
               {Math.round(getProgressPercentage())}% Complete
             </div>
           </div>
@@ -209,7 +209,7 @@ export function PomodoroTimer() {
         <Button
           onClick={isRunning ? pauseTimer : startTimer}
           size="lg"
-          className="bg-theme-accent hover:bg-theme-accent-hover text-theme-text-primary px-6 sm:px-8 py-2 sm:py-3 rounded-xl shadow-lg transition-all duration-200 hover:scale-105 text-sm sm:text-base"
+          className="bg-theme-accent hover:bg-theme-accent-hover text-theme-text-primary px-6 sm:px-8 py-2 sm:py-3 rounded-xl shadow-lg transition-all duration-200 hover:scale-105 text-caption sm:text-body"
         >
           {isRunning ? <Pause className="w-4 h-4 sm:w-6 sm:h-6 mr-1 sm:mr-2" /> : <Play className="w-4 h-4 sm:w-6 sm:h-6 mr-1 sm:mr-2" />}
           {isRunning ? "Pause" : "Start"}

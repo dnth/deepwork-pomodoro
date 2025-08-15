@@ -133,15 +133,15 @@ export function TodoList() {
     <div className="w-full bg-theme-card-bg/30 backdrop-blur-sm border border-theme-card-border/30 rounded-2xl p-4 sm:p-6 lg:p-8 shadow-2xl">
       {/* Header */}
       <div className="flex justify-between items-center mb-4 sm:mb-6">
-        <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-theme-text-primary">To Do</h2>
+        <h2 className="text-body-lg sm:text-title-sm lg:text-title font-bold text-theme-text-primary">To Do</h2>
         <div className="flex items-center gap-3">
           <div className="text-theme-text-secondary">
-            <span className="text-theme-text-primary font-semibold text-sm sm:text-base">
+            <span className="text-theme-text-primary font-semibold text-caption sm:text-body">
               {todos.filter((t) => t.completed).length}/{todos.length}
             </span>
-            <span className="ml-1 text-theme-text-secondary text-xs sm:text-sm">completed</span>
+            <span className="ml-1 text-theme-text-secondary text-label sm:text-caption">completed</span>
           </div>
-          <span className="text-theme-task-text font-semibold text-sm sm:text-base">{Math.round(progress)}%</span>
+          <span className="text-theme-task-text font-semibold text-caption sm:text-body">{Math.round(progress)}%</span>
         </div>
       </div>
 
@@ -174,7 +174,7 @@ export function TodoList() {
               {"deep" in taskTagConfig ? (
                 <ToggleGroupItem
                   value="deep"
-                  className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-[11px] sm:text-xs rounded-md px-2 py-0.5"
+                  className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-label sm:text-caption rounded-md px-2 py-0.5"
                   aria-label="Deep Work 50 minutes"
                 >
                   {taskTagConfig["deep"].symbol}&nbsp;50m
@@ -183,7 +183,7 @@ export function TodoList() {
 
               <ToggleGroupItem
                 value="focus"
-                className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-[11px] sm:text-xs rounded-md px-2 py-0.5"
+                className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-label sm:text-caption rounded-md px-2 py-0.5"
                 aria-label="Focus 25 minutes"
               >
                 {taskTagConfig["focus"].symbol}&nbsp;25m
@@ -192,7 +192,7 @@ export function TodoList() {
               {/* 5m option maps to "quick" tag */}
               <ToggleGroupItem
                 value={"quick" as unknown as TaskTag}
-                className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-[11px] sm:text-xs rounded-md px-2 py-0.5"
+                className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-label sm:text-caption rounded-md px-2 py-0.5"
                 aria-label="Quick 5 minutes"
               >
                 {(taskTagConfig as any)["quick"]?.symbol ?? "⚡"}&nbsp;5m
@@ -216,7 +216,7 @@ export function TodoList() {
                 }
               }}
               placeholder="What would you like to focus on?"
-              className="w-full bg-theme-input-bg border-theme-input-border text-theme-text-primary placeholder:text-slate-400 rounded-lg text-sm sm:text-base h-9 sm:h-10 px-3"
+              className="w-full bg-theme-input-bg border-theme-input-border text-theme-text-primary placeholder:text-slate-400 rounded-lg text-caption sm:text-body h-9 sm:h-10 px-3"
               aria-label="Task description"
             />
           </div>
@@ -244,7 +244,7 @@ export function TodoList() {
             {/* Incomplete Tasks Section */}
             {incompleteTasks.length > 0 && (
               <div className="space-y-3">
-                <h3 className="text-sm font-medium text-theme-text-secondary flex items-center gap-2">
+                <h3 className="text-caption font-medium text-theme-text-secondary flex items-center gap-2">
                   📋 To Do ({incompleteTasks.length})
                 </h3>
                 {incompleteTasks.map((todo) => {
@@ -292,7 +292,7 @@ export function TodoList() {
                                 if (e.key === "Enter") saveEditing()
                                 if (e.key === "Escape") cancelEditing()
                               }}
-                              className="min-w-0 flex-1 bg-theme-input-bg border-theme-input-border text-theme-text-primary rounded-xl text-sm p-2"
+                              className="min-w-0 flex-1 bg-theme-input-bg border-theme-input-border text-theme-text-primary rounded-xl text-caption p-2"
                             />
 
                             {/* Segmented control while editing */}
@@ -306,7 +306,7 @@ export function TodoList() {
                               {"deep" in taskTagConfig ? (
                                 <ToggleGroupItem
                                   value="deep"
-                                  className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-xs rounded-lg px-2 py-1"
+                                  className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-label rounded-lg px-2 py-1"
                                   aria-label="Deep Work 50 minutes"
                                 >
                                   {taskTagConfig["deep"].symbol}&nbsp;50m
@@ -314,7 +314,7 @@ export function TodoList() {
                               ) : null}
                               <ToggleGroupItem
                                 value="focus"
-                                className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-xs rounded-lg px-2 py-1"
+                                className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-label rounded-lg px-2 py-1"
                                 aria-label="Focus 25 minutes"
                               >
                                 {taskTagConfig["focus"].symbol}&nbsp;25m
@@ -322,7 +322,7 @@ export function TodoList() {
                               {/* 5m option maps to "quick" tag */}
                               <ToggleGroupItem
                                 value={"quick" as unknown as TaskTag}
-                                className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-xs rounded-lg px-2 py-1"
+                                className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-label rounded-lg px-2 py-1"
                                 aria-label="Quick 5 minutes"
                               >
                                 {(taskTagConfig as any)["quick"]?.symbol ?? "⚡"}&nbsp;5m
@@ -349,14 +349,14 @@ export function TodoList() {
                           </div>
                         ) : (
                           <div className="flex items-center gap-2">
-                            <span className="flex-1 transition-all text-theme-text-primary text-sm break-words">
+                            <span className="flex-1 transition-all text-theme-text-primary text-caption break-words">
                               {todo.text}
                             </span>
                             <div className="flex items-center gap-1 flex-shrink-0">
-                              <span className="text-sm">
+                              <span className="text-caption">
                                 {(taskTagConfig as any)[todo.tag]?.symbol ?? "🎯"}
                               </span>
-                              <span className={`text-xs ${((taskTagConfig as any)[todo.tag]?.textColor ?? "text-theme-text-secondary")} whitespace-nowrap`}>
+                              <span className={`text-label ${((taskTagConfig as any)[todo.tag]?.textColor ?? "text-theme-text-secondary")} whitespace-nowrap`}>
                                 {(taskTagConfig as any)[todo.tag]?.label ?? "Focus"} ({(taskTagConfig as any)[todo.tag]?.duration ?? 25}m)
                               </span>
                             </div>
@@ -394,14 +394,14 @@ export function TodoList() {
             {completedTasks.length > 0 && (
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-medium text-theme-text-secondary flex items-center gap-2">
+                  <h3 className="text-caption font-medium text-theme-text-secondary flex items-center gap-2">
                     ✅ Completed ({completedTasks.length})
                   </h3>
                   <Button
                     onClick={clearCompletedTodos}
                     variant="ghost"
                     size="sm"
-                    className="text-theme-text-muted hover:text-red-400 transition-all text-xs"
+                    className="text-theme-text-muted hover:text-red-400 transition-all text-label"
                   >
                     Clear All
                   </Button>
@@ -451,7 +451,7 @@ export function TodoList() {
                                 if (e.key === "Enter") saveEditing()
                                 if (e.key === "Escape") cancelEditing()
                               }}
-                              className="min-w-0 flex-1 bg-theme-input-bg border-theme-input-border text-theme-text-primary rounded-xl text-sm p-2"
+                              className="min-w-0 flex-1 bg-theme-input-bg border-theme-input-border text-theme-text-primary rounded-xl text-caption p-2"
                             />
 
                             {/* Segmented control while editing (keep available to change tag) */}
@@ -465,7 +465,7 @@ export function TodoList() {
                               {"deep" in taskTagConfig ? (
                                 <ToggleGroupItem
                                   value="deep"
-                                  className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-xs rounded-lg px-2 py-1"
+                                  className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-label rounded-lg px-2 py-1"
                                   aria-label="Deep Work 50 minutes"
                                 >
                                   {taskTagConfig["deep"].symbol}&nbsp;50m
@@ -473,7 +473,7 @@ export function TodoList() {
                               ) : null}
                               <ToggleGroupItem
                                 value="focus"
-                                className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-xs rounded-lg px-2 py-1"
+                                className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-label rounded-lg px-2 py-1"
                                 aria-label="Focus 25 minutes"
                               >
                                 {taskTagConfig["focus"].symbol}&nbsp;25m
@@ -481,7 +481,7 @@ export function TodoList() {
                               {/* 5m option maps to "quick" tag */}
                               <ToggleGroupItem
                                 value={"quick" as unknown as TaskTag}
-                                className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-xs rounded-lg px-2 py-1"
+                                className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-label rounded-lg px-2 py-1"
                                 aria-label="Quick 5 minutes"
                               >
                                 {(taskTagConfig as any)["quick"]?.symbol ?? "⚡"}&nbsp;5m
@@ -508,14 +508,14 @@ export function TodoList() {
                           </div>
                         ) : (
                           <div className="flex items-center gap-2">
-                            <span className="flex-1 transition-all text-theme-text-muted line-through text-sm break-words">
+                            <span className="flex-1 transition-all text-theme-text-muted line-through text-caption break-words">
                               {todo.text}
                             </span>
                             <div className="flex items-center gap-1 flex-shrink-0">
-                              <span className="text-sm">
+                              <span className="text-caption">
                                 {(taskTagConfig as any)[todo.tag]?.symbol ?? "🎯"}
                               </span>
-                              <span className={`text-xs ${((taskTagConfig as any)[todo.tag]?.textColor ?? "text-theme-text-secondary")} opacity-70 whitespace-nowrap`}>
+                              <span className={`text-label ${((taskTagConfig as any)[todo.tag]?.textColor ?? "text-theme-text-secondary")} opacity-70 whitespace-nowrap`}>
                                 {((taskTagConfig as any)[todo.tag]?.label ?? "Focus")} ({((taskTagConfig as any)[todo.tag]?.duration ?? 25)}m)
                               </span>
                             </div>

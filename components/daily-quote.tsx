@@ -22,12 +22,12 @@ export function DailyQuote() {
         </div>
 
         <div className="flex-1">
-          <label className="block text-xs sm:text-sm font-medium text-theme-text-muted mb-2 sm:mb-3">Theme of the day</label>
+          <label className="block text-label sm:text-caption font-medium text-theme-text-muted mb-2 sm:mb-3">Theme of the day</label>
           <Input
             value={quote}
             onChange={handleChange}
             placeholder="Enter your theme of the day..."
-            className="bg-transparent border-none text-base sm:text-lg lg:text-xl text-theme-text-primary placeholder:text-theme-text-muted p-0 h-auto font-medium italic focus-visible:ring-0 focus-visible:ring-offset-0"
+            className="bg-transparent border-none text-body sm:text-body-lg lg:text-title-sm text-theme-text-primary placeholder:text-theme-text-muted p-0 h-auto font-medium italic focus-visible:ring-0 focus-visible:ring-offset-0"
           />
         </div>
       </div>

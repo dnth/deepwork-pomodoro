@@ -84,6 +84,28 @@ const config: Config = {
   				'task-text': 'hsl(var(--theme-task-text))'
   			}
   		},
+  		fontSize: {
+  			'display': ['4.5rem', { lineHeight: '1.1' }],     /* 72px */
+  			'headline': ['3rem', { lineHeight: '1.1' }],       /* 48px */
+  			'title-lg': ['2.25rem', { lineHeight: '1.2' }],    /* 36px */
+  			'title': ['1.875rem', { lineHeight: '1.3' }],   /* 30px */
+  			'title-sm': ['1.5rem', { lineHeight: '1.4' }],     /* 24px */
+  			'body-lg': ['1.125rem', { lineHeight: '1.5' }],    /* 18px */
+  			'body': ['1rem', { lineHeight: '1.5' }],      /* 16px */
+  			'caption': ['0.875rem', { lineHeight: '1.5' }],    /* 14px */
+  			'label': ['0.75rem', { lineHeight: '1.5' }],     /* 12px */
+  		},
+  		lineHeight: {
+  			'tight': '1.25',
+  			'normal': '1.5',
+  			'relaxed': '1.625',
+  		},
+  		minHeight: {
+  			'touch': '2.75rem', /* 44px WCAG minimum */
+  		},
+  		minWidth: {
+  			'touch': '2.75rem', /* 44px WCAG minimum */
+  		},
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',

@@ -32,13 +32,13 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-theme-card-bg border-theme-card-border text-theme-text-primary max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-xl font-bold text-theme-text-primary">Timer Settings</DialogTitle>
+          <DialogTitle className="text-title-sm font-bold text-theme-text-primary">Timer Settings</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-6 py-4">
           {/* Timer Durations */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-theme-task-text">Timer Durations</h3>
+            <h3 className="text-body-lg font-semibold text-theme-task-text">Timer Durations</h3>
 
             <div className="space-y-2">
               <Label className="text-theme-text-secondary" htmlFor="pomodoro">
@@ -88,7 +88,7 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
 
           {/* Preferences */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-theme-task-text">Preferences</h3>
+            <h3 className="text-body-lg font-semibold text-theme-task-text">Preferences</h3>
 
             <div className="flex items-center justify-between">
               <Label className="text-theme-text-secondary" htmlFor="autoStart">

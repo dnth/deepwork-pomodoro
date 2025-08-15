@@ -166,7 +166,7 @@ export function YoutubePlaylist() {
     <div className="bg-theme-card-bg/30 backdrop-blur-sm border border-theme-card-border/30 rounded-2xl p-4 sm:p-6 lg:p-8 shadow-2xl">
       {/* Header */}
       <div className="flex justify-between items-center mb-4 sm:mb-6">
-        <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-theme-text-primary">Ambient Sounds</h2>
+        <h2 className="text-body-lg sm:text-title-sm lg:text-title font-bold text-theme-text-primary">Ambient Sounds</h2>
         <div className="flex gap-2">
           <Button onClick={togglePlayPause} variant="ghost" size="sm" className="text-theme-text-muted hover:text-theme-text-primary hover:bg-theme-card-bg/40">
             {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
@@ -189,11 +189,11 @@ export function YoutubePlaylist() {
               }
             }}
             placeholder="Paste YouTube video or playlist URL"
-            className="flex-1 bg-theme-input-bg border-theme-input-border text-theme-text-primary placeholder:text-slate-400 rounded-xl text-sm sm:text-base p-2 sm:p-3"
+            className="flex-1 bg-theme-input-bg border-theme-input-border text-theme-text-primary placeholder:text-slate-400 rounded-xl text-caption sm:text-body p-2 sm:p-3"
           />
           <Button
             onClick={handleCustomVideo}
-            className="bg-theme-accent hover:bg-theme-accent-hover text-theme-text-primary rounded-xl px-4 sm:px-6 text-xs sm:text-sm font-medium"
+            className="bg-theme-accent hover:bg-theme-accent-hover text-theme-text-primary rounded-xl px-4 sm:px-6 text-label sm:text-caption font-medium"
           >
             Load Video
           </Button>
@@ -215,7 +215,7 @@ export function YoutubePlaylist() {
             }`}
           >
             <div className="w-5 h-5 sm:w-6 sm:h-6">{category.icon}</div>
-            <span className="text-xs sm:text-sm font-medium">{category.name}</span>
+            <span className="text-label sm:text-caption font-medium">{category.name}</span>
           </Button>
         ))}
       </div>
@@ -262,7 +262,7 @@ export function YoutubePlaylist() {
                 ? "Custom Video"
                 : ambientCategories.find((c) => c.id === activeCategory)?.name}
             </div>
-            <div className="text-theme-text-muted text-sm">
+            <div className="text-theme-text-muted text-caption">
               {activeCategory === "custom"
                 ? "Your custom ambient sound"
                 : ambientCategories.find((c) => c.id === activeCategory)?.description}
