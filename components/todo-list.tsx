@@ -348,19 +348,9 @@ export function TodoList() {
                             </div>
                           </div>
                         ) : (
-                          <div className="flex items-center gap-2">
-                            <span className="flex-1 transition-all text-theme-text-primary text-caption break-words">
-                              {todo.text}
-                            </span>
-                            <div className="flex items-center gap-1 flex-shrink-0">
-                              <span className="text-caption">
-                                {(taskTagConfig as any)[todo.tag]?.symbol ?? "🎯"}
-                              </span>
-                              <span className={`text-label ${((taskTagConfig as any)[todo.tag]?.textColor ?? "text-theme-text-secondary")} whitespace-nowrap`}>
-                                {(taskTagConfig as any)[todo.tag]?.label ?? "Focus"} ({(taskTagConfig as any)[todo.tag]?.duration ?? 25}m)
-                              </span>
-                            </div>
-                          </div>
+                          <span className="flex-1 transition-all text-theme-text-primary text-caption break-words">
+                            {todo.text}
+                          </span>
                         )}
                       </div>
 
@@ -383,6 +373,14 @@ export function TodoList() {
                         >
                           <Trash2 className="w-4 h-4" />
                         </Button>
+                        <div className="flex items-center gap-1 min-w-0 flex-shrink">
+                          <span className="text-caption">
+                            {(taskTagConfig as any)[todo.tag]?.symbol ?? "🎯"}
+                          </span>
+                          <span className={`text-label ${((taskTagConfig as any)[todo.tag]?.textColor ?? "text-theme-text-secondary")} whitespace-nowrap`}>
+                            {(taskTagConfig as any)[todo.tag]?.label ?? "Focus"} ({(taskTagConfig as any)[todo.tag]?.duration ?? 25}m)
+                          </span>
+                        </div>
                       </div>
                     </div>
                   )
@@ -507,19 +505,9 @@ export function TodoList() {
                             </div>
                           </div>
                         ) : (
-                          <div className="flex items-center gap-2">
-                            <span className="flex-1 transition-all text-theme-text-muted line-through text-caption break-words">
-                              {todo.text}
-                            </span>
-                            <div className="flex items-center gap-1 flex-shrink-0">
-                              <span className="text-caption">
-                                {(taskTagConfig as any)[todo.tag]?.symbol ?? "🎯"}
-                              </span>
-                              <span className={`text-label ${((taskTagConfig as any)[todo.tag]?.textColor ?? "text-theme-text-secondary")} opacity-70 whitespace-nowrap`}>
-                                {((taskTagConfig as any)[todo.tag]?.label ?? "Focus")} ({((taskTagConfig as any)[todo.tag]?.duration ?? 25)}m)
-                              </span>
-                            </div>
-                          </div>
+                          <span className="flex-1 transition-all text-theme-text-muted line-through text-caption break-words">
+                            {todo.text}
+                          </span>
                         )}
                       </div>
 
@@ -542,6 +530,14 @@ export function TodoList() {
                         >
                           <Trash2 className="w-4 h-4" />
                         </Button>
+                        <div className="flex items-center gap-1 min-w-0 flex-shrink">
+                          <span className="text-caption">
+                            {(taskTagConfig as any)[todo.tag]?.symbol ?? "🎯"}
+                          </span>
+                          <span className={`text-label ${((taskTagConfig as any)[todo.tag]?.textColor ?? "text-theme-text-secondary")} opacity-70 whitespace-nowrap`}>
+                            {((taskTagConfig as any)[todo.tag]?.label ?? "Focus")} ({((taskTagConfig as any)[todo.tag]?.duration ?? 25)}m)
+                          </span>
+                        </div>
                       </div>
                     </div>
                   )
