@@ -70,38 +70,38 @@ export function DayProgressBar() {
     
     if (percentage > 0.8) {
       // Pure green
-      return { background: 'linear-gradient(to right, #4ade80, #22c55e)' }
+      return { background: 'linear-gradient(to right, hsl(var(--theme-accent)), hsl(var(--theme-accent-hover)))' }
     } else if (percentage > 0.6) {
       // Green to yellow-green
       const greenMix = (percentage - 0.6) / 0.2
       return { 
-        background: `linear-gradient(to right, 
-          rgb(${Math.round(74 + (255 - 74) * (1 - greenMix))}, ${Math.round(222 + (255 - 222) * (1 - greenMix))}, ${Math.round(128 * greenMix)}), 
-          rgb(${Math.round(34 + (255 - 34) * (1 - greenMix))}, ${Math.round(197 + (255 - 197) * (1 - greenMix))}, ${Math.round(94 * greenMix)}))` 
+        background: `linear-gradient(to right,
+          hsl(var(--theme-accent)),
+          hsl(var(--theme-progress)))`
       }
     } else if (percentage > 0.4) {
       // Yellow-green to yellow
       const yellowMix = (percentage - 0.4) / 0.2
       return { 
-        background: `linear-gradient(to right, 
-          rgb(255, ${Math.round(255 - (255 - 222) * (1 - yellowMix))}, ${Math.round(128 * yellowMix)}), 
-          rgb(255, ${Math.round(255 - (255 - 197) * (1 - yellowMix))}, ${Math.round(94 * yellowMix)}))` 
+        background: `linear-gradient(to right,
+          hsl(var(--theme-progress)),
+          hsl(var(--theme-accent)))`
       }
     } else if (percentage > 0.2) {
       // Yellow to orange
       const orangeMix = (percentage - 0.2) / 0.2
       return { 
-        background: `linear-gradient(to right, 
-          rgb(255, ${Math.round(222 - (222 - 165) * (1 - orangeMix))}, ${Math.round(128 * orangeMix)}), 
-          rgb(255, ${Math.round(197 - (197 - 149) * (1 - orangeMix))}, ${Math.round(94 * orangeMix)}))` 
+        background: `linear-gradient(to right,
+          hsl(var(--theme-progress)),
+          hsl(var(--theme-text-secondary)))`
       }
     } else {
       // Orange to red
       const redMix = percentage / 0.2
       return { 
-        background: `linear-gradient(to right, 
-          rgb(255, ${Math.round(165 * redMix)}, ${Math.round(165 * redMix)}), 
-          rgb(255, ${Math.round(149 * redMix)}, ${Math.round(149 * redMix)}))` 
+        background: `linear-gradient(to right,
+          hsl(var(--theme-text-secondary)),
+          hsl(var(--theme-text-muted)))`
       }
     }
   }

@@ -48,24 +48,24 @@ export function FocusRing({
     switch (visualState) {
       case "focus":
         return {
-          ring: "text-emerald-500 dark:text-emerald-400",
-          glow: "drop-shadow-lg filter drop-shadow-emerald-500/20",
+          ring: "text-theme-accent",
+          glow: "drop-shadow-lg filter drop-shadow-theme-accent/20",
           animation: isRunning ? "animate-pulse" : "",
-          background: "text-slate-200 dark:text-slate-700"
+          background: "text-theme-card-border"
         }
       case "break":
         return {
-          ring: "text-blue-400 dark:text-blue-300",
-          glow: "drop-shadow-lg filter drop-shadow-blue-400/20",
+          ring: "text-theme-progress",
+          glow: "drop-shadow-lg filter drop-shadow-theme-progress/20",
           animation: "",
-          background: "text-slate-200 dark:text-slate-700"
+          background: "text-theme-card-border"
         }
       case "overtime":
         return {
-          ring: "text-red-500 dark:text-red-400",
-          glow: "drop-shadow-lg filter drop-shadow-red-500/30",
+          ring: "text-destructive",
+          glow: "drop-shadow-lg filter drop-shadow-destructive/30",
           animation: "animate-pulse",
-          background: "text-slate-200 dark:text-slate-700"
+          background: "text-theme-card-border"
         }
       default:
         return {
@@ -98,7 +98,7 @@ export function FocusRing({
           y2={y2}
           stroke="currentColor"
           strokeWidth="2"
-          className="text-slate-300 dark:text-slate-600 opacity-60"
+          className="text-theme-text-muted opacity-60"
         />
       )
     }
@@ -177,8 +177,8 @@ export function FocusRing({
       {/* Background glow effect */}
       <div 
         className={`absolute inset-0 rounded-full blur-lg scale-110 opacity-40 ${
-          visualState === 'focus' ? 'bg-emerald-500/20' :
-          visualState === 'break' ? 'bg-blue-400/20' : 'bg-red-500/20'
+          visualState === 'focus' ? 'bg-theme-accent/20' :
+          visualState === 'break' ? 'bg-theme-progress/20' : 'bg-destructive/20'
         } ${isRunning && visualState === 'focus' ? 'animate-pulse' : ''}`}
         aria-hidden="true"
       ></div>
@@ -232,9 +232,9 @@ export function FocusRing({
       <div className="absolute inset-0 flex items-center justify-center" aria-hidden="true">
         <div className={`w-4 h-4 rounded-full transition-all duration-300 ${
           isRunning 
-            ? `${visualState === 'focus' ? 'bg-emerald-500' : 
-                visualState === 'break' ? 'bg-blue-400' : 'bg-red-500'} animate-ping` 
-            : 'bg-slate-400 dark:bg-slate-500'
+            ? `${visualState === 'focus' ? 'bg-theme-accent' :
+                visualState === 'break' ? 'bg-theme-progress' : 'bg-destructive'} animate-ping`
+            : 'bg-theme-text-muted'
         }`}></div>
       </div>
 
