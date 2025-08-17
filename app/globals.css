@@ -36,6 +36,26 @@
     --chart-5: 0 84% 60%;             /* red-500: #ef4444 */
     --radius: 0.5rem;
 
+    /* Consistent Spacing System - Based on 4px/8px units */
+    --space-1: 4px;    /* 1 unit */
+    --space-2: 8px;    /* 2 units */
+    --space-3: 12px;   /* 3 units */
+    --space-4: 16px;   /* 4 units */
+    --space-6: 24px;   /* 6 units */
+    --space-8: 32px;   /* 8 units */
+    --space-12: 48px;  /* 12 units */
+    --space-16: 64px;  /* 16 units */
+    --space-20: 80px;  /* 20 units */
+    --space-24: 96px;  /* 24 units */
+    --space-32: 128px; /* 32 units */
+
+    /* Consistent Border Radius System */
+    --radius-xs: 2px;
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+
     /* Custom theme variables - Daylight Focus Palette */
     --theme-background-from: 210 40% 98%;  /* bg-slate-50: #f8fafc */
     --theme-background-via: 0 0% 100%;     /* bg-white: #ffffff */

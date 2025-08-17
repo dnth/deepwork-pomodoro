@@ -163,10 +163,10 @@ export function YoutubePlaylist() {
   }, [activeCategory, isPlaying])
 
   return (
-    <div className="bg-theme-card-bg/30 backdrop-blur-sm border border-theme-card-border/30 rounded-2xl p-4 sm:p-6 lg:p-8 shadow-2xl">
+    <div className="bg-theme-card-bg/30 backdrop-blur-sm border border-theme-card-border/30 rounded-xl p-6 shadow-2xl">
       {/* Header */}
-      <div className="flex justify-between items-center mb-4 sm:mb-6">
-        <h2 className="text-body-lg sm:text-title-sm lg:text-title font-bold text-theme-text-primary">Ambient Sounds</h2>
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-base sm:text-lg lg:text-xl font-bold text-theme-text-primary">Ambient Sounds</h2>
         <div className="flex gap-2">
           <Button onClick={togglePlayPause} variant="ghost" size="sm" className="text-theme-text-muted hover:text-theme-text-primary hover:bg-theme-card-bg/40">
             {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
@@ -178,8 +178,8 @@ export function YoutubePlaylist() {
       </div>
 
       {/* Custom Video Input (persisted) */}
-      <div className="mb-4 sm:mb-6">
-        <div className="flex gap-2 sm:gap-3">
+      <div className="mb-6">
+        <div className="flex gap-3">
           <Input
             value={customVideoUrl}
             onChange={(e) => setCustomVideoUrl(e.target.value)}
@@ -189,11 +189,11 @@ export function YoutubePlaylist() {
               }
             }}
             placeholder="Paste YouTube video or playlist URL"
-            className="flex-1 bg-theme-input-bg border-theme-input-border text-theme-text-primary placeholder:text-slate-400 rounded-xl text-caption sm:text-body p-2 sm:p-3"
+            className="flex-1 bg-theme-input-bg border-theme-input-border text-theme-text-primary placeholder:text-slate-400 rounded-lg text-body p-3"
           />
           <Button
             onClick={handleCustomVideo}
-            className="bg-theme-accent hover:bg-theme-accent-hover text-theme-text-primary rounded-xl px-4 sm:px-6 text-label sm:text-caption font-medium"
+            className="bg-theme-accent hover:bg-theme-accent-hover text-theme-text-primary rounded-lg px-4 text-caption font-medium"
           >
             Load Video
           </Button>
@@ -202,13 +202,13 @@ export function YoutubePlaylist() {
 
 
       {/* Category Grid */}
-      <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-4 sm:mb-6">
+      <div className="grid grid-cols-2 gap-4 mb-6">
         {ambientCategories.map((category) => (
           <Button
             key={category.id}
             onClick={() => handleCategoryClick(category)}
             variant="ghost"
-            className={`h-20 sm:h-24 flex flex-col items-center justify-center gap-1 sm:gap-2 rounded-xl border transition-all duration-200 hover:scale-105 ${
+            className={`h-24 flex flex-col items-center justify-center gap-2 rounded-lg border transition-all duration-200 hover:scale-105 ${
               activeCategory === category.id
                 ? `bg-theme-task-bg/30 border-theme-task-border text-theme-task-text shadow-lg shadow-theme-task-bg/20`
                 : `bg-theme-card-bg border-theme-card-border hover:bg-theme-card-bg hover:border-theme-accent/30 text-theme-text-secondary hover:text-theme-text-primary shadow-sm hover:shadow-md`
@@ -222,8 +222,8 @@ export function YoutubePlaylist() {
 
       {/* YouTube Player */}
       {activeCategory && (
-        <div className="mb-4 sm:mb-6">
-          <div className="aspect-video bg-theme-input-bg/50 rounded-xl overflow-hidden">
+        <div className="mb-6">
+          <div className="aspect-video bg-theme-input-bg/50 rounded-lg overflow-hidden">
             <iframe
               ref={playerRef}
               width="100%"
@@ -248,7 +248,7 @@ export function YoutubePlaylist() {
       )}
 
       {activeCategory && (
-        <div className="flex items-center gap-4 p-4 bg-theme-input-bg/50 rounded-xl">
+        <div className="flex items-center gap-4 p-4 bg-theme-input-bg/50 rounded-lg">
           <div className="w-12 h-12 bg-theme-accent/20 rounded-lg flex items-center justify-center">
             {activeCategory === "custom" ? (
               <Play className="w-6 h-6" />

@@ -44,13 +44,13 @@ export default function Home() {
       <header className="relative z-10 p-4 sm:p-6">
         <div className="flex items-center justify-between mb-2">
           {/* Left: App Name */}
-          <h1 className="text-title-sm sm:text-title font-bold text-theme-text-primary">Deep Work</h1>
+          <h1 className="text-lg sm:text-xl font-bold text-theme-text-primary">Deep Work</h1>
           
           {/* Center: Current Time */}
           <div className="absolute left-1/2 transform -translate-x-1/2 text-center">
             <div className="flex items-center gap-2 sm:gap-3">
               {/* Time Display */}
-              <span className="text-title-sm sm:text-title lg:text-title-lg font-light text-theme-text-primary font-mono tracking-wider">
+              <span className="text-lg sm:text-xl lg:text-2xl font-light text-theme-text-primary font-mono tracking-wider">
                 {mounted ? currentTime.toLocaleTimeString('en-US', {
                   hour: '2-digit',
                   minute: '2-digit',
@@ -59,7 +59,7 @@ export default function Home() {
               </span>
               
               {/* Date Display */}
-              <span className="text-theme-text-secondary text-label sm:text-caption uppercase tracking-widest">
+              <span className="text-theme-text-secondary text-xs sm:text-sm uppercase tracking-widest">
                 {mounted ? currentTime.toLocaleDateString('en-US', {
                   weekday: 'short',
                   month: 'short',
@@ -137,7 +137,7 @@ export default function Home() {
       
       {/* Footer */}
       <footer className="relative z-10 p-4 sm:p-6">
-        <div className="text-center text-theme-text-secondary text-caption">
+        <div className="text-center text-theme-text-secondary text-sm">
           Made by{' '}
           <a
             href="https://dicksonneoh.com"
