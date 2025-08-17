@@ -153,11 +153,89 @@ const config: Config = {
   				to: {
   					height: '0'
   				}
+  			},
+  			'fade-in': {
+  				from: {
+  					opacity: '0',
+  					transform: 'translateY(10px)'
+  				},
+  				to: {
+  					opacity: '1',
+  					transform: 'translateY(0)'
+  				}
+  			},
+  			'fade-out': {
+  				from: {
+  					opacity: '1',
+  					transform: 'translateY(0)'
+  				},
+  				to: {
+  					opacity: '0',
+  					transform: 'translateY(10px)'
+  				}
+  			},
+  			'bounce-in': {
+  				'0%': {
+  					opacity: '0',
+  					transform: 'scale(0.3)'
+  				},
+  				'50%': {
+  					opacity: '1',
+  					transform: 'scale(1.05)'
+  				},
+  				'70%': {
+  					transform: 'scale(0.9)'
+  				},
+  				'100%': {
+  					transform: 'scale(1)'
+  				}
+  			},
+  			'pulse-glow': {
+  				'0%': {
+  					boxShadow: '0 0 5px hsl(var(--theme-accent) / 0.5)'
+  				},
+  				'50%': {
+  					boxShadow: '0 20px hsl(var(--theme-accent) / 0.8)'
+  				},
+  				'10%': {
+  					boxShadow: '0 0 5px hsl(var(--theme-accent) / 0.5)'
+  				}
+  			},
+  			'shake': {
+  				'0%, 100%': {
+  					transform: 'translateX(0)'
+  				},
+  				'25%': {
+  					transform: 'translateX(-5px)'
+  				},
+  				'75%': {
+  					transform: 'translateX(5px)'
+  				}
+  			},
+  			'success-celebration': {
+  				'0%': {
+  					transform: 'scale(1)',
+  					boxShadow: '0 0 hsl(var(--theme-progress) / 0.7)'
+  				},
+  				'50%': {
+  					transform: 'scale(1.05)',
+  					boxShadow: '0 0 10px hsl(var(--theme-progress) / 0.3)'
+  				},
+  				'100%': {
+  					transform: 'scale(1)',
+  					boxShadow: '0 0 0 20px hsl(var(--theme-progress) / 0)'
+  				}
   			}
   		},
   		animation: {
   			'accordion-down': 'accordion-down 0.2s ease-out',
-  			'accordion-up': 'accordion-up 0.2s ease-out'
+  			'accordion-up': 'accordion-up 0.2s ease-out',
+  			'fade-in': 'fade-in 0.3s ease-in-out',
+  			'fade-out': 'fade-out 0.3s ease-in-out',
+  			'bounce-in': 'bounce-in 0.6s ease-out',
+  			'pulse-glow': 'pulse-glow 2s infinite',
+  			'shake': 'shake 0.5s ease-in-out',
+  			'success-celebration': 'success-celebration 0.8s ease-out'
   		}
   	}
   },
