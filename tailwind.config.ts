@@ -137,6 +137,44 @@ const config: Config = {
   			'legacy-md': 'calc(var(--radius) - 2px)',
   			'legacy-sm': 'calc(var(--radius) - 4px)'
   		},
+  		boxShadow: {
+  			'xs': '0 1px 2px 0 rgb(0 0 0 / 0.05)',
+  			'sm': '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)',
+  			'md': '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
+  			'lg': '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
+  			'xl': '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)',
+  			'2xl': '0 25px 50px -12px rgb(0 0 0 / 0.25)',
+  			'3xl': '0 35px 60px -15px rgb(0 0 0 / 0.3)',
+  			'inner': 'inset 0 2px 4px 0 rgb(0 0 0 / 0.05)',
+  			'inner-md': 'inset 0 4px 8px 0 rgba(0, 0, 0, 0.08)',
+  			'inner-lg': 'inset 0 8px 16px 0 rgba(0, 0, 0, 0.12)',
+  			'none': 'none',
+  			// Premium shadow layers for cards
+  			'premium-xs': '0 1px 2px 0 rgba(0, 0, 0.05), 0 1px 3px 0 rgba(0, 0, 0, 0.06)',
+  			'premium-sm': '0 2px 4px 0 rgba(0, 0, 0, 0.06), 0 4px 6px -1px rgba(0, 0, 0, 0.08)',
+  			'premium-md': '0 4px 8px 0 rgba(0, 0, 0, 0.08), 0 6px 12px -2px rgba(0, 0, 0, 0.1)',
+  			'premium-lg': '0 8px 16px 0 rgba(0, 0, 0, 0.1), 0 12px 24px -4px rgba(0, 0, 0, 0.12)',
+  			'premium-xl': '0 16px 32px 0 rgba(0, 0, 0, 0.12), 0 24px 48px -8px rgba(0, 0, 0, 0.15)',
+  			'premium-2xl': '0 24px 48px 0 rgba(0, 0, 0, 0.15), 0 32px 64px -12px rgba(0, 0, 0, 0.18)',
+  			// Soft shadows for light themes
+  			'soft-xs': '0 1px 2px 0 rgba(0, 0, 0, 0.02), 0 1px 3px 0 rgba(0, 0, 0, 0.03)',
+  			'soft-sm': '0 2px 4px 0 rgba(0, 0, 0, 0.03), 0 4px 6px -1px rgba(0, 0, 0, 0.04)',
+  			'soft-md': '0 4px 8px 0 rgba(0, 0, 0, 0.04), 0 6px 12px -2px rgba(0, 0, 0, 0.05)',
+  			'soft-lg': '0 8px 16px 0 rgba(0, 0, 0, 0.05), 0 12px 24px -4px rgba(0, 0, 0, 0.06)',
+  			'soft-xl': '0 16px 32px 0 rgba(0, 0, 0, 0.06), 0 24px 48px -8px rgba(0, 0, 0, 0.08)',
+  			// Elevated shadows for dark themes
+  			'elevated-xs': '0 1px 2px 0 rgba(0, 0, 0, 0.15), 0 1px 3px 0 rgba(0, 0, 0, 0.12)',
+  			'elevated-sm': '0 2px 4px 0 rgba(0, 0, 0.18), 0 4px 6px -1px rgba(0, 0, 0, 0.15)',
+  			'elevated-md': '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 12px -2px rgba(0, 0, 0, 0.18)',
+  			'elevated-lg': '0 8px 16px 0 rgba(0, 0, 0, 0.22), 0 12px 24px -4px rgba(0, 0, 0, 0.2)',
+  			'elevated-xl': '0 16px 32px 0 rgba(0, 0, 0, 0.25), 0 24px 48px -8px rgba(0, 0, 0, 0.22)',
+  			// Colored shadows using theme variables
+  			'theme-xs': '0 1px 2px 0 hsl(var(--theme-accent) / 0.1), 0 1px 3px 0 hsl(var(--theme-accent) / 0.08)',
+  			'theme-sm': '0 2px 4px 0 hsl(var(--theme-accent) / 0.12), 0 4px 6px -1px hsl(var(--theme-accent) / 0.1)',
+  			'theme-md': '0 4px 8px 0 hsl(var(--theme-accent) / 0.15), 0 6px 12px -2px hsl(var(--theme-accent) / 0.12)',
+  			'theme-lg': '0 8px 16px 0 hsl(var(--theme-accent) / 0.18), 0 12px 24px -4px hsl(var(--theme-accent) / 0.15)',
+  			'theme-xl': '0 16px 32px 0 hsl(var(--theme-accent) / 0.2), 0 24px 48px -8px hsl(var(--theme-accent) / 0.18)',
+  		},
   		keyframes: {
   			'accordion-down': {
   				from: {

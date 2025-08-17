@@ -30,7 +30,7 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-theme-card-bg border-theme-card-border text-theme-text-primary max-w-md">
+      <DialogContent className="glassmorphism-modal text-theme-text-primary max-w-md">
         <DialogHeader>
           <DialogTitle className="text-title-sm font-bold text-theme-text-primary">Timer Settings</DialogTitle>
         </DialogHeader>

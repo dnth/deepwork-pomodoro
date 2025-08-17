@@ -163,7 +163,7 @@ export function YoutubePlaylist() {
   }, [activeCategory, isPlaying])
 
   return (
-    <div className="bg-theme-card-bg/30 backdrop-blur-sm border border-theme-card-border/30 rounded-xl p-6 shadow-2xl">
+    <div className="card-premium-glass rounded-xl p-6">
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-base sm:text-lg lg:text-xl font-bold text-theme-text-primary">Ambient Sounds</h2>
@@ -277,8 +277,9 @@ export function YoutubePlaylist() {
               </div>
             )}
           </div>
-        </div>
-      )}
-    </div>
-  )
-}
+                  </div>
+                )}
+                <div className="divider-gradient-secondary"></div>
+              </div>
+            )
+          }

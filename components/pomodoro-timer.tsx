@@ -86,7 +86,7 @@ export function PomodoroTimer() {
   ]
 
   return (
-    <div className="w-full bg-theme-card-bg/30 backdrop-blur-sm border border-theme-card-border/30 rounded-xl p-4 sm:p-6 lg:p-8 shadow-2xl">
+    <div className="w-full card-premium-glass rounded-xl p-4 sm:p-6 lg:p-8">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-2 sm:gap-3">
@@ -227,8 +227,8 @@ export function PomodoroTimer() {
           <RotateCcw className="w-4 h-4 mr-2" />
           Reset
         </Button>
-      </div>
-
-    </div>
-  )
-}
+              </div>
+              <div className="divider-gradient-secondary"></div>
+            </div>
+          )
+        }

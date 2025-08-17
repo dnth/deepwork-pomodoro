@@ -14,8 +14,8 @@ export function DailyQuote() {
 
   return (
     <div
-      className="w-full bg-theme-card-bg/30 backdrop-blur-sm border-theme-card-border/30 border rounded-xl p-4 sm:p-5 shadow-xl group hover:bg-theme-card-bg/40 transition-all duration-200"
-    >
+          className="w-full card-premium-glass rounded-xl p-4 sm:p-5 group hover:bg-theme-card-bg/40 transition-all duration-200"
+        >
       <div className="flex items-center gap-3 sm:gap-4">
         <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-theme-task-bg/20 rounded-lg">
           <Edit3 className="w-4 h-4 sm:w-5 sm:h-5 text-theme-task-text" />
@@ -31,6 +31,7 @@ export function DailyQuote() {
           />
         </div>
       </div>
-    </div>
+            <div className="divider-gradient-secondary"></div>
+          </div>
   )
 }

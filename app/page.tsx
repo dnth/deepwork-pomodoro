@@ -38,10 +38,16 @@ export default function Home() {
     effectiveLayout === "horizontal" ? "lg:grid-cols-2" : "grid-cols-1"
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-theme-background-from via-theme-background-via to-theme-background-to">
-
-      {/* Compact Header with App Name, Time, and Progress Bar */}
-      <header className="relative z-10 p-4 sm:p-6">
+    <div className="min-h-screen bg-gradient-to-br from-theme-background-from via-theme-background-via to-theme-background-to parallax-container">
+    
+          {/* Parallax background layers */}
+          <div className="parallax-element">
+            <div className="parallax-layer parallax-slow gradient-overlay-radial"></div>
+            <div className="parallax-layer parallax-medium grain-effect"></div>
+          </div>
+    
+          {/* Compact Header with App Name, Time, and Progress Bar */}
+          <header className="relative z-10 p-4 sm:p-6">
         <div className="flex items-center justify-between mb-2">
           {/* Left: App Name */}
           <h1 className="text-lg sm:text-xl font-bold text-theme-text-primary">Deep Work</h1>
@@ -102,7 +108,7 @@ export default function Home() {
       </header>
 
       {/* Main Content */}
-      <main className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-4 sm:pb-6">
+            <main className="parallax-content relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-4 sm:pb-6">
         {/* Daily Quote Section */}
         <div className="grid gap-4 sm:gap-6">
           {/* Daily Quote */}
