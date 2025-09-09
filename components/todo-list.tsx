@@ -1,6 +1,6 @@
 "use client"
 
-import type React from "react"
+import React from "react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -10,6 +10,7 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import { Plus, Trash2, GripVertical, Pencil } from "lucide-react"
 import { useTodos, taskTagConfig, type TaskTag, type Todo } from "@/hooks/use-todos"
 import { useState, useRef, useCallback } from "react"
+
 
 const TASK_TYPE_ORDER = ["deep", "focus", "quick"] as const
 const TASK_TYPE_PRIORITY: Record<string, number> = { deep: 0, focus: 1, quick: 2 }
@@ -21,6 +22,40 @@ type DragState = {
   draggedId: string | null
   overId: string | null
 }
+
+const isValidUrl = (string: string): boolean => {
+  try {
+    const url = new URL(string);
+    // Must have a valid hostname with at least one dot or be localhost
+    return url.hostname.length > 0 && (url.hostname.includes('.') || url.hostname === 'localhost');
+  } catch (_) {
+    // Check for URLs without protocol
+    try {
+      const url = new URL(`http://${string}`);
+      // Must have a valid hostname with at least one dot or be localhost
+      return url.hostname.length > 0 && (url.hostname.includes('.') || url.hostname === 'localhost');
+    } catch (_) {
+      return false;
+    }
+  }
+};
+
+const ClickableText: React.FC<{ text: string }> = ({ text }) => {
+  if (isValidUrl(text)) {
+    const url = text.startsWith('http') ? text : `http://${text}`;
+    return (
+      <a
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-theme-accent hover:underline break-words cursor-pointer"
+      >
+        {text}
+      </a>
+    );
+  }
+  return <span className="break-words cursor-text">{text}</span>;
+};
 
 export function TodoList() {
   const {
@@ -264,7 +299,7 @@ export function TodoList() {
                       onDragEnd={onDragEnd}
                       className={draggableItemClasses(
                         todo.id,
-                        "flex items-center gap-3 p-3 bg-theme-input-bg/50 rounded-lg hover:bg-theme-card-bg/40 transition-colors group cursor-grab active:cursor-grabbing"
+                        "flex items-center gap-3 p-3 bg-theme-input-bg/50 rounded-lg hover:bg-theme-card-bg/40 transition-colors group"
                       )}
                     >
                       <div className="text-theme-text-muted opacity-60 group-hover:opacity-100 flex items-center">
@@ -349,7 +384,7 @@ export function TodoList() {
                           </div>
                         ) : (
                           <span className="flex-1 transition-all text-theme-text-primary text-sm break-words">
-                            {todo.text}
+                            <ClickableText text={todo.text} />
                           </span>
                         )}
                       </div>
@@ -421,7 +456,7 @@ export function TodoList() {
                       onDragEnd={onDragEnd}
                       className={draggableItemClasses(
                         todo.id,
-                        "flex items-center gap-2 p-2 bg-theme-input-bg/30 rounded-lg hover:bg-theme-card-bg/30 transition-colors group cursor-grab active:cursor-grabbing"
+                        "flex items-center gap-2 p-2 bg-theme-input-bg/30 rounded-lg hover:bg-theme-card-bg/30 transition-colors group"
                       )}
                     >
                       <div className="text-theme-text-muted opacity-60 group-hover:opacity-100 flex items-center">
@@ -506,7 +541,7 @@ export function TodoList() {
                           </div>
                         ) : (
                           <span className="flex-1 transition-all text-theme-text-muted line-through text-sm break-words">
-                            {todo.text}
+                            <ClickableText text={todo.text} />
                           </span>
                         )}
                       </div>
@@ -547,7 +582,7 @@ export function TodoList() {
           </>
         )}
       </div>
-            <div className="divider-gradient-secondary"></div>
-          </div>
-        )
-      }
+      <div className="divider-gradient-secondary"></div>
+    </div>
+  )
+}
