@@ -5,6 +5,7 @@ import { Play, Pause, RotateCcw } from "lucide-react"
 import { usePomodoro } from "@/hooks/use-pomodoro"
 import { useSettings } from "@/hooks/use-settings"
 import { FocusRing } from "@/components/focus-ring"
+import { taskTagConfig } from "@/hooks/use-todos"
 import { useEffect, useMemo, useState } from "react"
 
 type Preset = "deep" | "focus" | "quick"
@@ -79,10 +80,10 @@ export function PomodoroTimer() {
     resetTimerTo(presetConfig[preset].minutes * 60)
   }
 
-  const presets: { key: Preset; label: string }[] = [
-    { key: "deep", label: presetConfig.deep.label },
-    { key: "focus", label: presetConfig.focus.label },
-    { key: "quick", label: presetConfig.quick.label },
+  const presets: { key: Preset; label: string; emoji: string }[] = [
+    { key: "deep", label: presetConfig.deep.label, emoji: taskTagConfig.deep.symbol },
+    { key: "focus", label: presetConfig.focus.label, emoji: taskTagConfig.focus.symbol },
+    { key: "quick", label: presetConfig.quick.label, emoji: taskTagConfig.quick.symbol },
   ]
 
   return (
@@ -118,7 +119,7 @@ export function PomodoroTimer() {
               }`}
               style={isActive ? { backgroundColor: '#0d9488' } : {}}
             >
-              {p.label}
+              {p.emoji} {p.label}
             </Button>
           )
         })}
