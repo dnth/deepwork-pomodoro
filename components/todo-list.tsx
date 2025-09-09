@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react"
+import React, { useEffect, useRef } from "react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import { Plus, Trash2, GripVertical, Pencil } from "lucide-react"
 import { useTodos, taskTagConfig, type TaskTag, type Todo } from "@/hooks/use-todos"
-import { useState, useRef, useCallback } from "react"
+import { useState, useCallback } from "react"
 
 
 const TASK_TYPE_ORDER = ["deep", "focus", "quick"] as const
@@ -58,6 +58,7 @@ const ClickableText: React.FC<{ text: string }> = ({ text }) => {
 };
 
 export function TodoList() {
+  console.log('TodoList component rendering');
   const {
     todos,
     addTodo,
@@ -77,6 +78,10 @@ export function TodoList() {
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editingText, setEditingText] = useState<string>("")
   const [editingTag, setEditingTag] = useState<TaskTag>("focus")
+  const [isAnimating, setIsAnimating] = useState(false)
+  const [isMounted, setIsMounted] = useState(false)
+  const taskTypeSelectorRef = useRef<HTMLDivElement>(null)
+  const [indicatorStyle, setIndicatorStyle] = useState<{ left: string; width: string }>({ left: '0px', width: '0px' })
 
   const getProgress = () => {
     if (todos.length === 0) return 0
@@ -89,6 +94,76 @@ export function TodoList() {
   // Separate completed and incomplete tasks
   const completedTasks = todos.filter((todo) => todo.completed)
   const incompleteTasks = todos.filter((todo) => !todo.completed)
+
+  // Set mounted state
+  useEffect(() => {
+    console.log('TodoList component mounting');
+    setIsMounted(true);
+    return () => {
+      console.log('TodoList component unmounting');
+      setIsMounted(false);
+    };
+  }, []);
+
+  // Keyboard shortcut handler
+  useEffect(() => {
+    if (!isMounted) return;
+    
+    const handleKeyDown = (e: KeyboardEvent) => {
+      console.log('Key event detected:', e.key, e.ctrlKey, e.shiftKey, e.code);
+      // Try different ways to detect the key combination
+      if (e.ctrlKey && e.shiftKey) {
+        if (e.key === '1' || e.code === 'Digit1') {
+          e.preventDefault()
+          console.log('Ctrl+Shift+1 pressed - setting to deep')
+          setSelectedTag('deep')
+          triggerAnimation()
+        } else if (e.key === '2' || e.code === 'Digit2') {
+          e.preventDefault()
+          console.log('Ctrl+Shift+2 pressed - setting to focus')
+          setSelectedTag('focus')
+          triggerAnimation()
+        } else if (e.key === '3' || e.code === 'Digit3') {
+          e.preventDefault()
+          console.log('Ctrl+Shift+3 pressed - setting to quick')
+          setSelectedTag('quick')
+          triggerAnimation()
+        }
+      }
+    }
+
+    console.log('Adding keydown event listener');
+    window.addEventListener('keydown', handleKeyDown, true); // Use capture phase
+    return () => {
+      console.log('Removing keydown event listener');
+      window.removeEventListener('keydown', handleKeyDown, true);
+    }
+  }, [setSelectedTag, isMounted])
+
+  // Update sliding indicator position when selectedTag changes
+  useEffect(() => {
+    if (!taskTypeSelectorRef.current) return
+    
+    const container = taskTypeSelectorRef.current
+    const activeButton = container.querySelector(`[data-state="on"]`) as HTMLElement
+    
+    if (activeButton) {
+      const containerRect = container.getBoundingClientRect()
+      const buttonRect = activeButton.getBoundingClientRect()
+      const left = buttonRect.left - containerRect.left
+      const width = buttonRect.width
+      
+      setIndicatorStyle({
+        left: `${left}px`,
+        width: `${width}px`
+      })
+    }
+  }, [selectedTag, isMounted])
+
+  const triggerAnimation = () => {
+    setIsAnimating(true)
+    setTimeout(() => setIsAnimating(false), 300) // Match CSS animation duration
+  }
 
   const handleAddTask = () => {
     if (newTask.trim()) {
@@ -198,18 +273,32 @@ export function TodoList() {
           aria-label="Add new task"
         >
           {/* Task type selector */}
-          <div className="flex-shrink-0">
+          <div
+            ref={taskTypeSelectorRef}
+            className="flex-shrink-0 relative"
+          >
+            {/* Sliding indicator */}
+            <div
+              className="absolute top-0 rounded-md transition-all duration-300 ease-in-out z-0 shadow-lg"
+              style={{
+                backgroundColor: '#0d9488',
+                left: indicatorStyle.left,
+                width: indicatorStyle.width,
+                height: '100%'
+              }}
+            />
             <ToggleGroup
               type="single"
               value={selectedTag}
               onValueChange={(v) => v && setSelectedTag(v as TaskTag)}
-              className="flex flex-row gap-1"
+              className="flex flex-row gap-1 relative z-10"
               aria-label="Task type"
             >
               {"deep" in taskTagConfig ? (
                 <ToggleGroupItem
                   value="deep"
-                  className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-caption rounded-md px-2 py-1"
+                  className="data-[state=on]:text-theme-text-primary text-caption rounded-md px-2 py-1 relative z-10"
+                  style={selectedTag === 'deep' ? { backgroundColor: '#0d9488' } : undefined}
                   aria-label="Deep Work 50 minutes"
                 >
                   {taskTagConfig["deep"].symbol}&nbsp;50m
@@ -218,7 +307,8 @@ export function TodoList() {
 
               <ToggleGroupItem
                 value="focus"
-                className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-caption rounded-md px-2 py-1"
+                className="data-[state=on]:text-theme-text-primary text-caption rounded-md px-2 py-1 relative z-10"
+                style={selectedTag === 'focus' ? { backgroundColor: '#0d9488' } : undefined}
                 aria-label="Focus 25 minutes"
               >
                 {taskTagConfig["focus"].symbol}&nbsp;25m
@@ -227,7 +317,8 @@ export function TodoList() {
               {/* 5m option maps to "quick" tag */}
               <ToggleGroupItem
                 value={"quick" as unknown as TaskTag}
-                className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-caption rounded-md px-2 py-1"
+                className="data-[state=on]:text-theme-text-primary text-caption rounded-md px-2 py-1 relative z-10"
+                style={selectedTag === 'quick' ? { backgroundColor: '#0d9488' } : undefined}
                 aria-label="Quick 5 minutes"
               >
                 {(taskTagConfig as any)["quick"]?.symbol ?? "⚡"}&nbsp;5m
@@ -261,7 +352,8 @@ export function TodoList() {
             <Button
               onClick={handleAddTask}
               aria-label="Add task"
-              className="bg-theme-accent hover:bg-theme-accent-hover text-theme-text-primary rounded-md px-3 h-10"
+              className="text-theme-text-primary rounded-md px-3 h-10"
+              style={{ backgroundColor: '#0d9488' }}
             >
               <Plus className="w-4 h-4" />
               <span className="sr-only">Add</span>
@@ -341,7 +433,8 @@ export function TodoList() {
                               {"deep" in taskTagConfig ? (
                                 <ToggleGroupItem
                                   value="deep"
-                                  className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-label rounded-lg px-2 py-1"
+                                  className="data-[state=on]:text-theme-text-primary text-label rounded-lg px-2 py-1"
+                                  style={editingTag === 'deep' ? { backgroundColor: '#0d9488' } : undefined}
                                   aria-label="Deep Work 50 minutes"
                                 >
                                   {taskTagConfig["deep"].symbol}&nbsp;50m
@@ -349,7 +442,8 @@ export function TodoList() {
                               ) : null}
                               <ToggleGroupItem
                                 value="focus"
-                                className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-label rounded-lg px-2 py-1"
+                                className="data-[state=on]:text-theme-text-primary text-label rounded-lg px-2 py-1"
+                                style={editingTag === 'focus' ? { backgroundColor: '#0d9488' } : undefined}
                                 aria-label="Focus 25 minutes"
                               >
                                 {taskTagConfig["focus"].symbol}&nbsp;25m
@@ -357,7 +451,8 @@ export function TodoList() {
                               {/* 5m option maps to "quick" tag */}
                               <ToggleGroupItem
                                 value={"quick" as unknown as TaskTag}
-                                className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-label rounded-lg px-2 py-1"
+                               className="data-[state=on]:text-theme-text-primary text-label rounded-lg px-2 py-1"
+                               style={editingTag === 'quick' ? { backgroundColor: '#0d9488' } : undefined}
                                 aria-label="Quick 5 minutes"
                               >
                                 {(taskTagConfig as any)["quick"]?.symbol ?? "⚡"}&nbsp;5m
@@ -368,7 +463,8 @@ export function TodoList() {
                               <Button
                                 onClick={saveEditing}
                                 size="sm"
-                                className="bg-theme-accent hover:bg-theme-accent-hover text-theme-text-primary rounded-lg px-3"
+                                className="text-theme-text-primary rounded-lg px-3"
+                                style={{ backgroundColor: '#0d9488' }}
                               >
                                 Save
                               </Button>
@@ -498,7 +594,8 @@ export function TodoList() {
                               {"deep" in taskTagConfig ? (
                                 <ToggleGroupItem
                                   value="deep"
-                                  className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-label rounded-lg px-2 py-1"
+                                  className="data-[state=on]:text-theme-text-primary text-label rounded-lg px-2 py-1"
+                                  style={editingTag === 'deep' ? { backgroundColor: '#0d9488' } : undefined}
                                   aria-label="Deep Work 50 minutes"
                                 >
                                   {taskTagConfig["deep"].symbol}&nbsp;50m
@@ -506,7 +603,8 @@ export function TodoList() {
                               ) : null}
                               <ToggleGroupItem
                                 value="focus"
-                                className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-label rounded-lg px-2 py-1"
+                                className="data-[state=on]:text-theme-text-primary text-label rounded-lg px-2 py-1"
+                                style={editingTag === 'focus' ? { backgroundColor: '#0d9488' } : undefined}
                                 aria-label="Focus 25 minutes"
                               >
                                 {taskTagConfig["focus"].symbol}&nbsp;25m
@@ -514,7 +612,8 @@ export function TodoList() {
                               {/* 5m option maps to "quick" tag */}
                               <ToggleGroupItem
                                 value={"quick" as unknown as TaskTag}
-                                className="data-[state=on]:bg-theme-accent/20 data-[state=on]:text-theme-text-primary text-label rounded-lg px-2 py-1"
+                                className="data-[state=on]:text-theme-text-primary text-label rounded-lg px-2 py-1"
+                                style={editingTag === 'quick' ? { backgroundColor: '#0d9488' } : undefined}
                                 aria-label="Quick 5 minutes"
                               >
                                 {(taskTagConfig as any)["quick"]?.symbol ?? "⚡"}&nbsp;5m
@@ -525,7 +624,8 @@ export function TodoList() {
                               <Button
                                 onClick={saveEditing}
                                 size="sm"
-                                className="bg-theme-accent hover:bg-theme-accent-hover text-theme-text-primary rounded-xl px-3"
+                                className="text-theme-text-primary rounded-xl px-3"
+                                style={{ backgroundColor: '#0d9488' }}
                               >
                                 Save
                               </Button>

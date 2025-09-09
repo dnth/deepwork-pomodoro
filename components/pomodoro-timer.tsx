@@ -113,9 +113,10 @@ export function PomodoroTimer() {
               onClick={() => handleSelectPreset(p.key)}
               className={`flex-1 rounded-md p-3 transition-all duration-200 ${
                 isActive
-                  ? "bg-theme-accent text-theme-text-primary shadow-lg"
+                  ? "text-theme-text-primary shadow-lg"
                   : "text-theme-text-secondary hover:text-theme-text-primary hover:bg-theme-card-bg/40"
               }`}
+              style={isActive ? { backgroundColor: '#0d9488' } : {}}
             >
               {p.label}
             </Button>
@@ -209,7 +210,8 @@ export function PomodoroTimer() {
         <Button
           onClick={isRunning ? pauseTimer : startTimer}
           size="lg"
-          className="bg-theme-accent hover:bg-theme-accent-hover text-theme-text-primary px-6 py-3 rounded-lg shadow-lg transition-all duration-200 hover:scale-105"
+          className="hover:bg-theme-accent-hover text-theme-text-primary px-6 py-3 rounded-lg shadow-lg transition-all duration-200 hover:scale-105"
+          style={{ backgroundColor: '#0d9488' }}
         >
           {isRunning ? <Pause className="w-5 h-5 mr-2" /> : <Play className="w-5 h-5 mr-2" />}
           {isRunning ? "Pause" : "Start"}

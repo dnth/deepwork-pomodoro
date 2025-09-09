@@ -160,6 +160,22 @@
     animation: successCelebration 0.8s ease-out;
   }
   
+  .animate-slide-in-left {
+    animation: slideInLeft 0.3s ease-out;
+  }
+  
+  .animate-slide-in-right {
+    animation: slideInRight 0.3s ease-out;
+  }
+  
+  .animate-slide-in-top {
+    animation: slideInTop 0.3s ease-out;
+  }
+  
+  .animate-slide-in-bottom {
+    animation: slideInBottom 0.3s ease-out;
+  }
+  
   /* Glassmorphism effects */
   .glassmorphism {
     background: rgba(255, 255, 255, 0.1);
@@ -540,5 +556,49 @@
   100% {
     transform: scale(1);
     box-shadow: 0 0 0 20px hsl(var(--theme-progress) / 0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInTop {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInBottom {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
