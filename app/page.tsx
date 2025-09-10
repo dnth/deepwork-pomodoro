@@ -3,19 +3,19 @@
 import { PomodoroTimer } from "@/components/pomodoro-timer"
 import { TodoList } from "@/components/todo-list"
 import { YoutubePlaylist } from "@/components/youtube-playlist"
-import { SettingsModal } from "@/components/settings-modal"
 import { DayProgressBar } from "@/components/day-progress-blocks"
-import { Settings, Rows3, Columns3 } from "lucide-react"
+import { Rows3, Columns3, Moon, Sun } from "lucide-react"
 import { useState, useEffect } from "react"
 import { DailyQuote } from "@/components/daily-quote"
 import { useLayout } from "@/hooks/use-layout"
+import { useTheme } from "next-themes"
 import Image from "next/image"
 
 export default function Home() {
-  const [showSettings, setShowSettings] = useState(false)
   const [mounted, setMounted] = useState(false)
   const [currentTime, setCurrentTime] = useState(new Date())
   const { effectiveLayout, preferredLayout, toggleLayout, isMobile, hydrated } = useLayout()
+  const { theme, setTheme } = useTheme()
 
   // Only show UI that depends on client state after mounting to prevent hydration mismatch
   useEffect(() => {
@@ -83,7 +83,7 @@ export default function Home() {
             </div>
           </div>
           
-          {/* Right: Layout Toggle + Settings */}
+          {/* Right: Layout Toggle + Theme Toggle */}
           <div className="flex items-center gap-1.5">
             {/* Hide toggle on mobile (auto vertical) and until hydrated to avoid mismatch */}
             {!isMobile && hydrated ? (
@@ -101,12 +101,16 @@ export default function Home() {
               </button>
             ) : null}
             <button
-              onClick={() => setShowSettings(true)}
+              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
               className="text-theme-text-secondary hover:text-theme-text-primary hover:bg-white/10 rounded-lg p-2 transition-colors"
-              aria-label="Open settings"
-              title="Settings"
+              aria-label="Toggle theme"
+              title="Toggle theme"
             >
-              <Settings className="w-4 h-4" />
+              {mounted && (theme === 'dark' ? (
+                <Sun className="w-4 h-4" />
+              ) : (
+                <Moon className="w-4 h-4" />
+              ))}
             </button>
           </div>
         </div>
@@ -146,9 +150,6 @@ export default function Home() {
         </div>
       </main>
 
-      {/* Settings Modal */}
-      <SettingsModal isOpen={showSettings} onClose={() => setShowSettings(false)} />
-      
       {/* Footer */}
       <footer className="relative z-10 p-4 sm:p-6">
         <div className="text-center text-theme-text-secondary text-sm">

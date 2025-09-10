@@ -61,7 +61,7 @@ export function FocusRing({
       switch (visualState) {
         case "focus":
           return {
-            ring: "text-theme-accent",
+            ring: "text-theme-progress",
             glow: "",
             background: "text-theme-card-border"
           }
@@ -180,7 +180,7 @@ export function FocusRing({
       {/* Background glow effect */}
       <div
         className={`absolute inset-0 rounded-full blur-md scale-110 opacity-40 ${
-          visualState === 'focus' ? 'bg-theme-accent/20' :
+          visualState === 'focus' ? 'bg-theme-progress/20' :
           visualState === 'break' ? 'bg-theme-progress/20' : 'bg-destructive/20'
         }`}
         style={{ animation: 'none' }}
@@ -231,7 +231,7 @@ export function FocusRing({
       <div className="absolute inset-0 flex items-center justify-center" style={{ animation: 'none' }} aria-hidden="true">
         <div className={`w-4 h-4 rounded-full ${
           isRunning
-            ? `${visualState === 'focus' ? 'bg-theme-accent' :
+            ? `${visualState === 'focus' ? 'bg-theme-progress' :
                 visualState === 'break' ? 'bg-theme-progress' : 'bg-destructive'}`
             : 'bg-theme-text-muted'
         }`}></div>
