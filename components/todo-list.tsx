@@ -63,13 +63,13 @@ const ClickableText: React.FC<{ text: string }> = ({ text }) => {
         href={url}
         target="_blank"
         rel="noopener noreferrer"
-        className="text-theme-accent hover:underline break-words cursor-pointer"
+        className="text-theme-accent hover:underline break-words cursor-pointer select-text"
       >
         {text}
       </a>
     );
   }
-  return <span className="break-words cursor-text">{text}</span>;
+  return <span className="break-words cursor-text select-text">{text}</span>;
 };
 
 const TodoItem: React.FC<{
