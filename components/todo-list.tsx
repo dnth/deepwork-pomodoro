@@ -26,16 +26,28 @@ type DragState = {
 }
 
 const isValidUrl = (string: string): boolean => {
+  // Reject purely numeric strings immediately
+  if (/^\d+$/.test(string)) {
+    return false;
+  }
+  
+  // Reject strings with spaces
+  if (string.includes(' ')) {
+    return false;
+  }
+  
   try {
     const url = new URL(string);
     // Must have a valid hostname with at least one dot or be localhost
-    return url.hostname.length > 0 && (url.hostname.includes('.') || url.hostname === 'localhost');
+    return url.hostname.length > 0 &&
+           (url.hostname.includes('.') || url.hostname === 'localhost');
   } catch (_) {
     // Check for URLs without protocol
     try {
       const url = new URL(`http://${string}`);
       // Must have a valid hostname with at least one dot or be localhost
-      return url.hostname.length > 0 && (url.hostname.includes('.') || url.hostname === 'localhost');
+      return url.hostname.length > 0 &&
+             (url.hostname.includes('.') || url.hostname === 'localhost');
     } catch (_) {
       return false;
     }
