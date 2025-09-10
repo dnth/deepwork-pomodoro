@@ -38,12 +38,10 @@ export default function Home() {
     effectiveLayout === "horizontal" ? "lg:grid-cols-2" : "grid-cols-1"
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-theme-background-from via-theme-background-via to-theme-background-to parallax-container">
+    <div className="min-h-screen bg-background parallax-container">
     
           {/* Parallax background layers */}
           <div className="parallax-element">
-            <div className="parallax-layer parallax-slow gradient-overlay-radial"></div>
-            <div className="parallax-layer parallax-medium grain-effect"></div>
           </div>
     
           {/* Compact Header with App Name, Time, and Progress Bar */}

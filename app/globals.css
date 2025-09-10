@@ -10,7 +10,7 @@
 
 @layer base {
   :root {
-    --background: 210 40% 98%;        /* bg-slate-50: #f8fafc */
+    --background: 0 0% 100%;          /* pure white */
     --foreground: 222 84% 5%;         /* text-slate-900: #0f172a */
     --card: 0 0% 100%;                /* bg-white: #ffffff */
     --card-foreground: 222 84% 5%;    /* text-slate-900: #0f172a */
@@ -57,9 +57,9 @@
     --radius-xl: 16px;
 
     /* Custom theme variables - Daylight Focus Palette */
-    --theme-background-from: 210 40% 98%;  /* bg-slate-50: #f8fafc */
-    --theme-background-via: 0 0% 100%;     /* bg-white: #ffffff */
-    --theme-background-to: 210 40% 98%;    /* bg-slate-50: #f8fafc */
+    --theme-background-from: 0 0% 100%;    /* pure white */
+    --theme-background-via: 0 0% 100%;     /* pure white */
+    --theme-background-to: 0 0% 100%;      /* pure white */
     --theme-card-bg: 0 0% 100%;            /* bg-white: #ffffff */
     --theme-card-border: 215 20% 91%;      /* border-slate-200: #e2e8f0 */
     --theme-text-primary: 222 84% 5%;      /* text-slate-900: #0f172a */
