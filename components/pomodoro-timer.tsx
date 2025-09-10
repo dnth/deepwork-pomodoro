@@ -6,7 +6,7 @@ import { usePomodoro } from "@/hooks/use-pomodoro"
 import { useSettings } from "@/hooks/use-settings"
 import { FocusRing } from "@/components/focus-ring"
 import { taskTagConfig } from "@/hooks/use-todos"
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 
 type Preset = "deep" | "focus" | "quick"
 
@@ -21,6 +21,8 @@ const presetToMode = {
   focus: "pomodoro",
   quick: "shortBreak",
 } as const satisfies Record<Preset, "pomodoro" | "shortBreak">
+
+const ACCENT_COLOR = 'hsl(var(--theme-accent))'
 
 export function PomodoroTimer() {
   const { settings } = useSettings()
@@ -41,6 +43,10 @@ export function PomodoroTimer() {
   // Track the selected preset locally (default to "focus")
   const [selectedPreset, setSelectedPreset] = useState<Preset>("focus")
 
+  const [isMounted, setIsMounted] = useState(false)
+  const taskTypeSelectorRef = useRef<HTMLDivElement>(null)
+  const [indicatorStyle, setIndicatorStyle] = useState<{ left: string; width: string }>({ left: '0px', width: '0px' })
+
   // On mount: if not running, default to "focus" and sync underlying mode; do not reset if already running
   useEffect(() => {
     if (!isRunning) {
@@ -51,6 +57,31 @@ export function PomodoroTimer() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []) // run once on mount
+
+  useEffect(() => {
+    setIsMounted(true)
+    return () => setIsMounted(false)
+  }, [])
+
+  // Update sliding indicator position when selectedPreset changes
+  useEffect(() => {
+    if (!taskTypeSelectorRef.current || !isMounted) return
+
+    const container = taskTypeSelectorRef.current
+    const activeButton = container.querySelector(`[data-state="on"]`) as HTMLElement
+
+    if (activeButton) {
+      const containerRect = container.getBoundingClientRect()
+      const buttonRect = activeButton.getBoundingClientRect()
+      const left = buttonRect.left - containerRect.left
+      const width = buttonRect.width
+
+      setIndicatorStyle({
+        left: `${left}px`,
+        width: `${width}px`
+      })
+    }
+  }, [selectedPreset, isMounted])
 
   // Total duration in seconds based on selected preset
   const totalDurationSec = useMemo(
@@ -104,7 +135,17 @@ export function PomodoroTimer() {
       </div>
 
       {/* Preset Buttons */}
-      <div className="flex bg-theme-input-bg/50 rounded-lg p-1 mb-6">
+      <div className="flex bg-theme-input-bg/50 rounded-lg p-1 mb-6 relative" ref={taskTypeSelectorRef}>
+        {/* Sliding indicator */}
+        <div
+          className="absolute top-0 rounded-md transition-all duration-300 ease-in-out z-0 shadow-lg"
+          style={{
+            backgroundColor: ACCENT_COLOR,
+            left: indicatorStyle.left,
+            width: indicatorStyle.width,
+            height: '100%'
+          }}
+        />
         {presets.map((p) => {
           const isActive = selectedPreset === p.key
           return (
@@ -112,12 +153,13 @@ export function PomodoroTimer() {
               key={p.key}
               variant="ghost"
               onClick={() => handleSelectPreset(p.key)}
-              className={`flex-1 rounded-md p-3 transition-all duration-200 ${
+              data-state={isActive ? "on" : "off"}
+              className={`flex-1 rounded-md p-3 transition-all duration-200 relative z-10 ${
                 isActive
                   ? "text-theme-text-primary shadow-lg"
                   : "text-theme-text-secondary hover:text-theme-text-primary hover:bg-theme-card-bg/40"
               }`}
-              style={isActive ? { backgroundColor: '#0d9488' } : {}}
+              style={isActive ? { backgroundColor: ACCENT_COLOR } : {}}
             >
               {p.emoji} {p.label}
             </Button>
