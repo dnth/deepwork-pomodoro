@@ -4,7 +4,7 @@ import { useReducer, useEffect, useCallback, useRef } from "react"
 import { useSettings } from "./use-settings"
 import { useLocalStorage } from "./use-local-storage"
 
-type TimerMode = "pomodoro" | "shortBreak" | "longBreak"
+type TimerMode = "deep" | "focus" | "quick"
 
 interface TimerState {
   timeLeft: number
@@ -50,22 +50,22 @@ export function usePomodoro() {
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
   
   const [state, dispatch] = useReducer(timerReducer, {
-    timeLeft: settings.pomodoroDuration * 60,
+    timeLeft: 25 * 60, // Default to 25 minutes initially
     isRunning: false,
-    currentMode: "pomodoro" as TimerMode,
+    currentMode: "focus" as TimerMode,
   })
 
   const getDuration = useCallback(
     (mode: TimerMode) => {
       switch (mode) {
-        case "pomodoro":
-          return settings.pomodoroDuration * 60
-        case "shortBreak":
-          return settings.shortBreakDuration * 60
-        case "longBreak":
-          return settings.longBreakDuration * 60
+        case "deep":
+          return settings.deepDuration * 60
+        case "focus":
+          return settings.focusDuration * 60
+        case "quick":
+          return settings.quickDuration * 60
         default:
-          return settings.pomodoroDuration * 60
+          return settings.focusDuration * 60
       }
     },
     [settings],
@@ -77,7 +77,7 @@ export function usePomodoro() {
     if (!state.isRunning && state.timeLeft !== duration) {
       dispatch({ type: "RESET", duration })
     }
-  }, [settings, getDuration])
+  }, [settings, getDuration, state.isRunning, state.timeLeft, state.currentMode])
 
   const setMode = useCallback(
     (mode: TimerMode) => {
@@ -146,11 +146,11 @@ export function usePomodoro() {
   // Update browser tab title with timer
   useEffect(() => {
     if (typeof document !== 'undefined') {
-      const modeLabel = state.currentMode === "pomodoro" ? "Pomodoro" : 
-                       state.currentMode === "shortBreak" ? "Short Break" : "Long Break"
+      const modeLabel = state.currentMode === "deep" ? "Deep Focus" :
+                       state.currentMode === "focus" ? "Focus" : "Quick Break"
       const timeDisplay = formatTime(state.timeLeft)
       const statusIcon = state.isRunning ? "⏰" : "⏸️"
-      
+
       document.title = `${statusIcon} ${timeDisplay} - ${modeLabel} | Deep Work`
     }
   }, [state.timeLeft, state.isRunning, state.currentMode, formatTime])
@@ -159,29 +159,24 @@ export function usePomodoro() {
   useEffect(() => {
     if (state.timeLeft === 0 && state.isRunning) {
       dispatch({ type: "COMPLETE" })
-      
-      if (state.currentMode === "pomodoro") {
+
+      if (state.currentMode === "deep" || state.currentMode === "focus") {
         setCompletedToday((prev) => prev + 1)
       }
-      
+
       // Notification
       if (settings.notifications && typeof window !== 'undefined' && Notification.permission === "granted") {
-        const message = state.currentMode === 'pomodoro' 
-          ? "Time for a break!" 
+        const message = (state.currentMode === 'deep' || state.currentMode === 'focus')
+          ? "Time for a quick break!"
           : "Break time is over!"
         new Notification("Deep Work", { body: message, icon: "/favicon.ico" })
       }
 
-      // Auto start breaks
-      if (settings.autoStartBreaks) {
-        const newCompletedCount = state.currentMode === "pomodoro" ? completedToday + 1 : completedToday
-        const nextMode = state.currentMode === "pomodoro" 
-          ? (newCompletedCount % 4 === 0 ? "longBreak" : "shortBreak") 
-          : "pomodoro"
-        
+      // Auto start breaks - simplified: after deep/focus, start quick
+      if (settings.autoStartBreaks && (state.currentMode === "deep" || state.currentMode === "focus")) {
         setTimeout(() => {
-          const duration = getDuration(nextMode)
-          dispatch({ type: "SET_MODE", mode: nextMode, duration })
+          const duration = getDuration("quick")
+          dispatch({ type: "SET_MODE", mode: "quick", duration })
           dispatch({ type: "START" })
         }, 1000)
       }

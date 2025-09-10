@@ -3,9 +3,9 @@
 import { useLocalStorage } from "./use-local-storage"
 
 interface Settings {
-  pomodoroDuration: number
-  shortBreakDuration: number
-  longBreakDuration: number
+  deepDuration: number
+  focusDuration: number
+  quickDuration: number
   autoStartBreaks: boolean
   notifications: boolean
   soundAlerts: boolean
@@ -13,9 +13,9 @@ interface Settings {
 }
 
 const defaultSettings: Settings = {
-  pomodoroDuration: 25,
-  shortBreakDuration: 5,
-  longBreakDuration: 15,
+  deepDuration: 50,
+  focusDuration: 25,
+  quickDuration: 5,
   autoStartBreaks: false,
   notifications: true,
   soundAlerts: true,

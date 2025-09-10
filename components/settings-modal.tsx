@@ -41,46 +41,46 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
             <h3 className="text-body-lg font-semibold text-theme-task-text">Timer Durations</h3>
 
             <div className="space-y-2">
-              <Label className="text-theme-text-secondary" htmlFor="pomodoro">
-                Pomodoro (minutes)
+              <Label className="text-theme-text-secondary" htmlFor="deep">
+                Deep Focus (minutes)
               </Label>
               <Input
-                id="pomodoro"
+                id="deep"
                 type="number"
                 min="1"
                 max="60"
-                value={settings.pomodoroDuration}
-                onChange={(e) => updateSettings({ pomodoroDuration: Number.parseInt(e.target.value) || 25 })}
+                value={settings.deepDuration}
+                onChange={(e) => updateSettings({ deepDuration: Number.parseInt(e.target.value) || 50 })}
                 className="border-theme-input-border text-theme-text-primary"
               />
             </div>
 
             <div className="space-y-2">
-              <Label className="text-theme-text-secondary" htmlFor="shortBreak">
-                Short Break (minutes)
+              <Label className="text-theme-text-secondary" htmlFor="focus">
+                Focus (minutes)
               </Label>
               <Input
-                id="shortBreak"
+                id="focus"
                 type="number"
                 min="1"
                 max="30"
-                value={settings.shortBreakDuration}
-                onChange={(e) => updateSettings({ shortBreakDuration: Number.parseInt(e.target.value) || 5 })}
+                value={settings.focusDuration}
+                onChange={(e) => updateSettings({ focusDuration: Number.parseInt(e.target.value) || 25 })}
                 className="border-theme-input-border text-theme-text-primary"
               />
             </div>
 
             <div className="space-y-2">
-              <Label className="text-theme-text-secondary" htmlFor="longBreak">
-                Long Break (minutes)
+              <Label className="text-theme-text-secondary" htmlFor="quick">
+                Quick Break (minutes)
               </Label>
               <Input
-                id="longBreak"
+                id="quick"
                 type="number"
                 min="1"
                 max="60"
-                value={settings.longBreakDuration}
-                onChange={(e) => updateSettings({ longBreakDuration: Number.parseInt(e.target.value) || 15 })}
+                value={settings.quickDuration}
+                onChange={(e) => updateSettings({ quickDuration: Number.parseInt(e.target.value) || 5 })}
                 className="border-theme-input-border text-theme-text-primary"
               />
             </div>

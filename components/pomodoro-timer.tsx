@@ -16,11 +16,7 @@ const presetConfig = {
   quick: { label: "Quick", minutes: 5 },
 } as const satisfies Record<Preset, { label: string; minutes: number }>
 
-const presetToMode = {
-  deep: "pomodoro",
-  focus: "pomodoro",
-  quick: "shortBreak",
-} as const satisfies Record<Preset, "pomodoro" | "shortBreak">
+// Presets now map directly to modes
 
 const ACCENT_COLOR = 'hsl(var(--theme-accent))'
 
@@ -51,9 +47,7 @@ export function PomodoroTimer() {
   useEffect(() => {
     if (!isRunning) {
       setSelectedPreset("focus")
-      setMode(presetToMode["focus"])
-      // Align initial duration to 25m for Focus
-      resetTimerTo(presetConfig["focus"].minutes * 60)
+      setMode("focus")
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []) // run once on mount
@@ -105,10 +99,7 @@ export function PomodoroTimer() {
   // Handle preset button clicks
   const handleSelectPreset = (preset: Preset) => {
     setSelectedPreset(preset)
-    const mapped = presetToMode[preset]
-    setMode(mapped)
-    // Apply precise duration per preset
-    resetTimerTo(presetConfig[preset].minutes * 60)
+    setMode(preset)
   }
 
   const presets: { key: Preset; label: string; emoji: string }[] = [

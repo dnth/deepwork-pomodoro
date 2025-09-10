@@ -6,7 +6,7 @@ interface FocusRingProps {
   timeLeft: number
   totalDuration: number
   isRunning: boolean
-  currentMode: "pomodoro" | "shortBreak" | "longBreak"
+  currentMode: "deep" | "focus" | "quick"
   size?: number
   className?: string
 }
@@ -28,8 +28,8 @@ export function FocusRing({
   const progress = ((totalDuration - timeLeft) / totalDuration) * 100
   const isOvertime = timeLeft === 0 && isRunning
   
-  // Calculate milestone segments (5-minute chunks for pomodoro)
-  const milestoneCount = currentMode === "pomodoro" ? 5 : Math.ceil(totalDuration / 300) // 5 minutes = 300 seconds
+  // Calculate milestone segments (5-minute chunks for deep/focus)
+  const milestoneCount = (currentMode === "deep" || currentMode === "focus") ? 5 : Math.ceil(totalDuration / 300) // 5 minutes = 300 seconds
   const segmentDuration = totalDuration / milestoneCount
   const completedSegments = Math.floor((totalDuration - timeLeft) / segmentDuration)
   const currentSegmentProgress = ((totalDuration - timeLeft) % segmentDuration) / segmentDuration
@@ -37,7 +37,7 @@ export function FocusRing({
   // Visual states
   const getVisualState = () => {
     if (isOvertime) return "overtime"
-    if (currentMode === "pomodoro") return "focus"
+    if (currentMode === "deep" || currentMode === "focus") return "focus"
     return "break"
   }
 
