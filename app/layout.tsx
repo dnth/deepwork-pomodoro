@@ -8,6 +8,9 @@ export const metadata: Metadata = {
   title: 'Deep Work',
   description: 'A Pomodoro timer app for deep work sessions',
   generator: 'v0.dev',
+  icons: {
+    icon: '/favicon.ico',
+  },
 }
 
 export default function RootLayout({
