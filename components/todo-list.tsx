@@ -152,7 +152,7 @@ const TodoItem: React.FC<{
               {"deep" in taskTagConfig ? (
                 <ToggleGroupItem
                   value="deep"
-                  className="data-[state=on]:text-theme-text-primary text-label rounded-lg px-2 py-1"
+                  className="data-[state=on]:text-theme-text-primary text-label rounded-lg px-2 py-1 hover:bg-theme-card-bg/40 hover:text-theme-text-primary"
                   style={editingTag === 'deep' ? { backgroundColor: ACCENT_COLOR } : undefined}
                   aria-label="Deep Work 50 minutes"
                 >
@@ -161,7 +161,7 @@ const TodoItem: React.FC<{
               ) : null}
               <ToggleGroupItem
                 value="focus"
-                className="data-[state=on]:text-theme-text-primary text-label rounded-lg px-2 py-1"
+                className="data-[state=on]:text-theme-text-primary text-label rounded-lg px-2 py-1 hover:bg-theme-card-bg/40 hover:text-theme-text-primary"
                 style={editingTag === 'focus' ? { backgroundColor: ACCENT_COLOR } : undefined}
                 aria-label="Focus 25 minutes"
               >
@@ -169,7 +169,7 @@ const TodoItem: React.FC<{
               </ToggleGroupItem>
               <ToggleGroupItem
                 value="quick"
-                className="data-[state=on]:text-theme-text-primary text-label rounded-lg px-2 py-1"
+                className="data-[state=on]:text-theme-text-primary text-label rounded-lg px-2 py-1 hover:bg-theme-card-bg/40 hover:text-theme-text-primary"
                 style={editingTag === 'quick' ? { backgroundColor: ACCENT_COLOR } : undefined}
                 aria-label="Quick 5 minutes"
               >
@@ -467,7 +467,7 @@ export function TodoList() {
               {"deep" in taskTagConfig ? (
                 <ToggleGroupItem
                   value="deep"
-                  className="data-[state=on]:text-theme-text-primary text-caption rounded-md px-2 py-1 relative z-10"
+                  className="data-[state=on]:text-theme-text-primary text-caption rounded-md px-2 py-1 relative z-10 hover:bg-theme-card-bg/40 hover:text-theme-text-primary"
                   style={selectedTag === 'deep' ? { backgroundColor: ACCENT_COLOR } : undefined}
                   aria-label="Deep Work 50 minutes"
                 >
@@ -477,7 +477,7 @@ export function TodoList() {
 
               <ToggleGroupItem
                 value="focus"
-                className="data-[state=on]:text-theme-text-primary text-caption rounded-md px-2 py-1 relative z-10"
+                className="data-[state=on]:text-theme-text-primary text-caption rounded-md px-2 py-1 relative z-10 hover:bg-theme-card-bg/40 hover:text-theme-text-primary"
                 style={selectedTag === 'focus' ? { backgroundColor: ACCENT_COLOR } : undefined}
                 aria-label="Focus 25 minutes"
               >
@@ -486,7 +486,7 @@ export function TodoList() {
 
               <ToggleGroupItem
                 value="quick"
-                className="data-[state=on]:text-theme-text-primary text-caption rounded-md px-2 py-1 relative z-10"
+                className="data-[state=on]:text-theme-text-primary text-caption rounded-md px-2 py-1 relative z-10 hover:bg-theme-card-bg/40 hover:text-theme-text-primary"
                 style={selectedTag === 'quick' ? { backgroundColor: ACCENT_COLOR } : undefined}
                 aria-label="Quick 5 minutes"
               >
