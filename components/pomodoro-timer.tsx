@@ -106,13 +106,12 @@ export function PomodoroTimer() {
       <div className="bg-theme-input-bg/50 rounded-lg p-1 mb-6 relative" ref={taskTypeSelectorRef}>
         {/* Sliding indicator */}
         <div
-          className="absolute top-0 rounded-md z-0 shadow-lg"
+          className="absolute top-0 rounded-md transition-all duration-300 ease-in-out z-0 shadow-lg"
           style={{
             backgroundColor: ACCENT_COLOR,
             left: indicatorStyle.left,
             width: indicatorStyle.width,
-            height: '100%',
-            transition: 'none'
+            height: '100%'
           }}
         />
         <ToggleGroup
