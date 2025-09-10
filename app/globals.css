@@ -24,8 +24,8 @@
     --muted-foreground: 215 16% 45%;  /* text-slate-500: #64748b - Darkened for better contrast */
     --accent: 45 96% 53%;             /* amber-400: #fbbf24 */
     --accent-foreground: 222 84% 5%;  /* text-slate-900: #0f172a */
-    --destructive: 0 84% 60%;         /* red-500: #ef4444 */
-    --destructive-foreground: 0 0% 98%;
+    --destructive: 205 95% 15%;       /* prussian_blue */
+    --destructive-foreground: 195 43% 78%; /* light_blue */
     --border: 215 20% 91%;            /* border-slate-200: #e2e8f0 */
     --input: 214 32% 91%;             /* border-slate-300: #cbd5e1 */
     --ring: 178 60% 29%;              /* teal-600: #0d9488 */
@@ -56,25 +56,25 @@
     --radius-lg: 12px;
     --radius-xl: 16px;
 
-    /* Custom theme variables - Daylight Focus Palette */
-    --theme-background-from: 0 0% 100%;    /* pure white */
-    --theme-background-via: 0 0% 100%;     /* pure white */
-    --theme-background-to: 0 0% 100%;      /* pure white */
-    --theme-card-bg: 0 0% 100%;            /* bg-white: #ffffff */
-    --theme-card-border: 215 20% 91%;      /* border-slate-200: #e2e8f0 */
-    --theme-text-primary: 222 84% 5%;      /* text-slate-900: #0f172a */
-    --theme-text-secondary: 215 25% 25%;   /* text-slate-700: #34155 - Darkened for better contrast */
-    --theme-text-muted: 215 16% 45%;       /* text-slate-500: #64748b - Darkened for better contrast */
-    --theme-accent: 178 60% 29%;           /* bg-teal-600: #0d9488 */
-    --theme-accent-hover: 178 69% 25%;     /* bg-teal-700: #0f766e */
-    --theme-progress: 45 96% 53%;          /* bg-amber-400: #fbbf24 */
-    --theme-progress-bg: 215 20% 91%;      /* bg-slate-200: #e2e8f0 */
-    --theme-input-bg: 0 0% 100%;           /* bg-white: #ffffff */
-    --theme-input-border: 214 32% 91%;     /* border-slate-300: #cbd5e1 */
-    --theme-task-accent: 178 60% 29%;      /* teal-600: #0d9488 */
-    --theme-task-bg: 178 60% 29%;          /* teal-600: #0d9488 */
-    --theme-task-border: 178 60% 29%;      /* teal-600: #0d9488 */
-    --theme-task-text: 178 60% 29%;        /* teal-600: #0d9488 */
+    /* Custom theme variables - Blue Ocean Palette */
+    --theme-background-from: 195 43% 78%;    /* light_blue */
+    --theme-background-via: 195 43% 78%;     /* light_blue */
+    --theme-background-to: 195 43% 78%;      /* light_blue */
+    --theme-card-bg: 0 0% 100%;              /* bg-white: #ffffff */
+    --theme-card-border: 195 43% 68%;        /* sky_blue */
+    --theme-text-primary: 205 95% 15%;       /* prussian_blue */
+    --theme-text-secondary: 205 95% 19%;     /* indigo_dye_1 */
+    --theme-text-muted: 205 95% 24%;         /* indigo_dye_2 */
+    --theme-accent: 195 55% 41%;             /* cerulean */
+    --theme-accent-hover: 195 55% 35%;       /* darker cerulean */
+    --theme-progress: 195 43% 52%;           /* air_force_blue */
+    --theme-progress-bg: 195 43% 78%;        /* light_blue */
+    --theme-input-bg: 0 0% 100%;             /* bg-white: #ffffff */
+    --theme-input-border: 195 43% 68%;       /* sky_blue */
+    --theme-task-accent: 195 55% 41%;        /* cerulean */
+    --theme-task-bg: 195 55% 41%;            /* cerulean */
+    --theme-task-border: 195 55% 41%;        /* cerulean */
+    --theme-task-text: 195 55% 41%;          /* cerulean */
   }
 
   .dark {
@@ -93,8 +93,8 @@
     --muted-foreground: 215 25% 55%; /* slate-600: #475569 - Lightened for better contrast */
     --accent: 173 80% 67%;     /* teal-400: #2dd4bf */
     --accent-foreground: 0 0% 9%;
-    --destructive: 0 72% 51%;  /* red-600: #dc2626 */
-    --destructive-foreground: 0 0% 98%;
+    --destructive: 205 95% 15%;  /* prussian_blue */
+    --destructive-foreground: 195 43% 78%; /* light_blue */
     --border: 215 20% 33%;     /* slate-700: #334155 */
     --input: 215 20% 33%;      /* slate-700: #334155 */
     --ring: 173 58% 39%;       /* teal-500: #14b8a6 */
@@ -104,25 +104,25 @@
     --chart-4: 217 92% 59%;    /* blue-500 */
     --chart-5: 0 72% 51%;      /* red-500 */
 
-    /* Midnight Productivity Custom Variables */
-    --theme-background-from: 222 84% 6%;   /* slate-900 */
-    --theme-background-via: 215 25% 17%;   /* slate-800 */
-    --theme-background-to: 222 84% 6%;     /* slate-900 */
-    --theme-card-bg: 215 25% 17%;          /* slate-800 with opacity */
-    --theme-card-border: 215 20% 33%;      /* slate-700 */
-    --theme-text-primary: 212 13% 95%;     /* slate-100 */
-    --theme-text-secondary: 213 27% 84%;   /* slate-300 */
-    --theme-text-muted: 215 20% 65%;       /* slate-400 */
-    --theme-accent: 173 58% 39%;           /* teal-500 */
-    --theme-accent-hover: 173 85% 54%;     /* teal-600 */
-    --theme-progress: 45 93% 47%;          /* amber-500 */
-    --theme-progress-bg: 215 20% 33%;      /* slate-700 */
-    --theme-input-bg: 215 20% 33%;         /* slate-700 */
-    --theme-input-border: 215 25% 35%;     /* slate-600 */
-    --theme-task-accent: 173 58% 39%;      /* teal-500 */
-    --theme-task-bg: 173 58% 39%;          /* teal-500 with opacity */
-    --theme-task-border: 173 58% 39%;      /* teal-500 */
-    --theme-task-text: 173 80% 67%;        /* teal-400 */
+    /* Midnight Productivity Custom Variables - Blue Ocean Palette */
+    --theme-background-from: 205 95% 15%;   /* prussian_blue */
+    --theme-background-via: 205 95% 19%;    /* indigo_dye_1 */
+    --theme-background-to: 205 95% 15%;     /* prussian_blue */
+    --theme-card-bg: 205 95% 19%;           /* indigo_dye_1 with opacity */
+    --theme-card-border: 205 95% 24%;       /* indigo_dye_2 */
+    --theme-text-primary: 195 43% 78%;      /* light_blue */
+    --theme-text-secondary: 195 43% 68%;    /* sky_blue */
+    --theme-text-muted: 195 43% 58%;        /* air_superiority_blue */
+    --theme-accent: 195 55% 41%;            /* cerulean */
+    --theme-accent-hover: 195 55% 48%;      /* lighter cerulean */
+    --theme-progress: 195 43% 52%;          /* air_force_blue */
+    --theme-progress-bg: 205 95% 24%;       /* indigo_dye_2 */
+    --theme-input-bg: 205 95% 19%;          /* indigo_dye_1 */
+    --theme-input-border: 205 95% 24%;      /* indigo_dye_2 */
+    --theme-task-accent: 195 55% 41%;       /* cerulean */
+    --theme-task-bg: 195 55% 41%;           /* cerulean with opacity */
+    --theme-task-border: 195 55% 41%;       /* cerulean */
+    --theme-task-text: 195 55% 48%;         /* lighter cerulean */
   }
 }
 

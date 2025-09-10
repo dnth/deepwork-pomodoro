@@ -272,7 +272,7 @@ export function PomodoroTimer() {
           onClick={isRunning ? pauseTimer : startTimer}
           size="lg"
           className="hover:bg-theme-accent-hover text-theme-text-primary px-6 py-3 rounded-lg shadow-lg"
-          style={{ backgroundColor: '#0d9488' }}
+          style={{ backgroundColor: ACCENT_COLOR }}
         >
           {isRunning ? <Pause className="w-5 h-5 mr-2" /> : <Play className="w-5 h-5 mr-2" />}
           {isRunning ? "Pause" : "Start"}

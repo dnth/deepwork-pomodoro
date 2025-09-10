@@ -222,7 +222,7 @@ const TodoItem: React.FC<{
             onClick={() => onStartEditing(todo)}
             variant="ghost"
             size="sm"
-            className="opacity-0 group-hover:opacity-100 text-theme-text-muted hover:text-theme-text-primary transition-all p-1"
+            className="opacity-0 group-hover:opacity-100 text-theme-text-muted hover:text-destructive transition-all p-1"
           >
             <Pencil className="w-4 h-4" />
           </Button>
@@ -231,7 +231,7 @@ const TodoItem: React.FC<{
           onClick={() => onDelete(todo.id)}
           variant="ghost"
           size="sm"
-          className="opacity-0 group-hover:opacity-100 text-theme-text-muted hover:text-red-400 transition-all p-1"
+          className="opacity-0 group-hover:opacity-100 text-theme-text-muted hover:text-destructive transition-all p-1"
         >
           <Trash2 className="w-4 h-4" />
         </Button>
@@ -505,7 +505,7 @@ export function TodoList() {
                 }
               }}
               placeholder="Define your focus goal for this Pomodoro."
-              className="w-full bg-theme-input-bg border-theme-input-border text-theme-text-primary placeholder:text-slate-400 rounded-md h-10 px-3"
+              className="w-full bg-theme-input-bg border-theme-input-border text-theme-text-primary placeholder:text-theme-text-muted rounded-md h-10 px-3"
               aria-label="Task description"
             />
           </div>
@@ -574,7 +574,7 @@ export function TodoList() {
                     onClick={clearCompletedTodos}
                     variant="ghost"
                     size="sm"
-                    className="text-theme-text-muted hover:text-red-400 transition-all text-label"
+                    className="text-theme-text-muted hover:text-destructive transition-all text-label"
                   >
                     Clear All
                   </Button>

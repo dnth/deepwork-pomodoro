@@ -73,7 +73,7 @@ export function FocusRing({
           }
         case "overtime":
           return {
-            ring: "text-destructive",
+            ring: "text-theme-accent",
             glow: "",
             background: "text-theme-card-border"
           }
@@ -181,7 +181,7 @@ export function FocusRing({
       <div
         className={`absolute inset-0 rounded-full blur-md scale-110 opacity-40 ${
           visualState === 'focus' ? 'bg-theme-progress/20' :
-          visualState === 'break' ? 'bg-theme-progress/20' : 'bg-destructive/20'
+          visualState === 'break' ? 'bg-theme-progress/20' : 'bg-theme-accent/20'
         }`}
         style={{ animation: 'none' }}
         aria-hidden="true"
@@ -221,7 +221,7 @@ export function FocusRing({
             stroke="currentColor"
             strokeWidth="2"
             fill="transparent"
-            className="text-red-500 opacity-80"
+            className="text-theme-accent opacity-80"
             strokeDasharray="10 5"
           />
         )}
@@ -232,7 +232,7 @@ export function FocusRing({
         <div className={`w-4 h-4 rounded-full ${
           isRunning
             ? `${visualState === 'focus' ? 'bg-theme-progress' :
-                visualState === 'break' ? 'bg-theme-progress' : 'bg-destructive'}`
+                visualState === 'break' ? 'bg-theme-progress' : 'bg-theme-accent'}`
             : 'bg-theme-text-muted'
         }`}></div>
       </div>
