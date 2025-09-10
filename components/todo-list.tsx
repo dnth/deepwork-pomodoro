@@ -12,6 +12,8 @@ import { useTodos, taskTagConfig, type TaskTag, type Todo } from "@/hooks/use-to
 import { useState, useCallback } from "react"
 
 
+const ACCENT_COLOR = 'hsl(var(--theme-accent))'
+
 const TASK_TYPE_ORDER = ["deep", "focus", "quick"] as const
 const TASK_TYPE_PRIORITY: Record<string, number> = { deep: 0, focus: 1, quick: 2 }
 function compareTaskTags(a: string, b: string) {
@@ -57,8 +59,183 @@ const ClickableText: React.FC<{ text: string }> = ({ text }) => {
   return <span className="break-words cursor-text">{text}</span>;
 };
 
+const TodoItem: React.FC<{
+  todo: Todo;
+  isCompleted: boolean;
+  editingId: string | null;
+  editingText: string;
+  editingTag: TaskTag;
+  onStartEditing: (todo: Todo) => void;
+  onSaveEditing: () => void;
+  onCancelEditing: () => void;
+  onSetEditingText: (text: string) => void;
+  onSetEditingTag: (tag: TaskTag) => void;
+  onToggle: (id: string) => void;
+  onDelete: (id: string) => void;
+  onDragStart: (id: string, e: React.DragEvent) => void;
+  onDragEnter: (id: string) => void;
+  onDragOver: (e: React.DragEvent) => void;
+  onDrop: (id: string, e: React.DragEvent) => void;
+  onDragEnd: () => void;
+  dragOverId: string | null;
+}> = ({
+  todo,
+  isCompleted,
+  editingId,
+  editingText,
+  editingTag,
+  onStartEditing,
+  onSaveEditing,
+  onCancelEditing,
+  onSetEditingText,
+  onSetEditingTag,
+  onToggle,
+  onDelete,
+  onDragStart,
+  onDragEnter,
+  onDragOver,
+  onDrop,
+  onDragEnd,
+  dragOverId,
+}) => {
+  const tagConfig = taskTagConfig[todo.tag];
+  const baseClasses = isCompleted
+    ? "flex items-center gap-2 p-2 bg-theme-input-bg/30 rounded-lg hover:bg-theme-card-bg/30 transition-colors group"
+    : "flex items-center gap-3 p-3 bg-theme-input-bg/50 rounded-lg hover:bg-theme-card-bg/40 transition-colors group";
+  const draggableClasses = `${baseClasses} ${dragOverId === todo.id ? "ring-2 ring-theme-accent/60" : ""}`;
+
+  return (
+    <div
+      draggable
+      onDragStart={(e) => onDragStart(todo.id, e)}
+      onDragEnter={() => onDragEnter(todo.id)}
+      onDragOver={(e) => e.preventDefault()}
+      onDrop={(e) => onDrop(todo.id, e)}
+      onDragEnd={onDragEnd}
+      className={draggableClasses}
+    >
+      <div className="text-theme-text-muted opacity-60 group-hover:opacity-100 flex items-center">
+        <GripVertical className="w-4 h-4" />
+      </div>
+
+      <Checkbox
+        checked={todo.completed}
+        onCheckedChange={() => onToggle(todo.id)}
+        className="border-theme-input-border data-[state=checked]:bg-theme-progress data-[state=checked]:border-theme-progress"
+      />
+
+      <div className="flex-1 min-w-0">
+        {editingId === todo.id ? (
+          <div
+            className="flex items-center gap-2 sm:gap-3 flex-wrap [>*]:shrink-0"
+            role="group"
+            aria-label="Edit task"
+          >
+            <Input
+              autoFocus
+              value={editingText}
+              onChange={(e) => onSetEditingText(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") onSaveEditing()
+                if (e.key === "Escape") onCancelEditing()
+              }}
+              className={`min-w-0 flex-1 bg-theme-input-bg border-theme-input-border text-theme-text-primary rounded-${isCompleted ? 'xl' : 'lg'} text-caption p-${isCompleted ? '2' : '3'}`}
+            />
+
+            <ToggleGroup
+              type="single"
+              value={editingTag}
+              onValueChange={(v) => v && onSetEditingTag(v as TaskTag)}
+              className={`bg-theme-input-bg border border-theme-input-border rounded-${isCompleted ? 'xl' : 'lg'} p-1`}
+              aria-label="Task type"
+            >
+              {"deep" in taskTagConfig ? (
+                <ToggleGroupItem
+                  value="deep"
+                  className="data-[state=on]:text-theme-text-primary text-label rounded-lg px-2 py-1"
+                  style={editingTag === 'deep' ? { backgroundColor: ACCENT_COLOR } : undefined}
+                  aria-label="Deep Work 50 minutes"
+                >
+                  {taskTagConfig.deep.symbol}&nbsp;50m
+                </ToggleGroupItem>
+              ) : null}
+              <ToggleGroupItem
+                value="focus"
+                className="data-[state=on]:text-theme-text-primary text-label rounded-lg px-2 py-1"
+                style={editingTag === 'focus' ? { backgroundColor: ACCENT_COLOR } : undefined}
+                aria-label="Focus 25 minutes"
+              >
+                {taskTagConfig.focus.symbol}&nbsp;25m
+              </ToggleGroupItem>
+              <ToggleGroupItem
+                value="quick"
+                className="data-[state=on]:text-theme-text-primary text-label rounded-lg px-2 py-1"
+                style={editingTag === 'quick' ? { backgroundColor: ACCENT_COLOR } : undefined}
+                aria-label="Quick 5 minutes"
+              >
+                {taskTagConfig.quick.symbol}&nbsp;5m
+              </ToggleGroupItem>
+            </ToggleGroup>
+
+            <div className="flex items-center gap-2 sm:gap-2">
+              <Button
+                onClick={onSaveEditing}
+                size="sm"
+                className="text-theme-text-primary rounded-lg px-3"
+                style={{ backgroundColor: ACCENT_COLOR }}
+              >
+                Save
+              </Button>
+              <Button
+                onClick={onCancelEditing}
+                size="sm"
+                variant="ghost"
+                className="text-theme-text-muted"
+              >
+                Cancel
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <span className={`flex-1 transition-all ${isCompleted ? 'text-theme-text-muted line-through' : 'text-theme-text-primary'} text-sm break-words`}>
+            <ClickableText text={todo.text} />
+          </span>
+        )}
+      </div>
+
+      <div className="flex items-center gap-2">
+        {editingId === todo.id ? null : (
+          <Button
+            onClick={() => onStartEditing(todo)}
+            variant="ghost"
+            size="sm"
+            className="opacity-0 group-hover:opacity-100 text-theme-text-muted hover:text-theme-text-primary transition-all p-1"
+          >
+            <Pencil className="w-4 h-4" />
+          </Button>
+        )}
+        <Button
+          onClick={() => onDelete(todo.id)}
+          variant="ghost"
+          size="sm"
+          className="opacity-0 group-hover:opacity-100 text-theme-text-muted hover:text-red-400 transition-all p-1"
+        >
+          <Trash2 className="w-4 h-4" />
+        </Button>
+        <div className="flex items-center gap-1 min-w-0 flex-shrink pl-2 mr-2">
+          <span className="text-xs">
+            {tagConfig?.symbol ?? "🎯"}
+          </span>
+          <span className={`text-xs ${tagConfig?.textColor ?? "text-theme-text-secondary"} ${isCompleted ? 'opacity-70' : ''} whitespace-nowrap`}>
+            {tagConfig?.label ?? "Focus"} ({tagConfig?.duration ?? 25}m)
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export function TodoList() {
-  console.log('TodoList component rendering');
   const {
     todos,
     addTodo,
@@ -79,6 +256,7 @@ export function TodoList() {
   const [editingText, setEditingText] = useState<string>("")
   const [editingTag, setEditingTag] = useState<TaskTag>("focus")
   const [isAnimating, setIsAnimating] = useState(false)
+  const [isShortcutAnimating, setIsShortcutAnimating] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
   const taskTypeSelectorRef = useRef<HTMLDivElement>(null)
   const [indicatorStyle, setIndicatorStyle] = useState<{ left: string; width: string }>({ left: '0px', width: '0px' })
@@ -97,10 +275,8 @@ export function TodoList() {
 
   // Set mounted state
   useEffect(() => {
-    console.log('TodoList component mounting');
     setIsMounted(true);
     return () => {
-      console.log('TodoList component unmounting');
       setIsMounted(false);
     };
   }, []);
@@ -108,34 +284,28 @@ export function TodoList() {
   // Keyboard shortcut handler
   useEffect(() => {
     if (!isMounted) return;
-    
+
     const handleKeyDown = (e: KeyboardEvent) => {
-      console.log('Key event detected:', e.key, e.ctrlKey, e.shiftKey, e.code);
       // Try different ways to detect the key combination
       if (e.ctrlKey && e.shiftKey) {
         if (e.key === '1' || e.code === 'Digit1') {
           e.preventDefault()
-          console.log('Ctrl+Shift+1 pressed - setting to deep')
           setSelectedTag('deep')
-          triggerAnimation()
+          triggerShortcutAnimation()
         } else if (e.key === '2' || e.code === 'Digit2') {
           e.preventDefault()
-          console.log('Ctrl+Shift+2 pressed - setting to focus')
           setSelectedTag('focus')
-          triggerAnimation()
+          triggerShortcutAnimation()
         } else if (e.key === '3' || e.code === 'Digit3') {
           e.preventDefault()
-          console.log('Ctrl+Shift+3 pressed - setting to quick')
           setSelectedTag('quick')
-          triggerAnimation()
+          triggerShortcutAnimation()
         }
       }
     }
 
-    console.log('Adding keydown event listener');
     window.addEventListener('keydown', handleKeyDown, true); // Use capture phase
     return () => {
-      console.log('Removing keydown event listener');
       window.removeEventListener('keydown', handleKeyDown, true);
     }
   }, [setSelectedTag, isMounted])
@@ -165,17 +335,15 @@ export function TodoList() {
     setTimeout(() => setIsAnimating(false), 300) // Match CSS animation duration
   }
 
+  const triggerShortcutAnimation = useCallback(() => {
+    setIsShortcutAnimating(true)
+    setTimeout(() => setIsShortcutAnimating(false), 600) // Match CSS animation duration
+  }, [])
+
   const handleAddTask = () => {
     if (newTask.trim()) {
-      // Map unsupported UI values to supported tags:
-      // - "break" (5m) -> "quick"
-      // - "custom" removed (no longer selectable)
-      const normalizedTag = (selectedTag as any) === "break" ? "quick" : selectedTag
-      console.log("[TodoList] handleAddTask", { text: newTask.trim(), selectedTag, normalizedTag })
-      addTodo(newTask.trim(), normalizedTag as TaskTag)
+      addTodo(newTask.trim(), selectedTag)
       setNewTask("")
-      // Do NOT reset selectedTag; keep user's last choice persistent
-      // setSelectedTag("focus")
     }
   }
 
@@ -279,9 +447,11 @@ export function TodoList() {
           >
             {/* Sliding indicator */}
             <div
-              className="absolute top-0 rounded-md transition-all duration-300 ease-in-out z-0 shadow-lg"
+              className={`absolute top-0 rounded-md transition-all duration-300 ease-in-out z-0 shadow-lg ${
+                isShortcutAnimating ? 'animate-slide-indicator animate-pulse-indicator' : ''
+              }`}
               style={{
-                backgroundColor: '#0d9488',
+                backgroundColor: ACCENT_COLOR,
                 left: indicatorStyle.left,
                 width: indicatorStyle.width,
                 height: '100%'
@@ -298,7 +468,7 @@ export function TodoList() {
                 <ToggleGroupItem
                   value="deep"
                   className="data-[state=on]:text-theme-text-primary text-caption rounded-md px-2 py-1 relative z-10"
-                  style={selectedTag === 'deep' ? { backgroundColor: '#0d9488' } : undefined}
+                  style={selectedTag === 'deep' ? { backgroundColor: ACCENT_COLOR } : undefined}
                   aria-label="Deep Work 50 minutes"
                 >
                   {taskTagConfig["deep"].symbol}&nbsp;50m
@@ -308,20 +478,19 @@ export function TodoList() {
               <ToggleGroupItem
                 value="focus"
                 className="data-[state=on]:text-theme-text-primary text-caption rounded-md px-2 py-1 relative z-10"
-                style={selectedTag === 'focus' ? { backgroundColor: '#0d9488' } : undefined}
+                style={selectedTag === 'focus' ? { backgroundColor: ACCENT_COLOR } : undefined}
                 aria-label="Focus 25 minutes"
               >
                 {taskTagConfig["focus"].symbol}&nbsp;25m
               </ToggleGroupItem>
 
-              {/* 5m option maps to "quick" tag */}
               <ToggleGroupItem
-                value={"quick" as unknown as TaskTag}
+                value="quick"
                 className="data-[state=on]:text-theme-text-primary text-caption rounded-md px-2 py-1 relative z-10"
-                style={selectedTag === 'quick' ? { backgroundColor: '#0d9488' } : undefined}
+                style={selectedTag === 'quick' ? { backgroundColor: ACCENT_COLOR } : undefined}
                 aria-label="Quick 5 minutes"
               >
-                {(taskTagConfig as any)["quick"]?.symbol ?? "⚡"}&nbsp;5m
+                {taskTagConfig.quick.symbol}&nbsp;5m
               </ToggleGroupItem>
             </ToggleGroup>
           </div>
@@ -353,7 +522,7 @@ export function TodoList() {
               onClick={handleAddTask}
               aria-label="Add task"
               className="text-theme-text-primary rounded-md px-3 h-10"
-              style={{ backgroundColor: '#0d9488' }}
+              style={{ backgroundColor: ACCENT_COLOR }}
             >
               <Plus className="w-4 h-4" />
               <span className="sr-only">Add</span>
@@ -374,148 +543,29 @@ export function TodoList() {
                 <h3 className="text-xs font-medium text-theme-text-secondary flex items-center gap-2">
                   📋 To Do ({incompleteTasks.length})
                 </h3>
-                {incompleteTasks.map((todo) => {
-                  const tagConfig = (taskTagConfig as any)[todo.tag]
-                  if (!tagConfig) {
-                    console.warn("[TodoList] Missing tag config for todo", { id: todo.id, tag: todo.tag, text: todo.text })
-                  }
-
-                  return (
-                    <div
-                      key={todo.id}
-                      draggable
-                      onDragStart={(e) => onDragStart(todo.id, e)}
-                      onDragEnter={() => onDragEnter(todo.id)}
-                      onDragOver={(e) => e.preventDefault()}
-                      onDrop={(e) => onDropOnItem(todo.id, e)}
-                      onDragEnd={onDragEnd}
-                      className={draggableItemClasses(
-                        todo.id,
-                        "flex items-center gap-3 p-3 bg-theme-input-bg/50 rounded-lg hover:bg-theme-card-bg/40 transition-colors group"
-                      )}
-                    >
-                      <div className="text-theme-text-muted opacity-60 group-hover:opacity-100 flex items-center">
-                        <GripVertical className="w-4 h-4" />
-                      </div>
-
-                      <Checkbox
-                        checked={todo.completed}
-                        onCheckedChange={() => toggleTodo(todo.id)}
-                        className="border-theme-input-border data-[state=checked]:bg-theme-progress data-[state=checked]:border-theme-progress"
-                      />
-
-                      <div className="flex-1 min-w-0">
-                        {editingId === todo.id ? (
-                          <div
-                            className="flex items-center gap-2 sm:gap-3 flex-wrap [>*]:shrink-0"
-                            role="group"
-                            aria-label="Edit task"
-                          >
-                            <Input
-                              autoFocus
-                              value={editingText}
-                              onChange={(e) => setEditingText(e.target.value)}
-                              onKeyDown={(e) => {
-                                if (e.key === "Enter") saveEditing()
-                                if (e.key === "Escape") cancelEditing()
-                              }}
-                              className="min-w-0 flex-1 bg-theme-input-bg border-theme-input-border text-theme-text-primary rounded-lg text-caption p-3"
-                            />
-
-                            {/* Segmented control while editing */}
-                            <ToggleGroup
-                              type="single"
-                              value={editingTag}
-                              onValueChange={(v) => v && setEditingTag(v as TaskTag)}
-                              className="bg-theme-input-bg border border-theme-input-border rounded-lg p-1"
-                              aria-label="Task type"
-                            >
-                              {"deep" in taskTagConfig ? (
-                                <ToggleGroupItem
-                                  value="deep"
-                                  className="data-[state=on]:text-theme-text-primary text-label rounded-lg px-2 py-1"
-                                  style={editingTag === 'deep' ? { backgroundColor: '#0d9488' } : undefined}
-                                  aria-label="Deep Work 50 minutes"
-                                >
-                                  {taskTagConfig["deep"].symbol}&nbsp;50m
-                                </ToggleGroupItem>
-                              ) : null}
-                              <ToggleGroupItem
-                                value="focus"
-                                className="data-[state=on]:text-theme-text-primary text-label rounded-lg px-2 py-1"
-                                style={editingTag === 'focus' ? { backgroundColor: '#0d9488' } : undefined}
-                                aria-label="Focus 25 minutes"
-                              >
-                                {taskTagConfig["focus"].symbol}&nbsp;25m
-                              </ToggleGroupItem>
-                              {/* 5m option maps to "quick" tag */}
-                              <ToggleGroupItem
-                                value={"quick" as unknown as TaskTag}
-                               className="data-[state=on]:text-theme-text-primary text-label rounded-lg px-2 py-1"
-                               style={editingTag === 'quick' ? { backgroundColor: '#0d9488' } : undefined}
-                                aria-label="Quick 5 minutes"
-                              >
-                                {(taskTagConfig as any)["quick"]?.symbol ?? "⚡"}&nbsp;5m
-                              </ToggleGroupItem>
-                            </ToggleGroup>
-
-                            <div className="flex items-center gap-2 sm:gap-2">
-                              <Button
-                                onClick={saveEditing}
-                                size="sm"
-                                className="text-theme-text-primary rounded-lg px-3"
-                                style={{ backgroundColor: '#0d9488' }}
-                              >
-                                Save
-                              </Button>
-                              <Button
-                                onClick={cancelEditing}
-                                size="sm"
-                                variant="ghost"
-                                className="text-theme-text-muted"
-                              >
-                                Cancel
-                              </Button>
-                            </div>
-                          </div>
-                        ) : (
-                          <span className="flex-1 transition-all text-theme-text-primary text-sm break-words">
-                            <ClickableText text={todo.text} />
-                          </span>
-                        )}
-                      </div>
-
-                      <div className="flex items-center gap-2">
-                        {editingId === todo.id ? null : (
-                          <Button
-                            onClick={() => startEditing(todo)}
-                            variant="ghost"
-                            size="sm"
-                            className="opacity-0 group-hover:opacity-100 text-theme-text-muted hover:text-theme-text-primary transition-all p-1"
-                          >
-                            <Pencil className="w-4 h-4" />
-                          </Button>
-                        )}
-                        <Button
-                          onClick={() => deleteTodo(todo.id)}
-                          variant="ghost"
-                          size="sm"
-                          className="opacity-0 group-hover:opacity-100 text-theme-text-muted hover:text-red-400 transition-all p-1"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                        <div className="flex items-center gap-1 min-w-0 flex-shrink pl-2 mr-2">
-                          <span className="text-xs">
-                            {(taskTagConfig as any)[todo.tag]?.symbol ?? "🎯"}
-                          </span>
-                          <span className={`text-xs ${((taskTagConfig as any)[todo.tag]?.textColor ?? "text-theme-text-secondary")} whitespace-nowrap`}>
-                            {(taskTagConfig as any)[todo.tag]?.label ?? "Focus"} ({(taskTagConfig as any)[todo.tag]?.duration ?? 25}m)
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  )
-                })}
+                {incompleteTasks.map((todo) => (
+                  <TodoItem
+                    key={todo.id}
+                    todo={todo}
+                    isCompleted={false}
+                    editingId={editingId}
+                    editingText={editingText}
+                    editingTag={editingTag}
+                    onStartEditing={startEditing}
+                    onSaveEditing={saveEditing}
+                    onCancelEditing={cancelEditing}
+                    onSetEditingText={setEditingText}
+                    onSetEditingTag={setEditingTag}
+                    onToggle={toggleTodo}
+                    onDelete={deleteTodo}
+                    onDragStart={onDragStart}
+                    onDragEnter={onDragEnter}
+                    onDragOver={(e) => e.preventDefault()}
+                    onDrop={onDropOnItem}
+                    onDragEnd={onDragEnd}
+                    dragOverId={drag.overId}
+                  />
+                ))}
               </div>
             )}
 
@@ -535,148 +585,29 @@ export function TodoList() {
                     Clear All
                   </Button>
                 </div>
-                {completedTasks.map((todo) => {
-                  const tagConfig = (taskTagConfig as any)[todo.tag]
-                  if (!tagConfig) {
-                    console.warn("[TodoList] Missing tag config (completed) for todo", { id: todo.id, tag: todo.tag, text: todo.text })
-                  }
-
-                  return (
-                    <div
-                      key={todo.id}
-                      draggable
-                      onDragStart={(e) => onDragStart(todo.id, e)}
-                      onDragEnter={() => onDragEnter(todo.id)}
-                      onDragOver={(e) => e.preventDefault()}
-                      onDrop={(e) => onDropOnItem(todo.id, e)}
-                      onDragEnd={onDragEnd}
-                      className={draggableItemClasses(
-                        todo.id,
-                        "flex items-center gap-2 p-2 bg-theme-input-bg/30 rounded-lg hover:bg-theme-card-bg/30 transition-colors group"
-                      )}
-                    >
-                      <div className="text-theme-text-muted opacity-60 group-hover:opacity-100 flex items-center">
-                        <GripVertical className="w-4 h-4" />
-                      </div>
-
-                      <Checkbox
-                        checked={todo.completed}
-                        onCheckedChange={() => toggleTodo(todo.id)}
-                        className="border-theme-input-border data-[state=checked]:bg-theme-progress data-[state=checked]:border-theme-progress"
-                      />
-
-                      <div className="flex-1 min-w-0">
-                        {editingId === todo.id ? (
-                          <div
-                            className="flex items-center gap-2 sm:gap-3 flex-wrap [>*]:shrink-0"
-                            role="group"
-                            aria-label="Edit task"
-                          >
-                            <Input
-                              autoFocus
-                              value={editingText}
-                              onChange={(e) => setEditingText(e.target.value)}
-                              onKeyDown={(e) => {
-                                if (e.key === "Enter") saveEditing()
-                                if (e.key === "Escape") cancelEditing()
-                              }}
-                              className="min-w-0 flex-1 bg-theme-input-bg border-theme-input-border text-theme-text-primary rounded-xl text-caption p-2"
-                            />
-
-                            {/* Segmented control while editing (keep available to change tag) */}
-                            <ToggleGroup
-                              type="single"
-                              value={editingTag}
-                              onValueChange={(v) => v && setEditingTag(v as TaskTag)}
-                              className="bg-theme-input-bg border border-theme-input-border rounded-xl p-1"
-                              aria-label="Task type"
-                            >
-                              {"deep" in taskTagConfig ? (
-                                <ToggleGroupItem
-                                  value="deep"
-                                  className="data-[state=on]:text-theme-text-primary text-label rounded-lg px-2 py-1"
-                                  style={editingTag === 'deep' ? { backgroundColor: '#0d9488' } : undefined}
-                                  aria-label="Deep Work 50 minutes"
-                                >
-                                  {taskTagConfig["deep"].symbol}&nbsp;50m
-                                </ToggleGroupItem>
-                              ) : null}
-                              <ToggleGroupItem
-                                value="focus"
-                                className="data-[state=on]:text-theme-text-primary text-label rounded-lg px-2 py-1"
-                                style={editingTag === 'focus' ? { backgroundColor: '#0d9488' } : undefined}
-                                aria-label="Focus 25 minutes"
-                              >
-                                {taskTagConfig["focus"].symbol}&nbsp;25m
-                              </ToggleGroupItem>
-                              {/* 5m option maps to "quick" tag */}
-                              <ToggleGroupItem
-                                value={"quick" as unknown as TaskTag}
-                                className="data-[state=on]:text-theme-text-primary text-label rounded-lg px-2 py-1"
-                                style={editingTag === 'quick' ? { backgroundColor: '#0d9488' } : undefined}
-                                aria-label="Quick 5 minutes"
-                              >
-                                {(taskTagConfig as any)["quick"]?.symbol ?? "⚡"}&nbsp;5m
-                              </ToggleGroupItem>
-                            </ToggleGroup>
-
-                            <div className="flex items-center gap-2 sm:gap-2">
-                              <Button
-                                onClick={saveEditing}
-                                size="sm"
-                                className="text-theme-text-primary rounded-xl px-3"
-                                style={{ backgroundColor: '#0d9488' }}
-                              >
-                                Save
-                              </Button>
-                              <Button
-                                onClick={cancelEditing}
-                                size="sm"
-                                variant="ghost"
-                                className="text-theme-text-muted"
-                              >
-                                Cancel
-                              </Button>
-                            </div>
-                          </div>
-                        ) : (
-                          <span className="flex-1 transition-all text-theme-text-muted line-through text-sm break-words">
-                            <ClickableText text={todo.text} />
-                          </span>
-                        )}
-                      </div>
-
-                      <div className="flex items-center gap-2">
-                        {editingId === todo.id ? null : (
-                          <Button
-                            onClick={() => startEditing(todo)}
-                            variant="ghost"
-                            size="sm"
-                            className="opacity-0 group-hover:opacity-100 text-theme-text-muted hover:text-theme-text-primary transition-all p-1"
-                          >
-                            <Pencil className="w-4 h-4" />
-                          </Button>
-                        )}
-                        <Button
-                          onClick={() => deleteTodo(todo.id)}
-                          variant="ghost"
-                          size="sm"
-                          className="opacity-0 group-hover:opacity-100 text-theme-text-muted hover:text-red-400 transition-all p-1"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                        <div className="flex items-center gap-1 min-w-0 flex-shrink pl-2 mr-2">
-                          <span className="text-xs">
-                            {(taskTagConfig as any)[todo.tag]?.symbol ?? "🎯"}
-                          </span>
-                          <span className={`text-xs ${((taskTagConfig as any)[todo.tag]?.textColor ?? "text-theme-text-secondary")} opacity-70 whitespace-nowrap`}>
-                            {((taskTagConfig as any)[todo.tag]?.label ?? "Focus")} ({((taskTagConfig as any)[todo.tag]?.duration ?? 25)}m)
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  )
-                })}
+                {completedTasks.map((todo) => (
+                  <TodoItem
+                    key={todo.id}
+                    todo={todo}
+                    isCompleted={true}
+                    editingId={editingId}
+                    editingText={editingText}
+                    editingTag={editingTag}
+                    onStartEditing={startEditing}
+                    onSaveEditing={saveEditing}
+                    onCancelEditing={cancelEditing}
+                    onSetEditingText={setEditingText}
+                    onSetEditingTag={setEditingTag}
+                    onToggle={toggleTodo}
+                    onDelete={deleteTodo}
+                    onDragStart={onDragStart}
+                    onDragEnter={onDragEnter}
+                    onDragOver={(e) => e.preventDefault()}
+                    onDrop={onDropOnItem}
+                    onDragEnd={onDragEnd}
+                    dragOverId={drag.overId}
+                  />
+                ))}
               </div>
             )}
           </>
