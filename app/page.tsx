@@ -9,6 +9,7 @@ import { Settings, Rows3, Columns3 } from "lucide-react"
 import { useState, useEffect } from "react"
 import { DailyQuote } from "@/components/daily-quote"
 import { useLayout } from "@/hooks/use-layout"
+import Image from "next/image"
 
 export default function Home() {
   const [showSettings, setShowSettings] = useState(false)
@@ -48,7 +49,16 @@ export default function Home() {
           <header className="relative z-10 p-4 sm:p-6">
         <div className="flex items-center justify-between mb-2">
           {/* Left: App Name */}
-          <h1 className="text-lg sm:text-xl font-bold text-theme-text-primary">Deep Work</h1>
+          <div className="flex items-center gap-2">
+            <Image
+              src="/favicon-32x32.png"
+              alt="Deep Work Logo"
+              width={32}
+              height={32}
+              className="w-8 h-8"
+            />
+            <h1 className="text-lg sm:text-xl font-bold text-theme-text-primary">Deep Work</h1>
+          </div>
           
           {/* Center: Current Time */}
           <div className="absolute left-1/2 transform -translate-x-1/2 text-center">
@@ -160,6 +170,9 @@ export default function Home() {
           >
             Buy me a coffee
           </a>
+        </div>
+        <div className="text-center text-theme-text-secondary text-xs mt-2">
+          © 2025 Dickson Neoh. All rights reserved.
         </div>
       </footer>
     </div>
