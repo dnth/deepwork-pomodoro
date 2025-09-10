@@ -56,25 +56,25 @@
     --radius-lg: 12px;
     --radius-xl: 16px;
 
-    /* Custom theme variables - Blue Ocean Palette */
-    --theme-background-from: 195 43% 78%;    /* light_blue */
+    /* Custom theme variables - Bright Blue Ocean Palette */
+    --theme-background-from: 195 43% 85%;    /* brighter light_blue */
     --theme-background-via: 195 43% 78%;     /* light_blue */
-    --theme-background-to: 195 43% 78%;      /* light_blue */
+    --theme-background-to: 195 43% 85%;      /* brighter light_blue */
     --theme-card-bg: 0 0% 100%;              /* bg-white: #ffffff */
-    --theme-card-border: 195 43% 68%;        /* sky_blue */
-    --theme-text-primary: 205 95% 15%;       /* prussian_blue */
-    --theme-text-secondary: 205 95% 19%;     /* indigo_dye_1 */
-    --theme-text-muted: 205 95% 24%;         /* indigo_dye_2 */
-    --theme-accent: 195 55% 41%;             /* cerulean */
-    --theme-accent-hover: 195 55% 35%;       /* darker cerulean */
-    --theme-progress: 195 43% 52%;           /* air_force_blue */
-    --theme-progress-bg: 195 43% 78%;        /* light_blue */
+    --theme-card-border: 195 43% 78%;        /* light_blue */
+    --theme-text-primary: 205 95% 15%;       /* prussian_blue - better contrast */
+    --theme-text-secondary: 205 95% 19%;     /* indigo_dye_1 - good contrast */
+    --theme-text-muted: 205 95% 24%;         /* indigo_dye_2 - sufficient contrast */
+    --theme-accent: 195 43% 68%;             /* sky_blue */
+    --theme-accent-hover: 195 43% 58%;       /* lighter sky_blue */
+    --theme-progress: 195 43% 52%;           /* air_superiority_blue */
+    --theme-progress-bg: 195 43% 85%;        /* brighter light_blue */
     --theme-input-bg: 0 0% 100%;             /* bg-white: #ffffff */
-    --theme-input-border: 195 43% 68%;       /* sky_blue */
-    --theme-task-accent: 195 55% 41%;        /* cerulean */
-    --theme-task-bg: 195 55% 41%;            /* cerulean */
-    --theme-task-border: 195 55% 41%;        /* cerulean */
-    --theme-task-text: 195 55% 41%;          /* cerulean */
+    --theme-input-border: 195 43% 78%;       /* light_blue */
+    --theme-task-accent: 195 43% 68%;        /* sky_blue */
+    --theme-task-bg: 195 43% 85%;            /* brighter light_blue */
+    --theme-task-border: 195 43% 78%;        /* light_blue */
+    --theme-task-text: 195 43% 52%;          /* air_superiority_blue */
   }
 
   .dark {

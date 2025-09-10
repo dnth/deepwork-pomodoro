@@ -113,8 +113,8 @@ const TodoItem: React.FC<{
 }) => {
   const tagConfig = taskTagConfig[todo.tag];
   const baseClasses = isCompleted
-    ? "flex items-center gap-2 p-2 bg-theme-input-bg/30 rounded-lg hover:bg-theme-card-bg/30 transition-colors group"
-    : "flex items-center gap-3 p-3 bg-theme-input-bg/50 rounded-lg hover:bg-theme-card-bg/40 transition-colors group";
+    ? "flex items-center gap-2 p-2 bg-theme-input-bg/30 border border-theme-input-border/40 rounded-lg hover:bg-theme-card-bg/30 transition-colors group"
+    : "flex items-center gap-3 p-3 bg-theme-input-bg/50 border border-theme-input-border/60 rounded-lg hover:bg-theme-card-bg/40 transition-colors group";
   const draggableClasses = `${baseClasses} ${dragOverId === todo.id ? "ring-2 ring-theme-accent/60" : ""}`;
 
   return (
