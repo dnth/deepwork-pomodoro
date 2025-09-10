@@ -77,7 +77,7 @@ export function usePomodoro() {
     if (!state.isRunning && state.timeLeft !== duration) {
       dispatch({ type: "RESET", duration })
     }
-  }, [settings, getDuration, state.isRunning, state.timeLeft, state.currentMode])
+  }, [settings, getDuration, state.isRunning, state.currentMode]) // Removed state.timeLeft to prevent running every second
 
   const setMode = useCallback(
     (mode: TimerMode) => {
@@ -143,21 +143,31 @@ export function usePomodoro() {
     }
   }, [state.isRunning])
 
-  // Update browser tab title with timer
+  // Update browser tab title with timer (debounced)
   useEffect(() => {
     if (typeof document !== 'undefined') {
       const modeLabel = state.currentMode === "deep" ? "Deep Focus" :
-                       state.currentMode === "focus" ? "Focus" : "Quick Break"
+                        state.currentMode === "focus" ? "Focus" : "Quick Break"
       const timeDisplay = formatTime(state.timeLeft)
       const statusIcon = state.isRunning ? "⏰" : "⏸️"
 
-      document.title = `${statusIcon} ${timeDisplay} - ${modeLabel} | Deep Work`
+      // Debounce title updates to every 5 seconds when running, or immediate when paused/stopped
+      const shouldUpdateImmediately = !state.isRunning || state.timeLeft % 5 === 0
+
+      if (shouldUpdateImmediately) {
+        document.title = `${statusIcon} ${timeDisplay} - ${modeLabel} | Deep Work`
+      }
     }
   }, [state.timeLeft, state.isRunning, state.currentMode, formatTime])
 
   // Handle timer completion
+  const prevTimeLeftRef = useRef(state.timeLeft)
   useEffect(() => {
-    if (state.timeLeft === 0 && state.isRunning) {
+    const prevTimeLeft = prevTimeLeftRef.current
+    prevTimeLeftRef.current = state.timeLeft
+
+    // Only trigger completion logic when transitioning from > 0 to 0
+    if (prevTimeLeft > 0 && state.timeLeft === 0 && state.isRunning) {
       dispatch({ type: "COMPLETE" })
 
       if (state.currentMode === "deep" || state.currentMode === "focus") {
@@ -181,7 +191,7 @@ export function usePomodoro() {
         }, 1000)
       }
     }
-  }, [state.timeLeft, state.isRunning, state.currentMode, settings, completedToday, setCompletedToday, getDuration])
+  }, [state.timeLeft, state.isRunning, state.currentMode, settings, setCompletedToday, getDuration])
 
   return {
     timeLeft: state.timeLeft,

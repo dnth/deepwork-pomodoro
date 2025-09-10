@@ -66,18 +66,12 @@ export function PomodoroTimer() {
     [selectedPreset]
   )
 
-  const getTimerTitle = () => {
-    return "Pomodoro Timer"
-  }
+  const timerTitle = useMemo(() => "Pomodoro Timer", [])
 
-  const getProgressPercentage = () => {
+  const progressPercentage = useMemo(() => {
     const total = totalDurationSec
     return total > 0 ? ((total - timeLeft) / total) * 100 : 0
-  }
-
-  const getTotalDuration = () => {
-    return totalDurationSec
-  }
+  }, [totalDurationSec, timeLeft])
 
   // Handle preset button clicks
   const handleSelectPreset = (preset: Preset) => {
@@ -96,7 +90,7 @@ export function PomodoroTimer() {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-2 sm:gap-3">
-          <h2 className="text-base sm:text-lg lg:text-xl font-bold text-theme-text-primary">{getTimerTitle()}</h2>
+          <h2 className="text-base sm:text-lg lg:text-xl font-bold text-theme-text-primary">{timerTitle}</h2>
         </div>
         
         {/* Stats */}
@@ -167,7 +161,7 @@ export function PomodoroTimer() {
             
             {/* Progress percentage */}
             <div className="text-xs sm:text-sm font-medium text-theme-text-muted uppercase tracking-wider">
-              {Math.round(getProgressPercentage())}% Complete
+              {Math.round(progressPercentage)}% Complete
             </div>
           </div>
         </div>
@@ -177,7 +171,7 @@ export function PomodoroTimer() {
           {settings.enhancedVisualization ? (
             <FocusRing
               timeLeft={timeLeft}
-              totalDuration={getTotalDuration()}
+              totalDuration={totalDurationSec}
               isRunning={isRunning}
               currentMode={currentMode}
               size={144}
@@ -206,7 +200,7 @@ export function PomodoroTimer() {
                   strokeWidth="10"
                   fill="transparent"
                   strokeDasharray={`${2 * Math.PI * 54}`}
-                  strokeDashoffset={`${2 * Math.PI * 54 * (1 - getProgressPercentage() / 100)}`}
+                  strokeDashoffset={`${2 * Math.PI * 54 * (1 - progressPercentage / 100)}`}
                   className="text-theme-progress transition-all duration-1000 ease-linear drop-shadow-lg"
                   strokeLinecap="round"
                   filter="drop-shadow(0 0 8px hsl(var(--theme-progress)/0.5))"

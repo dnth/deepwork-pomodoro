@@ -49,7 +49,7 @@ export function useSlidingIndicator<T extends string>(
 
     const observer = new ResizeObserver(() => {
       clearTimeout(updateTimeoutRef.current)
-      updateTimeoutRef.current = setTimeout(updateIndicator, 16)
+      updateTimeoutRef.current = setTimeout(updateIndicator, 32)
     })
 
     observer.observe(containerRef.current)

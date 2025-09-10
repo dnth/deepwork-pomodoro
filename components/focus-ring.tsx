@@ -24,60 +24,79 @@ export function FocusRing({
   const normalizedRadius = radius - strokeWidth * 0.5
   const circumference = normalizedRadius * 2 * Math.PI
 
-  // Calculate progress and milestone segments
-  const progress = ((totalDuration - timeLeft) / totalDuration) * 100
-  const isOvertime = timeLeft === 0 && isRunning
-  
-  // Calculate milestone segments (5-minute chunks for deep/focus)
-  const milestoneCount = (currentMode === "deep" || currentMode === "focus") ? 5 : Math.ceil(totalDuration / 300) // 5 minutes = 300 seconds
-  const segmentDuration = totalDuration / milestoneCount
-  const completedSegments = Math.floor((totalDuration - timeLeft) / segmentDuration)
-  const currentSegmentProgress = ((totalDuration - timeLeft) % segmentDuration) / segmentDuration
+  // Memoize expensive calculations
+  const calculations = useMemo(() => {
+    const progress = ((totalDuration - timeLeft) / totalDuration) * 100
+    const isOvertime = timeLeft === 0 && isRunning
 
-  // Visual states
-  const getVisualState = () => {
-    if (isOvertime) return "overtime"
-    if (currentMode === "deep" || currentMode === "focus") return "focus"
-    return "break"
-  }
+    // Calculate milestone segments (5-minute chunks for deep/focus)
+    const milestoneCount = (currentMode === "deep" || currentMode === "focus") ? 5 : Math.ceil(totalDuration / 300) // 5 minutes = 300 seconds
+    const segmentDuration = totalDuration / milestoneCount
+    const completedSegments = Math.floor((totalDuration - timeLeft) / segmentDuration)
+    const currentSegmentProgress = ((totalDuration - timeLeft) % segmentDuration) / segmentDuration
 
-  const visualState = getVisualState()
-
-  // Color and animation classes based on state
-  const getStateClasses = () => {
-    switch (visualState) {
-      case "focus":
-        return {
-          ring: "text-theme-accent",
-          glow: "drop-shadow-lg filter drop-shadow-theme-accent/20",
-          animation: isRunning ? "animate-pulse" : "",
-          background: "text-theme-card-border"
-        }
-      case "break":
-        return {
-          ring: "text-theme-progress",
-          glow: "drop-shadow-lg filter drop-shadow-theme-progress/20",
-          animation: "",
-          background: "text-theme-card-border"
-        }
-      case "overtime":
-        return {
-          ring: "text-destructive",
-          glow: "drop-shadow-lg filter drop-shadow-destructive/30",
-          animation: "animate-pulse",
-          background: "text-theme-card-border"
-        }
-      default:
-        return {
-          ring: "text-theme-progress",
-          glow: "",
-          animation: "",
-          background: "text-theme-progress-bg"
-        }
+    return {
+      progress,
+      isOvertime,
+      milestoneCount,
+      segmentDuration,
+      completedSegments,
+      currentSegmentProgress
     }
-  }
+  }, [totalDuration, timeLeft, isRunning, currentMode])
 
-  const stateClasses = getStateClasses()
+  const { progress, isOvertime, milestoneCount, segmentDuration, completedSegments, currentSegmentProgress } = calculations
+
+  // Memoize visual state and classes
+  const visualStateAndClasses = useMemo(() => {
+    const getVisualState = () => {
+      if (isOvertime) return "overtime"
+      if (currentMode === "deep" || currentMode === "focus") return "focus"
+      return "break"
+    }
+
+    const visualState = getVisualState()
+
+    const getStateClasses = () => {
+      switch (visualState) {
+        case "focus":
+          return {
+            ring: "text-theme-accent",
+            glow: "drop-shadow-lg filter drop-shadow-theme-accent/20",
+            animation: isRunning ? "animate-pulse" : "",
+            background: "text-theme-card-border"
+          }
+        case "break":
+          return {
+            ring: "text-theme-progress",
+            glow: "drop-shadow-lg filter drop-shadow-theme-progress/20",
+            animation: "",
+            background: "text-theme-card-border"
+          }
+        case "overtime":
+          return {
+            ring: "text-destructive",
+            glow: "drop-shadow-lg filter drop-shadow-destructive/30",
+            animation: "animate-pulse",
+            background: "text-theme-card-border"
+          }
+        default:
+          return {
+            ring: "text-theme-progress",
+            glow: "",
+            animation: "",
+            background: "text-theme-progress-bg"
+          }
+      }
+    }
+
+    return {
+      visualState,
+      stateClasses: getStateClasses()
+    }
+  }, [isOvertime, currentMode, isRunning])
+
+  const { visualState, stateClasses } = visualStateAndClasses
 
   // Generate milestone tick marks
   const milestoneMarkers = useMemo(() => {
@@ -105,19 +124,19 @@ export function FocusRing({
     return markers
   }, [milestoneCount, radius])
 
-  // Generate segment arcs
+  // Generate segment arcs - memoize more aggressively
   const segmentArcs = useMemo(() => {
     const arcs = []
     const segmentLength = circumference / milestoneCount
-    
+
     for (let i = 0; i < milestoneCount; i++) {
       const isCompleted = i < completedSegments
       const isCurrentSegment = i === completedSegments
       const segmentProgress = isCurrentSegment ? currentSegmentProgress : (isCompleted ? 1 : 0)
-      
+
       const startOffset = circumference - (i * segmentLength)
       const endOffset = startOffset - (segmentLength * segmentProgress)
-      
+
       if (segmentProgress > 0) {
         arcs.push(
           <circle
@@ -140,16 +159,19 @@ export function FocusRing({
         )
       }
     }
-    
+
     return arcs
-  }, [milestoneCount, completedSegments, currentSegmentProgress, circumference, normalizedRadius, strokeWidth, stateClasses])
+  }, [milestoneCount, completedSegments, currentSegmentProgress, stateClasses.ring, stateClasses.glow])
 
   const progressPercentage = Math.round(progress)
-  const stateDescription = {
+  const stateDescription = useMemo(() => ({
     focus: `Focus session ${progressPercentage}% complete`,
-    break: `Break time ${progressPercentage}% complete`, 
+    break: `Break time ${progressPercentage}% complete`,
     overtime: `Session overtime, ${Math.abs(timeLeft)} seconds over`
-  }
+  }), [progressPercentage, timeLeft])
+
+  // Type assertion for visualState to ensure proper indexing
+  const typedVisualState = visualState as keyof typeof stateDescription
 
   return (
     <div 
@@ -159,8 +181,8 @@ export function FocusRing({
       aria-valuenow={progressPercentage}
       aria-valuemin={0}
       aria-valuemax={100}
-      aria-label={stateDescription[visualState]}
-      aria-describedby={`focus-ring-${visualState}`}
+      aria-label={stateDescription[typedVisualState]}
+      aria-describedby={`focus-ring-${typedVisualState}`}
     >
       {/* Screen reader description */}
       <div 
@@ -169,7 +191,7 @@ export function FocusRing({
         aria-live="polite"
         aria-atomic="true"
       >
-        {stateDescription[visualState]}. 
+        {stateDescription[typedVisualState]}.
         {completedSegments > 0 && `Completed ${completedSegments} of ${milestoneCount} milestone segments.`}
         {isRunning ? 'Timer is running.' : 'Timer is paused.'}
       </div>
