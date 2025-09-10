@@ -139,9 +139,6 @@ export function PomodoroTimer() {
       <div className="text-center mb-8">
         {/* Enhanced Timer Display */}
         <div className="relative mb-8">
-          {/* Background glow effect */}
-          <div className="absolute inset-0 bg-gradient-to-r from-theme-accent/20 via-theme-progress/20 to-theme-accent/20 rounded-3xl blur-3xl scale-110 opacity-60" style={{ animation: 'none' }}></div>
-          
           {/* Timer container */}
           <div className="relative bg-gradient-to-br from-theme-card-bg/80 to-theme-card-bg/40 backdrop-blur-xl border border-theme-card-border/50 rounded-xl p-8 shadow-2xl overflow-hidden">
             {/* Timer digits */}
