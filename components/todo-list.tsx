@@ -504,7 +504,7 @@ export function TodoList() {
                   handleAddTask()
                 }
               }}
-              placeholder="What would you like to focus on?"
+              placeholder="Define your focus goal for this Pomodoro."
               className="w-full bg-theme-input-bg border-theme-input-border text-theme-text-primary placeholder:text-slate-400 rounded-md h-10 px-3"
               aria-label="Task description"
             />
