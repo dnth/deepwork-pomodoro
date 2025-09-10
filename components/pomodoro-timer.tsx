@@ -41,6 +41,10 @@ export function PomodoroTimer() {
   // Track the selected preset locally (default to "focus")
   const [selectedPreset, setSelectedPreset] = useState<Preset>("focus")
 
+  const [displayTime, setDisplayTime] = useState(0)
+  const [displayTotal, setDisplayTotal] = useState(0)
+  const [isAnimating, setIsAnimating] = useState(false)
+
   const [isMounted, setIsMounted] = useState(false)
   const taskTypeSelectorRef = useRef<HTMLDivElement>(null)
   const indicatorStyle = useSlidingIndicator(selectedPreset, taskTypeSelectorRef, isMounted)
@@ -66,17 +70,37 @@ export function PomodoroTimer() {
     [selectedPreset]
   )
 
+  useEffect(() => {
+    if (!isAnimating) {
+      setDisplayTime(timeLeft)
+      setDisplayTotal(totalDurationSec)
+    }
+  }, [timeLeft, totalDurationSec, isAnimating])
+
   const timerTitle = useMemo(() => "Pomodoro Timer", [])
 
   const progressPercentage = useMemo(() => {
-    const total = totalDurationSec
-    return total > 0 ? ((total - timeLeft) / total) * 100 : 0
-  }, [totalDurationSec, timeLeft])
+    const total = isAnimating ? displayTotal : totalDurationSec
+    const time = isAnimating ? displayTime : timeLeft
+    return total > 0 ? ((total - time) / total) * 100 : 0
+  }, [totalDurationSec, timeLeft, isAnimating, displayTime, displayTotal])
 
   // Handle preset button clicks
   const handleSelectPreset = (preset: Preset) => {
     setSelectedPreset(preset)
-    setMode(preset)
+    if (!isRunning) {
+      const newDuration = presetConfig[preset].minutes * 60
+      const oldDuration = totalDurationSec
+      if (oldDuration !== newDuration) {
+        animateTime(oldDuration, newDuration, oldDuration, newDuration, () => {
+          setMode(preset)
+        })
+      } else {
+        setMode(preset)
+      }
+    } else {
+      setMode(preset)
+    }
   }
 
   const presets: { key: Preset; label: string; emoji: string }[] = [
@@ -84,6 +108,35 @@ export function PomodoroTimer() {
     { key: "focus", label: presetConfig.focus.label, emoji: taskTagConfig.focus.symbol },
     { key: "quick", label: presetConfig.quick.label, emoji: taskTagConfig.quick.symbol },
   ]
+
+  const animateTime = (fromTime: number, toTime: number, fromTotal: number, toTotal: number, callback: () => void) => {
+    setIsAnimating(true)
+    const duration = 500
+    const startTime = Date.now()
+    const fromMinutes = Math.floor(fromTime / 60)
+    const toMinutes = Math.floor(toTime / 60)
+    const fromTotalMinutes = Math.floor(fromTotal / 60)
+    const toTotalMinutes = Math.floor(toTotal / 60)
+    const animate = () => {
+      const elapsed = Date.now() - startTime
+      const progress = Math.min(elapsed / duration, 1)
+      const currentMinutes = fromMinutes + Math.floor((toMinutes - fromMinutes) * progress)
+      const currentTotalMinutes = fromTotalMinutes + Math.floor((toTotalMinutes - fromTotalMinutes) * progress)
+      const currentTime = currentMinutes * 60
+      const currentTotal = currentTotalMinutes * 60
+      setDisplayTime(currentTime)
+      setDisplayTotal(currentTotal)
+      if (progress < 1) {
+        requestAnimationFrame(animate)
+      } else {
+        setDisplayTime(toTime)
+        setDisplayTotal(toTotal)
+        setIsAnimating(false)
+        callback()
+      }
+    }
+    animate()
+  }
 
   return (
     <div className="w-full card-premium-glass rounded-xl p-4 sm:p-6 lg:p-8">
@@ -145,7 +198,7 @@ export function PomodoroTimer() {
             <div className="font-black text-theme-text-primary font-mono tracking-tight leading-none mb-2 sm:mb-3
                             w-full max-w-full whitespace-nowrap overflow-hidden"
                  style={{ fontSize: "clamp(2.5rem, 12vw, 6.5rem)" }}>
-              {formatTime(timeLeft)}
+              {formatTime(displayTime)}
             </div>
             
             {/* Timer status indicator */}
@@ -167,8 +220,8 @@ export function PomodoroTimer() {
         <div className="flex justify-center mb-6">
           {settings.enhancedVisualization ? (
             <FocusRing
-              timeLeft={timeLeft}
-              totalDuration={totalDurationSec}
+              timeLeft={isAnimating ? displayTime : timeLeft}
+              totalDuration={isAnimating ? displayTotal : totalDurationSec}
               isRunning={isRunning}
               currentMode={currentMode}
               size={144}
