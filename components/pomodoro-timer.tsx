@@ -1,12 +1,14 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import { Play, Pause, RotateCcw } from "lucide-react"
 import { usePomodoro } from "@/hooks/use-pomodoro"
 import { useSettings } from "@/hooks/use-settings"
+import { useSlidingIndicator } from "@/hooks/use-sliding-indicator"
 import { FocusRing } from "@/components/focus-ring"
 import { taskTagConfig } from "@/hooks/use-todos"
-import { useEffect, useMemo, useRef, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 
 type Preset = "deep" | "focus" | "quick"
 
@@ -41,7 +43,7 @@ export function PomodoroTimer() {
 
   const [isMounted, setIsMounted] = useState(false)
   const taskTypeSelectorRef = useRef<HTMLDivElement>(null)
-  const [indicatorStyle, setIndicatorStyle] = useState<{ left: string; width: string }>({ left: '0px', width: '0px' })
+  const indicatorStyle = useSlidingIndicator(selectedPreset, taskTypeSelectorRef, isMounted)
 
   // On mount: if not running, default to "focus" and sync underlying mode; do not reset if already running
   useEffect(() => {
@@ -57,25 +59,6 @@ export function PomodoroTimer() {
     return () => setIsMounted(false)
   }, [])
 
-  // Update sliding indicator position when selectedPreset changes
-  useEffect(() => {
-    if (!taskTypeSelectorRef.current || !isMounted) return
-
-    const container = taskTypeSelectorRef.current
-    const activeButton = container.querySelector(`[data-state="on"]`) as HTMLElement
-
-    if (activeButton) {
-      const containerRect = container.getBoundingClientRect()
-      const buttonRect = activeButton.getBoundingClientRect()
-      const left = buttonRect.left - containerRect.left
-      const width = buttonRect.width
-
-      setIndicatorStyle({
-        left: `${left}px`,
-        width: `${width}px`
-      })
-    }
-  }, [selectedPreset, isMounted])
 
   // Total duration in seconds based on selected preset
   const totalDurationSec = useMemo(
@@ -126,7 +109,7 @@ export function PomodoroTimer() {
       </div>
 
       {/* Preset Buttons */}
-      <div className="flex bg-theme-input-bg/50 rounded-lg p-1 mb-6 relative" ref={taskTypeSelectorRef}>
+      <div className="bg-theme-input-bg/50 rounded-lg p-1 mb-6 relative" ref={taskTypeSelectorRef}>
         {/* Sliding indicator */}
         <div
           className="absolute top-0 rounded-md transition-all duration-300 ease-in-out z-0 shadow-lg"
@@ -137,25 +120,25 @@ export function PomodoroTimer() {
             height: '100%'
           }}
         />
-        {presets.map((p) => {
-          const isActive = selectedPreset === p.key
-          return (
-            <Button
+        <ToggleGroup
+          type="single"
+          value={selectedPreset}
+          onValueChange={(v) => v && handleSelectPreset(v as Preset)}
+          className="flex flex-row gap-1 relative z-10"
+          aria-label="Pomodoro preset"
+        >
+          {presets.map((p) => (
+            <ToggleGroupItem
               key={p.key}
-              variant="ghost"
-              onClick={() => handleSelectPreset(p.key)}
-              data-state={isActive ? "on" : "off"}
-              className={`flex-1 rounded-md p-3 transition-all duration-200 relative z-10 ${
-                isActive
-                  ? "text-theme-text-primary shadow-lg"
-                  : "text-theme-text-secondary hover:text-theme-text-primary hover:bg-theme-card-bg/40"
-              }`}
-              style={isActive ? { backgroundColor: ACCENT_COLOR } : {}}
+              value={p.key}
+              className="flex-1 rounded-md p-3 transition-all duration-200 relative z-10 data-[state=on]:text-theme-text-primary data-[state=on]:shadow-lg text-theme-text-secondary hover:text-theme-text-primary hover:bg-theme-card-bg/40"
+              style={selectedPreset === p.key ? { backgroundColor: ACCENT_COLOR } : {}}
+              aria-label={`${p.label} ${presetConfig[p.key as Preset].minutes} minutes`}
             >
               {p.emoji} {p.label}
-            </Button>
-          )
-        })}
+            </ToggleGroupItem>
+          ))}
+        </ToggleGroup>
       </div>
 
       {/* Timer Display */}

@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import { Plus, Trash2, GripVertical, Pencil } from "lucide-react"
 import { useTodos, taskTagConfig, type TaskTag, type Todo } from "@/hooks/use-todos"
+import { useSlidingIndicator } from "@/hooks/use-sliding-indicator"
 import { useState, useCallback } from "react"
 
 
@@ -271,7 +272,7 @@ export function TodoList() {
   const [isShortcutAnimating, setIsShortcutAnimating] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
   const taskTypeSelectorRef = useRef<HTMLDivElement>(null)
-  const [indicatorStyle, setIndicatorStyle] = useState<{ left: string; width: string }>({ left: '0px', width: '0px' })
+  const indicatorStyle = useSlidingIndicator(selectedTag, taskTypeSelectorRef, isMounted)
 
   const getProgress = () => {
     if (todos.length === 0) return 0
@@ -322,25 +323,6 @@ export function TodoList() {
     }
   }, [setSelectedTag, isMounted])
 
-  // Update sliding indicator position when selectedTag changes
-  useEffect(() => {
-    if (!taskTypeSelectorRef.current) return
-    
-    const container = taskTypeSelectorRef.current
-    const activeButton = container.querySelector(`[data-state="on"]`) as HTMLElement
-    
-    if (activeButton) {
-      const containerRect = container.getBoundingClientRect()
-      const buttonRect = activeButton.getBoundingClientRect()
-      const left = buttonRect.left - containerRect.left
-      const width = buttonRect.width
-      
-      setIndicatorStyle({
-        left: `${left}px`,
-        width: `${width}px`
-      })
-    }
-  }, [selectedTag, isMounted])
 
   const triggerAnimation = () => {
     setIsAnimating(true)
