@@ -74,18 +74,10 @@ export function usePomodoro() {
   // Update timer when settings change (but not when paused)
   useEffect(() => {
     const duration = getDuration(state.currentMode)
-    if (!state.isRunning && state.timeLeft === duration) {
+    if (!state.isRunning && state.timeLeft !== duration) {
       dispatch({ type: "RESET", duration })
     }
-  }, [settings, state.currentMode, getDuration])
-
-  // Initialize timer duration when mode changes
-  useEffect(() => {
-    const duration = getDuration(state.currentMode)
-    if (state.timeLeft !== duration && !state.isRunning) {
-      dispatch({ type: "RESET", duration })
-    }
-  }, [state.currentMode, getDuration])
+  }, [settings, getDuration])
 
   const setMode = useCallback(
     (mode: TimerMode) => {
