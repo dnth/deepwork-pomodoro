@@ -106,12 +106,13 @@ export function PomodoroTimer() {
       <div className="bg-theme-input-bg/50 rounded-lg p-1 mb-6 relative" ref={taskTypeSelectorRef}>
         {/* Sliding indicator */}
         <div
-          className="absolute top-0 rounded-md transition-all duration-300 ease-in-out z-0 shadow-lg"
+          className="absolute top-0 rounded-md z-0 shadow-lg"
           style={{
             backgroundColor: ACCENT_COLOR,
             left: indicatorStyle.left,
             width: indicatorStyle.width,
-            height: '100%'
+            height: '100%',
+            transition: 'none'
           }}
         />
         <ToggleGroup
@@ -125,7 +126,7 @@ export function PomodoroTimer() {
             <ToggleGroupItem
               key={p.key}
               value={p.key}
-              className="flex-1 rounded-md p-3 transition-all duration-200 relative z-10 data-[state=on]:text-theme-text-primary data-[state=on]:shadow-lg text-theme-text-secondary hover:text-theme-text-primary hover:bg-theme-card-bg/40"
+              className="flex-1 rounded-md p-3 relative z-10 data-[state=on]:text-theme-text-primary data-[state=on]:shadow-lg text-theme-text-secondary hover:text-theme-text-primary hover:bg-theme-card-bg/40"
               style={selectedPreset === p.key ? { backgroundColor: ACCENT_COLOR } : {}}
               aria-label={`${p.label} ${presetConfig[p.key as Preset].minutes} minutes`}
             >
@@ -140,7 +141,7 @@ export function PomodoroTimer() {
         {/* Enhanced Timer Display */}
         <div className="relative mb-8">
           {/* Background glow effect */}
-          <div className="absolute inset-0 bg-gradient-to-r from-theme-accent/20 via-theme-progress/20 to-theme-accent/20 rounded-3xl blur-3xl scale-110 opacity-60 animate-pulse"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-theme-accent/20 via-theme-progress/20 to-theme-accent/20 rounded-3xl blur-3xl scale-110 opacity-60" style={{ animation: 'none' }}></div>
           
           {/* Timer container */}
           <div className="relative bg-gradient-to-br from-theme-card-bg/80 to-theme-card-bg/40 backdrop-blur-xl border border-theme-card-border/50 rounded-xl p-8 shadow-2xl overflow-hidden">
@@ -153,7 +154,7 @@ export function PomodoroTimer() {
             
             {/* Timer status indicator */}
             <div className="flex items-center justify-center gap-2 mb-4">
-              <div className={`w-3 h-3 rounded-full ${isRunning ? 'bg-theme-progress animate-pulse' : 'bg-theme-text-muted'}`}></div>
+              <div className={`w-3 h-3 rounded-full ${isRunning ? 'bg-theme-progress' : 'bg-theme-text-muted'}`} style={{ animation: 'none' }}></div>
               <span className="text-xs sm:text-base font-medium text-theme-text-secondary uppercase tracking-wider">
                 {isRunning ? 'Running' : 'Paused'}
               </span>
@@ -201,7 +202,7 @@ export function PomodoroTimer() {
                   fill="transparent"
                   strokeDasharray={`${2 * Math.PI * 54}`}
                   strokeDashoffset={`${2 * Math.PI * 54 * (1 - progressPercentage / 100)}`}
-                  className="text-theme-progress transition-all duration-1000 ease-linear drop-shadow-lg"
+                  className="text-theme-progress drop-shadow-lg"
                   strokeLinecap="round"
                   filter="drop-shadow(0 0 8px hsl(var(--theme-progress)/0.5))"
                 />
@@ -209,7 +210,7 @@ export function PomodoroTimer() {
               
               {/* Center indicator */}
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className={`w-4 h-4 rounded-full ${isRunning ? 'bg-theme-progress animate-ping' : 'bg-theme-text-muted'}`}></div>
+                <div className={`w-4 h-4 rounded-full ${isRunning ? 'bg-theme-progress' : 'bg-theme-text-muted'}`} style={{ animation: 'none' }}></div>
               </div>
             </div>
           )}
@@ -221,7 +222,7 @@ export function PomodoroTimer() {
         <Button
           onClick={isRunning ? pauseTimer : startTimer}
           size="lg"
-          className="hover:bg-theme-accent-hover text-theme-text-primary px-6 py-3 rounded-lg shadow-lg transition-all duration-200 hover:scale-105"
+          className="hover:bg-theme-accent-hover text-theme-text-primary px-6 py-3 rounded-lg shadow-lg"
           style={{ backgroundColor: '#0d9488' }}
         >
           {isRunning ? <Pause className="w-5 h-5 mr-2" /> : <Play className="w-5 h-5 mr-2" />}
