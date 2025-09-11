@@ -21,7 +21,7 @@
     --secondary: 195 43% 68%;         /* sky_blue 500: #8ecae6 */
     --secondary-foreground: 205 95% 15%; /* prussian_blue 500: #023047 */
     --muted: 195 65% 88%;             /* sky_blue 800: #d2eaf5 */
-    --muted-foreground: 205 95% 25%;  /* prussian_blue 300: #011c2a */
+    --muted-foreground: 205 95% 25%; /* prussian_blue 300: #011c2a */
     --accent: 180 48% 31%;             /* teal 500: #0a9396 */
     --accent-foreground: 0 0% 100%;  /* white text */
     --destructive: 25 95% 45%;       /* ut_orange 500: #fb8500 */
@@ -78,7 +78,7 @@
   }
 
   .dark {
-    /* Dark mode - using darker variations of the teal/blue palette */
+    /* Dark mode - using the same #0a9396 teal color */
     --background: 205 95% 10%;  /* prussian_blue 100: #00090e */
     --foreground: 195 65% 90%; /* sky_blue 800: #d2eaf5 */
     --card: 205 95% 12%;       /* prussian_blue 200: #01131c */
@@ -87,11 +87,11 @@
     --popover-foreground: 195 65% 90%;
     --primary: 195 43% 68%;    /* sky_blue 500: #8ecae6 */
     --primary-foreground: 205 95% 10%; /* prussian_blue 100 */
-    --secondary: 180 48% 31%;   /* teal 500: #0a9396 */
+    --secondary: 180 48% 31%;   /* teal 500: #0a9396 - SAME AS LIGHT MODE */
     --secondary-foreground: 0 0% 100%; /* white text */
     --muted: 195 65% 20%;      /* sky_blue 200: #1b5c7a */
     --muted-foreground: 195 65% 60%; /* sky_blue 500 */
-    --accent: 180 45% 40%;     /* teal 600: #3aa9ac */
+    --accent: 180 48% 31%;     /* teal 500: #0a9396 - SAME AS LIGHT MODE */
     --accent-foreground: 0 0% 100%; /* white text */
     --destructive: 25 95% 45%;  /* ut_orange 500: #fb8500 */
     --destructive-foreground: 0 0% 100%; /* white text */
@@ -99,12 +99,12 @@
     --input: 195 65% 20%;      /* sky_blue 200: #1b5c7a */
     --ring: 195 43% 68%;       /* sky_blue 500: #8ecae6 */
     --chart-1: 195 43% 68%;    /* sky_blue 500 */
-    --chart-2: 180 48% 31%;     /* teal 500: #0a9396 */
+    --chart-2: 180 48% 31%;     /* teal 500: #0a9396 - SAME AS LIGHT MODE */
     --chart-3: 195 43% 52%;    /* sky_blue 400 */
     --chart-4: 174 80% 45%;    /* blue_green 500 */
     --chart-5: 25 95% 45%;      /* ut_orange 500 */
 
-    /* Dark mode custom variables */
+    /* Dark mode custom variables - using the same teal */
     --theme-background-from: 205 95% 10%;   /* prussian_blue 100 */
     --theme-background-via: 205 95% 12%;    /* prussian_blue 200 */
     --theme-background-to: 205 95% 10%;     /* prussian_blue 100 */
@@ -113,13 +113,13 @@
     --theme-text-primary: 195 65% 90%;      /* sky_blue 800 */
     --theme-text-secondary: 195 65% 80%;    /* sky_blue 700 */
     --theme-text-muted: 195 65% 60%;        /* sky_blue 500 */
-    --theme-accent: 180 45% 40%;            /* teal 600: #3aa9ac */
-    --theme-accent-hover: 180 42% 50%;      /* teal 700: #6bc3c5 */
+    --theme-accent: 180 48% 31%;            /* teal 500: #0a9396 - SAME AS LIGHT MODE */
+    --theme-accent-hover: 180 45% 40%;      /* teal 600: #3aa9ac - SAME AS LIGHT MODE */
     --theme-progress: 195 43% 68%;          /* sky_blue 500 */
     --theme-progress-bg: 205 95% 15%;       /* prussian_blue 500 */
     --theme-input-bg: 205 95% 12%;          /* prussian_blue 200 */
     --theme-input-border: 195 65% 20%;      /* sky_blue 200 */
-    --theme-task-accent: 180 45% 40%;       /* teal 600: #3aa9ac */
+    --theme-task-accent: 180 48% 31%;       /* teal 500: #0a9396 - SAME AS LIGHT MODE */
     --theme-task-bg: 205 95% 12%;           /* prussian_blue 200 */
     --theme-task-border: 195 65% 20%;       /* sky_blue 200 */
     --theme-task-text: 195 65% 90%;         /* sky_blue 800 */
@@ -257,7 +257,7 @@
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
     background-repeat: repeat;
     background-size: 256px 256px;
-  }
+ }
   
   .grain-effect-heavy {
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.15'/%3E%3C/svg%3E");
@@ -400,7 +400,7 @@
       0 1px 2px 0 rgba(0, 0.05),
       0 2px 4px 0 rgba(0, 0, 0, 0.06),
       0 4px 8px 0 rgba(0, 0.08),
-      0 8px 16px 0 rgba(0, 0, 0, 0.1);
+      0 8px 16px 0 rgba(0, 0, 0.1);
     transition: all 0.3s ease-in-out;
   }
   
@@ -556,7 +556,7 @@
   0% {
     transform: scale(1);
     box-shadow: 0 0 hsl(var(--theme-progress) / 0.7);
-  }
+ }
   50% {
     transform: scale(1.05);
     box-shadow: 0 0 10px hsl(var(--theme-progress) / 0.3);
