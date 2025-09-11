@@ -10,26 +10,26 @@
 
 @layer base {
   :root {
-    --background: 195 65% 94%;          /* sky_blue 900: #e8f4fa */
+    --background: 195 65% 96%;          /* lighter sky_blue */
     --foreground: 205 95% 15%;         /* prussian_blue 500: #023047 */
-    --card: 195 65% 94%;                /* sky_blue 900: #e8f4fa */
+    --card: 195 65% 96%;                /* lighter sky_blue */
     --card-foreground: 205 95% 15%;    /* prussian_blue 500: #023047 */
-    --popover: 195 65% 94%;             /* sky_blue 900: #e8f4fa */
+    --popover: 195 65% 96%;             /* lighter sky_blue */
     --popover-foreground: 205 95% 15%; /* prussian_blue 500: #023047 */
-    --primary: 205 95% 15%;           /* prussian_blue 500: #023047 */
+    --primary: 51 68% 79%;            /* sky_blue 400: #51aed9 */
     --primary-foreground: 0 0% 100%;  /* white text */
-    --secondary: 195 43% 68%;         /* sky_blue 500: #8ecae6 */
-    --secondary-foreground: 205 95% 15%; /* prussian_blue 500: #023047 */
+    --secondary: 180 48% 45%;         /* lighter teal */
+    --secondary-foreground: 0 0% 100%; /* white text */
     --muted: 195 65% 88%;             /* sky_blue 800: #d2eaf5 */
     --muted-foreground: 205 95% 25%; /* prussian_blue 300: #011c2a */
-    --accent: 180 48% 31%;             /* teal 500: #0a9396 */
+    --accent: 180 48% 45%;             /* lighter teal */
     --accent-foreground: 0 0% 100%;  /* white text */
     --destructive: 25 95% 45%;       /* ut_orange 500: #fb8500 */
     --destructive-foreground: 0 0% 100%; /* white text */
     --border: 195 43% 78%;            /* sky_blue 700: #bbdff0 */
     --input: 195 43% 78%;             /* sky_blue 700: #bbdff0 */
     --ring: 205 95% 15%;              /* prussian_blue 500: #023047 */
-    --chart-1: 180 48% 31%;            /* teal 500: #0a9396 */
+    --chart-1: 180 48% 45%;            /* lighter teal */
     --chart-2: 205 95% 15%;           /* prussian_blue 500: #023047 */
     --chart-3: 195 43% 68%;           /* sky_blue 500: #8ecae6 */
     --chart-4: 174 80% 45%;           /* blue_green 500: #219ebc */
@@ -57,22 +57,22 @@
     --radius-xl: 16px;
 
     /* Custom theme variables - #0a9396 Teal/Blue Focused Palette */
-    --theme-background-from: 195 65% 94%;    /* sky_blue 900 */
-    --theme-background-via: 195 65% 88%;     /* sky_blue 800 */
-    --theme-background-to: 195 65% 94%;      /* sky_blue 900 */
-    --theme-card-bg: 195 65% 94%;              /* sky_blue 900 */
+    --theme-background-from: 195 65% 96%;    /* lighter sky_blue */
+    --theme-background-via: 195 65% 90%;     /* lighter sky_blue */
+    --theme-background-to: 195 65% 96%;      /* lighter sky_blue */
+    --theme-card-bg: 195 65% 96%;              /* lighter sky_blue */
     --theme-card-border: 195 43% 78%;        /* sky_blue 700 */
     --theme-text-primary: 205 95% 15%;       /* prussian_blue 500 */
     --theme-text-secondary: 205 95% 25%;     /* prussian_blue 300 */
     --theme-text-muted: 195 65% 75%;         /* sky_blue 600 */
-    --theme-accent: 180 48% 31%;             /* teal 500: #0a9396 */
-    --theme-accent-hover: 180 45% 40%;       /* teal 600: #3aa9ac */
+    --theme-accent: 180 48% 45%;             /* lighter teal */
+    --theme-accent-hover: 180 45% 50%;       /* lighter teal hover */
     --theme-progress: 195 43% 68%;           /* sky_blue 500 */
     --theme-progress-bg: 195 65% 94%;        /* sky_blue 900 */
-    --theme-input-bg: 195 65% 94%;             /* sky_blue 900 */
+    --theme-input-bg: 195 65% 96%;             /* lighter sky_blue */
     --theme-input-border: 195 43% 78%;       /* sky_blue 700 */
-    --theme-task-accent: 180 48% 31%;        /* teal 500: #0a9396 */
-    --theme-task-bg: 195 65% 94%;            /* sky_blue 900 */
+    --theme-task-accent: 180 48% 45%;        /* lighter teal */
+    --theme-task-bg: 195 65% 96%;            /* lighter sky_blue */
     --theme-task-border: 195 43% 78%;        /* sky_blue 700 */
     --theme-task-text: 205 95% 15%;          /* prussian_blue 500 */
   }
@@ -87,19 +87,19 @@
     --popover-foreground: 195 65% 90%;
     --primary: 195 43% 68%;    /* sky_blue 500: #8ecae6 */
     --primary-foreground: 205 95% 10%; /* prussian_blue 100 */
-    --secondary: 180 48% 31%;   /* teal 500: #0a9396 - SAME AS LIGHT MODE */
+    --secondary: 180 48% 45%;   /* lighter teal - SAME AS LIGHT MODE */
     --secondary-foreground: 0 0% 100%; /* white text */
     --muted: 195 65% 20%;      /* sky_blue 200: #1b5c7a */
     --muted-foreground: 195 65% 60%; /* sky_blue 500 */
-    --accent: 180 48% 31%;     /* teal 500: #0a9396 - SAME AS LIGHT MODE */
+    --accent: 180 48% 45%;     /* lighter teal - SAME AS LIGHT MODE */
     --accent-foreground: 0 0% 100%; /* white text */
     --destructive: 25 95% 45%;  /* ut_orange 500: #fb8500 */
     --destructive-foreground: 0 0% 100%; /* white text */
     --border: 195 65% 20%;     /* sky_blue 200: #1b5c7a */
     --input: 195 65% 20%;      /* sky_blue 200: #1b5c7a */
     --ring: 195 43% 68%;       /* sky_blue 500: #8ecae6 */
-    --chart-1: 195 43% 68%;    /* sky_blue 500 */
-    --chart-2: 180 48% 31%;     /* teal 500: #0a9396 - SAME AS LIGHT MODE */
+    --chart-1: 180 48% 45%;    /* lighter teal - SAME AS LIGHT MODE */
+    --chart-2: 180 48% 45%;     /* lighter teal - SAME AS LIGHT MODE */
     --chart-3: 195 43% 52%;    /* sky_blue 400 */
     --chart-4: 174 80% 45%;    /* blue_green 500 */
     --chart-5: 25 95% 45%;      /* ut_orange 500 */
@@ -113,13 +113,13 @@
     --theme-text-primary: 195 65% 90%;      /* sky_blue 800 */
     --theme-text-secondary: 195 65% 80%;    /* sky_blue 700 */
     --theme-text-muted: 195 65% 35%;        /* sky_blue 300 - darker for better contrast in dark mode */
-    --theme-accent: 180 48% 31%;            /* teal 500: #0a9396 - SAME AS LIGHT MODE */
-    --theme-accent-hover: 180 45% 40%;      /* teal 600: #3aa9ac - SAME AS LIGHT MODE */
+    --theme-accent: 180 48% 45%;            /* lighter teal - SAME AS LIGHT MODE */
+    --theme-accent-hover: 180 45% 50%;      /* lighter teal hover - SAME AS LIGHT MODE */
     --theme-progress: 195 43% 68%;          /* sky_blue 500 */
     --theme-progress-bg: 205 95% 15%;       /* prussian_blue 500 */
     --theme-input-bg: 205 95% 12%;          /* prussian_blue 200 */
     --theme-input-border: 195 65% 20%;      /* sky_blue 200 */
-    --theme-task-accent: 180 48% 31%;       /* teal 500: #0a9396 - SAME AS LIGHT MODE */
+    --theme-task-accent: 180 48% 45%;        /* lighter teal - SAME AS LIGHT MODE */
     --theme-task-bg: 205 95% 12%;           /* prussian_blue 200 */
     --theme-task-border: 195 65% 20%;       /* sky_blue 200 */
     --theme-task-text: 195 65% 90%;         /* sky_blue 800 */
