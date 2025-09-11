@@ -230,8 +230,9 @@ export function DayProgressBar() {
             ))}
           </div>
         </div>
+</div>
 
-      </div>
-    </div>
-  )
+<div className="divider-gradient-secondary"></div>
+</div>
+)
 }

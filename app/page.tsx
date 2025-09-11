@@ -91,7 +91,7 @@ export default function Home() {
                 onClick={toggleLayout}
                 aria-label={`Switch to ${preferredLayout === "horizontal" ? "vertical" : "horizontal"} layout`}
                 title={`Switch to ${preferredLayout === "horizontal" ? "vertical" : "horizontal"} layout`}
-                className="text-theme-text-secondary hover:text-theme-text-primary hover:bg-white/10 rounded-lg p-2 transition-colors"
+                className="text-theme-text-secondary hover:text-theme-text-primary glassmorphism-nav rounded-lg p-2 transition-all duration-200 hover:scale-105"
               >
                 {preferredLayout === "horizontal" ? (
                   <Rows3 className="w-4 h-4" />
@@ -102,7 +102,7 @@ export default function Home() {
             ) : null}
             <button
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              className="text-theme-text-secondary hover:text-theme-text-primary hover:bg-white/10 rounded-lg p-2 transition-colors"
+              className="text-theme-text-secondary hover:text-theme-text-primary glassmorphism-nav rounded-lg p-2 transition-all duration-200 hover:scale-105"
               aria-label="Toggle theme"
               title="Toggle theme"
             >
