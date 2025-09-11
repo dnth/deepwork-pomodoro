@@ -208,7 +208,7 @@ export function YoutubePlaylist() {
             key={category.id}
             onClick={() => handleCategoryClick(category)}
             variant="ghost"
-            className={`h-24 flex flex-col items-center justify-center gap-2 rounded-lg border transition-all duration-200 hover:scale-105 ${
+            className={`h-24 flex flex-col items-center justify-center gap-2 rounded-lg border transition-all duration-200 hover:scale-102 ${
               activeCategory === category.id
                 ? `bg-theme-task-bg/30 border-theme-task-border text-theme-task-text shadow-lg shadow-theme-task-bg/20`
                 : `bg-theme-card-bg border-theme-card-border hover:bg-theme-card-bg hover:border-theme-accent/30 text-theme-text-secondary hover:text-theme-text-primary shadow-sm hover:shadow-md`
