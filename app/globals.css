@@ -112,7 +112,7 @@
     --theme-card-border: 195 65% 20%;       /* sky_blue 200 */
     --theme-text-primary: 195 65% 90%;      /* sky_blue 800 */
     --theme-text-secondary: 195 65% 80%;    /* sky_blue 700 */
-    --theme-text-muted: 195 65% 60%;        /* sky_blue 500 */
+    --theme-text-muted: 195 65% 35%;        /* sky_blue 300 - darker for better contrast in dark mode */
     --theme-accent: 180 48% 31%;            /* teal 500: #0a9396 - SAME AS LIGHT MODE */
     --theme-accent-hover: 180 45% 40%;      /* teal 600: #3aa9ac - SAME AS LIGHT MODE */
     --theme-progress: 195 43% 68%;          /* sky_blue 500 */
